@@ -1,0 +1,9 @@
+# Mesh Bridge "<%= @mesh_name %>"
+auto br-<%= @mesh_code %>
+iface br-<%= @mesh_code %> inet6 static
+  bridge-ports none
+  address <%= @mesh_ipv6 %>
+  netmask 64
+iface br-<%= @mesh_code %> inet static
+  address <%= @mesh_ipv4 %>
+  netmask 255.255.128.0
