@@ -1,11 +1,11 @@
-class ffnord::resources::batman-adv {
-  
-  include ffnord::resources::apt-tools 
-  include ffnord::resources::repo-universe-factory
+class ffnord::resources::batman-adv () {
+  include ffnord::resources::repos
 
-  Class[ffnord::resources::repo-universe-factory]
-  -> Exec['apt-get update']
-  -> package{ 'batctl': ensure => installed;
-           'batman-adv-dkms': ensure => installed;
-         }
+  Class[ffnord::resources::repos]
+  -> 
+  package { 
+    'vim': ensure => installed; 
+    'batctl': ensure => installed;
+    'batman-adv-dkms': ensure => installed;
+  }
 }

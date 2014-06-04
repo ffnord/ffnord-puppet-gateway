@@ -1,0 +1,24 @@
+#!/bin/bash
+
+shopt -s nullglob
+
+. /etc/ffnord
+
+ping -q -I $GW_VPN_INTERFACE $GW_CONTROL_IP -c 4 -i 1 -W 5 >/dev/null 2>&1
+
+if test $? -eq 0; then
+    NEW_STATE=server
+else
+    NEW_STATE=off
+fi
+
+for MESH in /sys/class/net/*/mesh; do
+OLD_STATE="$(cat $MESH/gw_mode)"
+[ "$OLD_STATE" == "$NEW_STATE" ] && continue
+         echo $NEW_STATE > $MESH/gw_mode
+         echo ${GW_BANDWIDTH}MBit/${GW_BANDWIDTH}MBit > $MESH/gw_bandwidth
+         logger "batman gateway mode changed to $NEW_STATE"
+done
+
+# vim: noai:ts=4:sw=4:ff=unix:ft=text:fdm=marker
+

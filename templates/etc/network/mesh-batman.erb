@@ -1,10 +1,8 @@
-allow-hotplug bat-<% @mesh_code %>
-iface bat-<% @mesh_code %> inet6 manual
-  pre-up modprobe batman-adv
-  pre-up   /usr/sbin/batctl if add <%= @mesh_code %>-mesh-vpn
-  up       /sbin/ip link set $IFACE up
-  post-up  /sbin/ip link set dev $IFACE master br-<%= @mesh_code %>
-  post-up  /usr/sbin/batctl -m $IFACE it <%= @batman_it %>
-  post-up  /sbin/ip rule add from all fwmark 0x1 table 42
-  pre-down /sbin/ip link set dev $IFACE nomaster || true
-  down     /sbin/ip link set $IFACE down
+allow-hotplug bat-<%= @mesh_code %>
+iface bat-<%= @mesh_code %> inet6 manual
+  pre-up    /sbin/ip link set dev $IFACE master br-<%= @mesh_code %>
+  pre-up    /usr/sbin/batctl -m $IFACE it <%= @batman_it %>
+  pre-up    /sbin/ip rule add from all fwmark 0x1 table 42
+  up        /sbin/ip link set dev $IFACE up
+  down      /sbin/ip link set dev $IFACE down
+  post-down /sbin/ip link set dev $IFACE nomaster || true

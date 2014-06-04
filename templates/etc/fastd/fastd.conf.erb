@@ -11,6 +11,9 @@ include "secret.conf";
 mtu 1426; # 1492 - IPv4 Header - fastd Header...
 include peers from "peers";
 on up "
+  modprobe batman-adv
+ ip link set address <%= @mesh_mac %> dev $INTERFACE
+ /usr/sbin/batctl -m bat-<%= @mesh_code %> if add $INTERFACE
  ifup bat-<%= @mesh_code %>
- ip link set address <%= @mesh_mac %> up dev $INTERFACE
+ ip link set up dev $INTERFACE
 ";

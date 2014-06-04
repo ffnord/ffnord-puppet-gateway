@@ -1,0 +1,132 @@
+#!/bin/bash
+
+# Munin plugin which reads the hourly, daily and monthly bandwidth usage.
+#
+# (c) 2011 Bram Schoenmakers <me@bramschoenmakers.nl>
+
+#%# family=contrib
+#%# capabilities=autoconf
+
+# par1 message
+error() {
+  [ $# = 1 ] && echo "$1" >&2
+  exit 1
+}
+
+# par1: "hourly", "daily" or "monthly"
+# par2: "tx" or "rx"
+getBandwidth() {
+  [ $# != 2 ] && exit 1
+
+  local FIELD=-1
+  [ $2 = "rx" ] && FIELD=4
+  [ $2 = "tx" ] && FIELD=5
+
+  [ "$FIELD" -eq -1 ] && exit 1
+
+  local DATA=$(echo "$VNSTAT" | grep "^${1:0:1};0")
+  local MIB=$(echo "$DATA" | cut -d ';' -f $FIELD)
+  local KIB=$(echo "$DATA" | cut -d ';' -f $(( $FIELD + 2 )) )
+
+  echo "scale=3; $MIB + ( $KIB / 1024 )" | bc
+}
+
+# par1: "hourly", "daily" or "monthly"
+# par2: value so far
+getEstimate() {
+  [ $# != 2 ] && exit 1
+
+  case "$1" in
+    "hourly")
+      local MINUTESPASSED=$(( $( date +%M ) ))
+      local MINUTESTOTAL=60
+      ;;
+    "daily")
+      local MINUTESPASSED=$( echo "$( date +%H ) * 60 + $( date +%M )" | bc )
+      local MINUTESTOTAL=1440
+      ;;
+    "monthly")
+      local MINUTESPASSED=$( echo "( $( date +%d ) - 1 ) * 1440 + $( date +%H ) * 60 + $( date +%M )" | bc )
+      local DAYSINMONTH=$(date -d "$(date +%Y)-$(($(date +%-m)+1))-01 -1 day" +%d)
+      local MINUTESTOTAL=$(( $DAYSINMONTH * 1440 ))
+      ;;
+  esac
+
+  echo "scale=1; $MINUTESTOTAL * $2 / $MINUTESPASSED" | bc
+}
+
+PARAMS=${0#*vnstat_}
+INTERFACE=$(echo "$PARAMS" | cut -d _ -f 1) # eth0
+PERIOD=$(echo "$PARAMS" | cut -d _ -f 2) # hourly, daily, monthly
+DIRECTION=$(echo "$PARAMS" | cut -d _ -f 3) # rx or tx
+
+# determine whether estimates should be shown
+[ \( "${estimate:-0}" = 1 \) -o \( "${estimate:-0}" = "yes" \) -o \( "${estimate:-0}" = "true" \) ] && ESTIMATE=1 || ESTIMATE=0
+
+# sanity checks
+[ "$PERIOD" = "hourly" ] || [ "$PERIOD" = "daily" ] || [ "$PERIOD" = "monthly" ] || error "Invalid period."
+[ "$DIRECTION" = "rx" ] || [ "$DIRECTION" = "tx" ] || [ "$DIRECTION" = "total" ] || [ "$DIRECTION" = "rxtx" ] || error "Invalid direction."
+
+case "$1" in
+  config)
+    echo graph_category network
+    echo graph_vlabel MiB
+
+    PERIODSTRING=${PERIOD%ly}
+    PERIODSTRING=${PERIODSTRING/dai/day}
+    if [ "$DIRECTION" = "rxtx" ]; then
+      echo "graph_title Network bandwidth for $INTERFACE ($PERIOD, rx and tx)"
+      echo value.label rx
+      echo value2.label tx
+
+      # show estimates
+      if [ $ESTIMATE -eq 1 ]; then
+        echo "estimate.label rx estimate for this $PERIODSTRING"
+        echo "estimate2.label tx estimate for this $PERIODSTRING"
+      fi
+    else
+      echo "graph_title Network bandwidth for $INTERFACE ($PERIOD, $DIRECTION)"
+      echo value.label $DIRECTION
+      [ $ESTIMATE -eq 1 ] && echo "estimate.label estimate for this ${PERIODSTRING}"
+    fi
+
+    exit 0;;
+  autoconf)
+    if ! which vnstat > /dev/null; then
+      echo "no (vnstat unavailable)"
+    elif ! which bc > /dev/null; then
+      echo "no (bc unavailable)"
+    else
+      echo yes
+    fi
+
+    exit 0
+    ;;
+esac
+
+VNSTAT=$(vnstat -i $INTERFACE --dumpdb)
+
+if [ "$DIRECTION" = "total" ] || [ "$DIRECTION" = "rxtx" ]; then
+  VALUE1=$(getBandwidth $PERIOD rx)
+  [ $? = 1 ] && error "Could not obtain data."
+  VALUE2=$(getBandwidth $PERIOD tx)
+  [ $? = 1 ] && error "Could not obtain data."
+
+  [ "$DIRECTION" = "total" ] && VALUE1=$( echo "scale=3; $VALUE1 + $VALUE2" | bc )
+else
+  VALUE1=$(getBandwidth $PERIOD $DIRECTION)
+  [ $? = 1 ] && error "Could not obtain data."
+fi
+
+if [ "$DIRECTION" = "rxtx" ]; then
+  echo value.value $VALUE1
+  echo value2.value $VALUE2
+
+  if [ "$ESTIMATE" -eq 1 ]; then
+    echo estimate.value $(getEstimate $PERIOD $VALUE1)
+    echo estimate2.value $(getEstimate $PERIOD $VALUE2)
+  fi
+else
+  echo value.value $VALUE1
+  [ "$ESTIMATE" -eq 1 ] && echo estimate.value $(getEstimate $PERIOD $VALUE1)
+fi

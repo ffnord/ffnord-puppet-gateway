@@ -6,4 +6,4 @@ iface br-<%= @mesh_code %> inet6 static
   netmask 64
 iface br-<%= @mesh_code %> inet static
   address <%= @mesh_ipv4 %>
-  netmask 255.255.128.0
+  netmask <%= @mesh_ipv4_prefix%>

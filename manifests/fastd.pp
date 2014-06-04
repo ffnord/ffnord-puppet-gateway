@@ -33,21 +33,5 @@ define ffnord::fastd( $mesh_name
     provider => git,
     source   => $fastd_peers_git,
     notify   => Class[ffnord::resources::fastd::auto_fetch_keys];
-  } 
+  }
 }
-
-#class ff_gw::fastd($mesh_mac, $gw_ipv4, $gw_ipv6, $secret_key) {
-#
-#  file {
-#    '/usr/local/bin/check_gateway':
-#      ensure => file,
-#      mode   => '0755',
-#      source => 'puppet:///modules/ff_gw/usr/local/bin/check_gateway';
-#
-#  cron {
-#    'check_gateway':
-#      command => '/usr/local/bin/check_gateway',
-#      user    => root,
-#      minute  => '*';
-#  }
-#}

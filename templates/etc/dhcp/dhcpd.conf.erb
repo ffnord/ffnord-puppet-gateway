@@ -1,0 +1,25 @@
+# The ddns-updates-style parameter controls whether or not the server will
+# attempt to do a DNS update when a lease is confirmed. We default to the
+# behavior of the version 2 packages ('none', since DHCP v2 didn't
+# have support for DDNS.)
+ddns-update-style none;
+
+# option definitions common to all supported networks...
+option domain-name ".ffhh";
+
+default-lease-time 600;
+max-lease-time 3600;
+
+log-facility local7;
+
+subnet 10.112.0.0 netmask 255.255.192.0 {
+    authoritative;
+    range <%= @dhcprange_start %> <%= @dhcprange_end %>;
+
+    # DNS: srv01 (10.112.1.1) & gw01 (10.112.14.1)
+    option domain-name-servers 10.112.1.1, 10.112.14.1;
+    option routers <%= @gw_ipv4 %>;
+}
+
+include "/etc/dhcp/static.conf";
+
