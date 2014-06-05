@@ -2,7 +2,12 @@
 auto br-<%= @mesh_code %>
 iface br-<%= @mesh_code %> inet6 static
   bridge-ports none
+  pre-up    /sbin/ip rule add iif $IFACE table 42
+  pre-up    /sbin/ip rule add oif $IFACE table 42
+  post-down /sbin/ip rule del iif $IFACE table 42
+  post-down /sbin/ip rule del oif $IFACE table 42
   address <%= @mesh_ipv6 %>
+  # TODO bits configurable
   netmask 64
 iface br-<%= @mesh_code %> inet static
   address <%= @mesh_ipv4 %>
