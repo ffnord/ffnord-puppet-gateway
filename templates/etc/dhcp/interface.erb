@@ -4,5 +4,7 @@ subnet <%= @ipv4_network %> netmask <%= @ipv4_netmask %> {
   <% end %>
   option domain-name "<%= @mesh_code %>";
   option domain-name-servers <%= @ipv4_address %><% dns_servers.each do |dns_server| %>,<%=dns_server %><% end %>;
+
+  option ntp-servers <%= @ipv4_address %>;
   option routers <%= @ipv4_address %>;
 }
