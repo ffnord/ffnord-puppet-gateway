@@ -15,6 +15,8 @@ define ffnord::mesh(
 ) {
 
   # TODO We should handle parameters in a param class pattern.
+
+  include ffnord::ntp
   
   ffnord::bridge { "bridge_${mesh_code}":
     mesh_name => $mesh_name,
@@ -24,6 +26,7 @@ define ffnord::mesh(
     mesh_prefix_ipv6 => $mesh_prefix_ipv6,
     mesh_prefix_ipv4 => $mesh_prefix_ipv4,
   } ->
+  Class['ffnord::ntp'] ->
   ffnord::dhcpd { "br-${mesh_code}": 
     mesh_code    => $mesh_code,
     ipv4_address => $mesh_ipv4,
@@ -45,8 +48,6 @@ define ffnord::mesh(
   }
   # ffnord::named
   # ffnord::bird{4,6}
-  # ffnord::ntp
-  # ffnord::sysctl (forwarding, etc)
   # ffnord::opkg::mirror
   # ffnord::firmware mirror
 }
