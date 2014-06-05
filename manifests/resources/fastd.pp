@@ -9,14 +9,14 @@ class ffnord::resources::fastd {
 }
 
 class ffnord::resources::fastd::auto_fetch_keys {
-  file { '/sbin/autoupdate_fastd_keys.sh':
+  file { '/usr/local/bin/autoupdate_fastd_keys':
     ensure => file,
-    source => 'puppet:///modules/ffnord/root/bin/autoupdate_fastd_keys.sh';
+    source => 'puppet:///modules/ffnord/usr/local/bin/autoupdate_fastd_keys';
   }
   package { 'ffnord::resources::cron': name => "cron", ensure => installed; }
   -> cron {
    'autoupdate_fastd':
-     command => '/root/bin/autoupdate_fastd_keys.sh',
+     command => '/usr/local/bin/autoupdate_fastd_keys',
      user    => root,
      minute  => '*/5';
   }

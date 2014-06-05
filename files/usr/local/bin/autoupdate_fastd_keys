@@ -34,6 +34,6 @@ do
   then
     # Version has changed we need to update
     echo "Reload fastd peers"
-    kill -HUP $(pidof fastd)
+    pkill -x -HUP fastd
   fi
 done
