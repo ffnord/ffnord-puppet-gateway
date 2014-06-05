@@ -38,8 +38,11 @@ define ffnord::mesh(
     fastd_secret => $fastd_secret,
     fastd_port   => $fastd_port,
     fastd_peers_git => 'git://freifunk.in-kiel.de/fastd-peer-keys.git';
+  } ->
+  ffnord::radvd { "br-${mesh_code}":
+    ipv6_address => $mesh_ipv6,
+    ipv6_prefix  => $mesh_prefix_ipv6;
   }
-  # ffnord::radvd
   # ffnord::named
   # ffnord::bird{4,6}
   # ffnord::ntp

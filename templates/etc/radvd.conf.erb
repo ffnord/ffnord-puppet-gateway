@@ -1,0 +1,16 @@
+# managed for interface <%= @interface %>
+interface <%= @interface %>
+{    
+ AdvSendAdvert on;
+ IgnoreIfMissing on;
+ MaxRtrAdvInterval 200;
+
+ prefix <%= @ipv6_prefix %>
+ {
+ };
+
+ RDNSS <%= @ipv6_address %> 
+ {
+ };
+};
+
