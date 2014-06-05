@@ -40,7 +40,7 @@ downloaded manually):
 
 ```
 cd /etc/puppet/modules
-git clone https://github.com/ffnord/ffnord-puppet-gateway
+git clone https://github.com/ffnord/ffnord-puppet-gateway ffnord
 ```
 
 ### Parameters
