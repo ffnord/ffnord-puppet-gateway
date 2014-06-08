@@ -15,6 +15,8 @@ define ffnord::bridge( $mesh_code
 
   ffnord::monitor::vnstat::device { "br-${mesh_code}": }
 
+  $mesh_ipv4_network = inline_template("<%= IPAddr.new(@mesh_ipv4).mask(@mesh_prefix_ipv4) %>")
+
   Class['ffnord::resources::network'] ->
   file {
     "/etc/network/interfaces.d/${mesh_code}-bridge":
@@ -26,6 +28,8 @@ define ffnord::bridge( $mesh_code
       command => "/sbin/ifup br-${mesh_code}",
       unless  => "/bin/ip link show dev br-${mesh_code} 2> /dev/null",
       notify  => Ffnord::Monitor::Vnstat::Device["br-${mesh_code}"];
-  } ->
-  Class[ffnord::resources::sysctl]
+      require => [ File_Line["/etc/iproute2/rt_tables"]
+                 , Class[ffnord::resources::sysctl] 
+                 ]
+  }
 }

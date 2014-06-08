@@ -1,6 +1,7 @@
 define ffnord::mesh(
   $mesh_name,        # Name of your community, e.g.: Freifunk Entenhausen
   $mesh_code,        # Code of your community, e.g.: ffeh
+  $mesh_as,          # AS of your community
   $mesh_mac,         # mac address mesh device: 52:54:00:bd:e6:d4
   $mesh_prefix_ipv4, # ipv4 netmask of your mesh network, in cid
   $mesh_prefix_ipv6, # ipv6 netmask of your mesh network, in cidr notation.
