@@ -13,7 +13,7 @@ define ffnord::dhcpd (
 
   if $ranges != [] {
 
-    $ipv4_network = inline_template("<%= IPAddr.new(ipv4_address).mask(ipv4_netmask) %>")
+    $ipv4_network = inline_template("<%= IPAddr.new(@ipv4_address).mask(@ipv4_netmask) %>")
 
     Class[ffnord::dhcpd::base]
     ->
