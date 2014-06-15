@@ -1,0 +1,10 @@
+Name = <%= @tinc_name %>
+PrivateKeyFile = rsa_key.priv
+Mode = Switch
+PingTimeout = 30
+Port = 655
+Hostnames = yes
+
+<% @icvpn_peers.each do |peer| -%>
+ConnectTo = <%=peer%>
+<% end -%>
