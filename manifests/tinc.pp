@@ -33,10 +33,17 @@ class ffnord::tinc (
     '/etc/tinc/icvpn/tinc-up':
       ensure  => file,
       content => template('ffnord/etc/tinc/icvpn/tinc-up.erb'),
+      require => Vcsrepo['/etc/tinc/icvpn/'],
       mode => '0755';
     '/etc/tinc/icvpn/tinc-down':
       ensure  => file,
       content => template('ffnord/etc/tinc/icvpn/tinc-down.erb'),
+      require => Vcsrepo['/etc/tinc/icvpn/'],
+      mode => '0755';
+    '/etc/tinc/icvpn/.git/hooks/post-merge':
+      ensure => file,
+      source => "/etc/tinc/icvpn/scripts/post-merge",
+      require => Vcsrepo['/etc/tinc/icvpn/'],
       mode => '0755';
   }
 
@@ -47,7 +54,12 @@ class ffnord::tinc (
     require => Package['tinc']
   }
 
-  
-
-  # TODO Cronjob entry for enabling icvpn key updates
+  cron {
+   'update-icvpn':
+     command => 'cd /etc/tinc/icvpn/ && git pull -q',
+     user    => root,
+     minute  => '0',
+     hour    => '6',
+     require => Vcsrepo['/etc/tinc/icvpn/'];
+  }
 }
