@@ -7,6 +7,7 @@ define ffnord::mesh(
   $mesh_prefix_ipv6, # ipv6 netmask of your mesh network, in cidr notation.
   $mesh_ipv6,        # ipv6 address of mesh device
   $mesh_ipv4,        # ipv4 address of mesh device
+  $mesh_peerings,    # path to the local peerings description yaml file
 
   $fastd_secret,     # fastd secret
   $fastd_port,       # fastd port
@@ -18,7 +19,7 @@ define ffnord::mesh(
   # TODO We should handle parameters in a param class pattern.
 
   include ffnord::ntp
-  
+
   ffnord::bridge { "bridge_${mesh_code}":
     mesh_name => $mesh_name,
     mesh_code => $mesh_code,
@@ -28,7 +29,7 @@ define ffnord::mesh(
     mesh_prefix_ipv4 => $mesh_prefix_ipv4,
   } ->
   Class['ffnord::ntp'] ->
-  ffnord::dhcpd { "br-${mesh_code}": 
+  ffnord::dhcpd { "br-${mesh_code}":
     mesh_code    => $mesh_code,
     ipv4_address => $mesh_ipv4,
     ipv4_netmask => $mesh_prefix_ipv4,
@@ -46,9 +47,17 @@ define ffnord::mesh(
   ffnord::radvd { "br-${mesh_code}":
     ipv6_address => $mesh_ipv6,
     ipv6_prefix  => $mesh_prefix_ipv6;
+  } ->
+  ffnord::bird6::mesh { "bird6-${mesh_code}":
+    mesh_code => $mesh_code,
+    mesh_ipv4_address => $mesh_ipv4,
+    mesh_ipv6_address => $mesh_ipv6,
+    mesh_peerings => $mesh_peerings,
+    site_ipv6_prefix => $mesh_prefix_ipv6,
+    icvpn_as => $mesh_as;
   }
   # ffnord::named
-  # ffnord::bird{4,6}
+  # ffnord::bird{4}
   # ffnord::opkg::mirror
   # ffnord::firmware mirror
 }
