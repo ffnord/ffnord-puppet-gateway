@@ -1,6 +1,7 @@
 define ffnord::radvd (
-    $ipv6_address,
-    $ipv6_prefix
+    $mesh_ipv6_address,
+    $mesh_ipv6_prefix,
+    $mesh_ipv6_prefixlen
   ) {
 
   include ffnord::radvd::base

@@ -1,9 +1,12 @@
 define ffnord::bridge( $mesh_code
                     , $mesh_name
-                    , $mesh_prefix_ipv6
-                    , $mesh_prefix_ipv4
-                    , $mesh_ipv6
-                    , $mesh_ipv4
+                    , $mesh_ipv6_address
+                    , $mesh_ipv6_prefix
+                    , $mesh_ipv6_prefixlen
+                    , $mesh_ipv4_address
+                    , $mesh_ipv4_netmask
+                    , $mesh_ipv4_prefix
+                    , $mesh_ipv4_prefixlen
 
                     , $dhcp_ranges = []
 
@@ -14,8 +17,6 @@ define ffnord::bridge( $mesh_code
   include ffnord::resources::sysctl
 
   ffnord::monitor::vnstat::device { "br-${mesh_code}": }
-
-  $mesh_ipv4_network = inline_template("<%= IPAddr.new(@mesh_ipv4).mask(@mesh_prefix_ipv4) %>")
 
   Class['ffnord::resources::network'] ->
   file {

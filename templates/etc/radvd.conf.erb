@@ -1,15 +1,15 @@
 # managed for interface <%= @interface %>
 interface <%= @interface %>
-{    
+{
  AdvSendAdvert on;
  IgnoreIfMissing on;
  MaxRtrAdvInterval 200;
 
- prefix <%= @ipv6_prefix %>
+ prefix <%= @mesh_ipv6_prefix %>/<%= @mesh_ipv6_prefixlen %>
  {
  };
 
- RDNSS <%= @ipv6_address %> 
+ RDNSS <%= @mesh_ipv6_address %>
  {
  };
 };
