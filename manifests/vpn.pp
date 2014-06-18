@@ -44,10 +44,59 @@ class ffnord::vpn::check_gateway (
   }
 }
 
-class ffnord::vpn::provider::mullvad () {
-  # TODO
+class ffnord::vpn::provider () {
+  service {'openvpn':
+    ensure  => running,
+    require => Package['openvpn'];
+  }
+ 
+  package { 'openvpn':
+    ensure => installed;
+  }
 }
 
-class ffnord::vpn::provider::hideio () {
+class ffnord::vpn::provider::mullvad () {
   # TODO
+  include ffnord::vpn::provider
+}
+
+class ffnord::vpn::provider::hideio (
+  $openvpn_server,
+  $openvpn_port,
+  $openvpn_user,
+  $openvpn_password,
+) {
+  include ffnord::vpn::provider
+
+  file { 
+    '/etc/openvpn/anonvpn.conf': 
+      ensure => link,
+      target => "/etc/openvpn/hideio/hideio.conf",
+      require => [File["/etc/openvpn/hideio/hideio.conf"],
+                  File["/etc/openvpn/hideio/password"],
+                  File["/etc/openvpn/hideio/TrustedRoot.pem"],
+                  File["/etc/openvpn/anonvpn-up.sh"],
+                  Package['openvpn'],
+                 ],
+      notify => [Service['openvpn']];
+    '/etc/openvpn/hideio':
+      ensure => directory,
+      require => [Package['openvpn']];
+    '/etc/openvpn/hideio/hideio.conf': 
+      ensure => file,
+      content => template("ffnord/etc/openvpn/hideio.conf.erb"),
+      require => [File["/etc/openvpn/hideio"],Package['openvpn']];
+    '/etc/openvpn/hideio/password':
+      ensure => file,
+      content => template("ffnord/etc/openvpn/password.erb"),
+      require => [File['/etc/openvpn/hideio']];
+    '/etc/openvpn/hideio/TrustedRoot.pem':
+      ensure => file,
+      source => "puppet:///ffnord/etc/openvpn/hideio.root.pem",
+      require => [File['/etc/openvpn/hideio']];
+    '/etc/openvpn/anonvpn-up.sh':
+      ensure => file,
+      source => "puppet:///ffnord/etc/openvpn/anonvpn-up.sh",
+      require => [File['/etc/openvpn/hideio']];
+  }
 }

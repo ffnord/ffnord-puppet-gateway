@@ -1,0 +1,20 @@
+client
+dev-type tun
+dev hideio
+
+proto udp
+remote <%= @openvpn_server %> <%= @openvpn_port %>
+cipher AES-128-CBC
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+mute-replay-warnings
+ca hideio/TrustedRoot.pem
+auth-user-pass hideio/password
+reneg-sec 0
+verb 3
+
+script-security 2
+route-noexec
+up anonvpn-up.sh
