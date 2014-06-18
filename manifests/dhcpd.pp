@@ -2,6 +2,7 @@ define ffnord::dhcpd (
   $mesh_code,
 
   $ipv4_address,
+  $ipv4_network,
   $ipv4_netmask,
 
   $ranges = [],
@@ -12,8 +13,6 @@ define ffnord::dhcpd (
   include ffnord::dhcpd::service
 
   if $ranges != [] {
-
-    $ipv4_network = inline_template("<%= IPAddr.new(@ipv4_address).mask(@ipv4_netmask) %>")
 
     Class[ffnord::dhcpd::base]
     ->

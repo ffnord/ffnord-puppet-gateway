@@ -47,6 +47,7 @@ define ffnord::mesh(
   ffnord::dhcpd { "br-${mesh_code}":
     mesh_code    => $mesh_code,
     ipv4_address => $mesh_ipv4_address,
+    ipv4_network => $mesh_ipv4_prefix,
     ipv4_netmask => $mesh_ipv4_netmask,
     ranges       => $dhcp_ranges,
     dns_servers  => $dns_servers;
