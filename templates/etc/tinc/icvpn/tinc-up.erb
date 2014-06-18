@@ -1,0 +1,4 @@
+#!/bin/sh
+/sbin/ip link set dev $INTERFACE up
+/sbin/ip -4 addr add dev $INTERFACE <%= @icvpn_ipv4_address%>/16
+/sbin/ip -6 addr add dev $INTERFACE <%= @icvpn_ipv6_address%>/96 preferred_lft 0
