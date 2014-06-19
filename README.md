@@ -9,14 +9,15 @@ The idea is to implement the step-by-step guide on http://wiki.freifunk.net/Frei
 Basically this is a complete rewrite of the puppet scripts provided by the
 Freifunk Hamburg Community.
 
+The 'ffnord::mesh' block will setup a bridge, fastd, batman, ntp, dhcpd, dns (bind9), 
+radvd and bird6. There are types for setting up monitoring, icvpn, anonymous vpn and alfred announcements.
+
 ## Open Problems
 
-* The apt repository at http://bird.network.cz/debian/ does not use PGP
-  signatures, so `bird` and `bird6` will not be installed automatically.
 * As usual, you should have configure the fully qualified domain name (fqdn) before running
-  this module.
-* Currently this module do not install a dns server, but reports one via 
-  dhcp on every mesh bridge.
+  this module, you can check this with 'hostname -f'.
+* The configured dns server only provide support for the root zone.
+  Custom tlds are currently not supported.  
 * Since puppet renders all templates during initial processing, you have
   to clone the icvpn repo by hand before starting the puppet manifest.
 
@@ -24,6 +25,7 @@ Freifunk Hamburg Community.
 
 * Bird IPv4 Route exchange
 * named/bind9 Freifunk/Hackint/DN42 TLDs
+* The announce script for alfred is functional iff only one mesh device is present.
 
 ## Usage
 
@@ -95,6 +97,8 @@ class { 'ffnord::monitor::munin':
 class { 'ffnord::monitor::nrpe':
       , allowed_hosts => '217.70.197.95'
       }
+
+class { 'ffnord::alfred':}
 ```
 
 #### Mesh Type
