@@ -152,7 +152,7 @@ gc-gw4:
 
 ### Run Puppet
 
-To apply the puppet manifest (e.g. saved as `gw.pp`) run:
+To apply the puppet manifest (e.g. saved as `gateway.pp`) run:
 
 ```
 puppet apply --verbose /root/gateway.pp
