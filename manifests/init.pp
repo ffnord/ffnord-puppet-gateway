@@ -7,6 +7,7 @@ define ffnord::mesh(
   $mesh_ipv6,        # ipv6 address in cidr notation, e.g. fd35:f308:a922::ff00/64
   $mesh_peerings,    # path to the local peerings description yaml file
 
+  $fastd_peers_git,  # fastd peers
   $fastd_secret,     # fastd secret
   $fastd_port,       # fastd port
 
@@ -58,7 +59,7 @@ define ffnord::mesh(
     mesh_mac  => $mesh_mac,
     fastd_secret => $fastd_secret,
     fastd_port   => $fastd_port,
-    fastd_peers_git => 'git://freifunk.in-kiel.de/fastd-peer-keys.git';
+    fastd_peers_git => $fastd_peers_git;
   } ->
   ffnord::radvd { "br-${mesh_code}":
     mesh_ipv6_address    => $mesh_ipv6_address,
