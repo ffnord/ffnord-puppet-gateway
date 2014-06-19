@@ -3,19 +3,7 @@ class ffnord::vpn (
   $gw_control_ip     = "8.8.8.8",     # Control ip addr 
   $gw_bandwidth      = 54,            # How much bandwith we should have up/down per mesh interface
 ) {
-  class { 'ffnord::vpn::check_gateway':
-            gw_vpn_interface  => $gw_vpn_interface,
-            gw_control_ip     => $gw_control_ip,
-            gw_bandwidth      => $gw_bandwidth
-        }
-}
 
-class ffnord::vpn::check_gateway (
-  $gw_vpn_interface,
-  $gw_control_ip,
-  $gw_bandwidth,
-) {
-  
   include ffnord::resources::ffnord
 
   file {
