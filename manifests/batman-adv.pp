@@ -3,10 +3,10 @@ define ffnord::batman-adv( $mesh_code
                          ) {
   include ffnord::resources::batman-adv
 
-  Package['batctl']
-  -> Package['batman-adv-dkms']
-  file { "/etc/network/interfaces.d/${mesh_code}-batman": 
-       , ensure => file
-       , content => template('ffnord/etc/network/mesh-batman.erb')
-       }
+  file { 
+    "/etc/network/interfaces.d/${mesh_code}-batman": 
+    ensure => file,
+    content => template('ffnord/etc/network/mesh-batman.erb'),
+    require => [Package['batctl'],Package['batman-adv-dkms']];
+  }
 }
