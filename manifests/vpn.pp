@@ -22,7 +22,7 @@ class ffnord::vpn::check_gateway (
     '/usr/local/bin/check-gateway':
       ensure => file,
       mode => "0755",
-      source => 'puppet:///modules/ffnord/usr/local/bin/check-gateway';
+      source => 'puppet:///ffnord/usr/local/bin/check-gateway';
   }
   Class[ffnord::resources::ffnord] ->
   file_line { 
@@ -47,12 +47,15 @@ class ffnord::vpn::check_gateway (
 class ffnord::vpn::provider () {
   service {'openvpn':
     ensure  => running,
-    require => Package['openvpn'];
+    require => Package['openvpn'],
+    notify => Class['ffnord::vpn'];
   }
  
   package { 'openvpn':
     ensure => installed;
   }
+
+  class { 'ffnord::vpn': }
 }
 
 class ffnord::vpn::provider::mullvad () {
