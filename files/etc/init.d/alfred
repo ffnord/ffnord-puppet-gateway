@@ -1,0 +1,68 @@
+#!/bin/sh -e
+
+### BEGIN INIT INFO
+# Provides:          Alfred
+# Required-Start:    $network $syslog
+# Required-Stop:     $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Alfred Fact Exchange Service
+# Description: 
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+test $DEBIAN_SCRIPT_DEBUG && set -v -x
+
+DAEMON=/opt/alfred/alfred
+DESC="alfred"
+test -x $DAEMON || exit 0
+
+# Source defaults file; edit that file to configure this script.
+STATUSREFRESH=10
+OMIT_SENDSIGS=0
+
+case "$1" in
+start)
+  log_daemon_msg "Starting $DESC"
+
+  # autostart alfred instances
+  for MESH in /sys/class/net/*/mesh; do
+    BATIF=$(echo $MESH | sed -r 's/\/sys\/class\/net\/(.*)\/mesh/\1/')
+    MASTER=$(echo $BATIF | sed -r 's/bat/br/')
+    start-stop-daemon --start --quiet --oknodo --background\
+      --pidfile /var/run/alfred.$MASTER.pid --make-pidfile \
+      --exec $DAEMON -- -m -i ${MASTER} -b ${BATIF} --  || STATUS=1
+    log_progress_msg "$MASTER"
+  done
+  log_end_msg ${STATUS:-0}
+
+  ;;
+stop)
+  log_daemon_msg "Stopping $DESC"
+
+  for PIDFILE in `ls /var/run/alfred.*.pid 2> /dev/null`; do
+    NAME=`echo $PIDFILE | cut -c17-`
+    NAME=${NAME%%.pid}
+    kill `cat $PIDFILE` || true
+    rm -f $PIDFILE
+    log_progress_msg "$NAME"
+  done
+  log_end_msg 0
+  ;;
+
+restart)
+  shift
+  $0 stop ${@}
+  sleep 1
+  $0 start ${@}
+  ;;
+*)
+  echo "Usage: $0 {start|stop|restart}" >&2
+  exit 1
+  ;;
+esac
+
+exit 0
+
+# vim:set ai sts=2 sw=2 tw=0:
