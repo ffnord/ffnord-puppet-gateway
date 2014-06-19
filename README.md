@@ -77,6 +77,7 @@ ffnord::mesh { 'mesh_ffeh':
 
       , fastd_secret => "50292dd647f0e41eb0c72f18c652bfd1bea8c8bd00ae9da3f772068b78111644"
       , fastd_port   => 10000
+      , fastd_peers_git => 'git://somehost/peers.git'
 
       , dhcp_ranges => ['10.13.37.2 10.13.37.254','10.13.38.1 10.13.38.254']
       , dns_servers => ['10.13.39.1','10.13.41.1']
@@ -114,6 +115,7 @@ ffnord :: mesh { '<mesh_code>':
 
   fastd_secret,     # fastd secret
   fastd_port,       # fastd port
+  fastd_peers_git,  # fastd peers repository
 
   dhcp_ranges = [], # dhcp pool
   dns_servers = [], # other dns servers in your network
