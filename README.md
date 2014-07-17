@@ -1,7 +1,7 @@
 # Freifunk Gateway Module
 
-Martin Schütte <info@mschuette.name>
-Daniel Ehlers <danielehlers@mindeye.net>
+* Martin Schütte <info@mschuette.name>
+* Daniel Ehlers <danielehlers@mindeye.net>
 
 This module tries to automate the configuration of a FFNord Freifunk Gateway.
 The idea is to implement the step-by-step guide on http://wiki.freifunk.net/Freifunk_Hamburg/Gateway with multi community support and almost all other FFNord tools.
@@ -66,37 +66,52 @@ Example puppet code (save e.g. as `/root/gateway.pp`):
 
 ```
 # You can repeat this mesh block for every community you support
-ffnord::mesh { 'mesh_ffeh':
-      , mesh_name => "Freifunk Entenhausen"
-      , mesh_code => "ffeh"
-      , mesh_mac  => "de:ad:be:ef:de:ad"
-      , mesh_prefix_ipv6 => "fda1:384a:74de:1::/64"
-      , mesh_prefix_ipv4 => "255.255.255.128"
-      , mesh_ipv6  => "fda1:384a:74de:1::1"
-      , mesh_ipv4  => "10.13.37.1"
+ffnord::mesh { 'mesh_ffgc':
+      mesh_name    => "Freifunk Gotham City",
+      mesh_code    => "ffgc",
+      mesh_as      => 65035,
+      mesh_mac     => "de:ad:be:ef:de:ad",
+      mesh_ipv6    => "fd35:f308:a922::ff00/64
+      mesh_ipv4    => "10.35.0.1/19"
 
-      , fastd_secret => "50292dd647f0e41eb0c72f18c652bfd1bea8c8bd00ae9da3f772068b78111644"
-      , fastd_port   => 10000
-      , fastd_peers_git => 'git://somehost/peers.git'
+      fastd_secret => "50292dd647f0e41eb0c72f18c652bfd1bea8c8bd00ae9da3f772068b78111644",
+      fastd_port   => 10035,
+      fastd_peers_git => 'git://somehost/peers.git',
 
-      , dhcp_ranges => ['10.13.37.2 10.13.37.254','10.13.38.1 10.13.38.254']
-      , dns_servers => ['10.13.39.1','10.13.41.1']
+      dhcp_ranges => [ '10.35.0.2 10.35.0.254'
+                     , '10.35.1.1 10.35.1.254'
+                     , '10.35.2.2 10.35.2.254'
+                     , '10.35.3.2 10.35.3.254'
+                     , '10.35.4.2 10.35.4.254'
+                     ],
+      dns_servers => [ '10.35.5.1'
+                     , '10.35.10.1'
+                     , '10.35.15.1'
+                     , '10.35.20.1'
+                     ]
       }
 
 class {'ffnord::vpn::provider::hideio':
   openvpn_server => "nl-7.hide.io",
   openvpn_port   => 3478,
-  openvpn_user   => "gordan"
-  openvpn_password => "secretpw",
+  openvpn_user   => "wayne"
+  openvpn_password => "brucessecretpw",
 }
 
+ffnord::bird6::icvpn { 'gotham_city0':
+  icvpn_as => 65035,
+  icvpn_ipv4_address => "10.112.0.1",
+  icvpn_ipv6_address => "fec0::a:cf:0:35",
+  icvpn_peerings     => [kiel],
+  tinc_keyfile       => "/root/tinc_rsa_key.priv"
+}
 
 class { 'ffnord::monitor::munin':
-      , host => '192.168.0.1'
+      , host => '10.35.31.1'
 }
 
 class { 'ffnord::monitor::nrpe':
-      , allowed_hosts => '217.70.197.95'
+      , allowed_hosts => '10.35.31.1'
       }
 
 class { 'ffnord::alfred':}
