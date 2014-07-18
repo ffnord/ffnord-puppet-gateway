@@ -11,6 +11,7 @@ class ffnord::resources::fastd {
 class ffnord::resources::fastd::auto_fetch_keys {
   file { '/usr/local/bin/autoupdate_fastd_keys':
     ensure => file,
+    mode => '0755',
     source => 'puppet:///modules/ffnord/usr/local/bin/autoupdate_fastd_keys';
   }
   package { 'ffnord::resources::cron': name => "cron", ensure => installed; }
