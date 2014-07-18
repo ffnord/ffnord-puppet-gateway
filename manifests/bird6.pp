@@ -11,7 +11,20 @@ class ffnord::bird6 () {
       owner => root,
       group => root,
       require => File['/etc/bird/bird6.conf'];
-  }
+    '/etc/bird/':
+      ensure => directory,
+      mode => '0755';
+    '/etc/bird/bird6.conf':
+      ensure => file,
+      mode => "0644",
+      content => template("ffnord/etc/bird/bird6.conf.erb"),
+      notify => Service['bird6'],
+      require => [Package['bird6'],File['/etc/bird/']];
+    '/etc/bird6.conf':
+      ensure => link,
+      target => '/etc/bird/bird6.conf',
+      require => File['/etc/bird/bird6.conf'];
+  } 
 
   service { 
     'bird6': 
@@ -20,19 +33,6 @@ class ffnord::bird6 () {
       require => Package['bird6'];
   }
 
-  file { 
-    '/etc/bird/':
-      ensure => directory,
-      mode => '0755'
-  }
-
-  file { '/etc/bird/bird6.conf':
-    ensure => file,
-    mode => "0644",
-    content => template("ffnord/etc/bird/bird6.conf.erb"),
-    notify => Service['bird6'],
-    require => [Package['bird6'],File['/etc/bird/']]
-  } 
 }
 
 define ffnord::bird6::mesh (
