@@ -11,7 +11,7 @@ function getCurrentVersion() {
 }
 
 
-for $FASTD_PEER in $(find ${FASTD_ROOT} -type d -name peers);
+for FASTD_PEER in $(find ${FASTD_ROOT} -type d -name peers);
 do
 
   cd $FASTD_PEER
@@ -34,6 +34,6 @@ do
   then
     # Version has changed we need to update
     echo "Reload fastd peers"
-    pkill -x -HUP fastd
+    pkill -HUP -x fastd
   fi
 done
