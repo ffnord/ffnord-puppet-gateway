@@ -1,7 +1,6 @@
 class ffnord::bird6 (
-  $router_id = $ffnord::param::router_id,
-  $icvpn_as  = $ffnord::param::icvpn_as
-) {
+  $router_id = $ffnord::params::router_id,
+  $icvpn_as  = $ffnord::params::icvpn_as
  
   package { 
     'bird6':
