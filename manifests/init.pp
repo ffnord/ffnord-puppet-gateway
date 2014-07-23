@@ -72,6 +72,7 @@ define ffnord::mesh(
     mesh_ipv6_address => $mesh_ipv6_address,
     mesh_peerings => $mesh_peerings,
     site_ipv6_prefix => $mesh_ipv6_prefix,
+    site_ipv6_prefixlen => $mesh_ipv6_prefixlen,
     icvpn_as => $mesh_as;
   } -> 
   ffnord::named::mesh { "${mesh_code}":

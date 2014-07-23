@@ -49,6 +49,7 @@ define ffnord::bird6::mesh (
   $icvpn_as,
 
   $site_ipv6_prefix,
+  $site_ipv6_prefixlen,
 ) {
 
   include ffnord::bird6
