@@ -15,7 +15,7 @@ template bgp icvpn {
 <% meta = YAML.load_file("/etc/tinc/icvpn/meta/" + peer + ".yaml") -%>
 <% meta[peer]['icvpn-peers'].each_pair do |name,node| -%>
 
-protocol bgp <%= peer %>_<%= name %> from icvpn {
+protocol bgp '<%= peer %>_<%= name %>' from icvpn {
   neighbor <%= node['ipv6'] %> as <%= meta[peer]['as'] %>;
 };
 <% end -%>
