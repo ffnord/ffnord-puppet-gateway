@@ -53,11 +53,18 @@ define ffnord::bird6::mesh (
 
   include ffnord::bird6
 
+  file_line { "bird6-${mesh_code}-include":
+    path => '/etc/bird/bird6.conf',
+    line => "include \"/etc/bird/bird6.conf.d/${mesh_code}.conf\";",
+    require => File['/etc/bird/bird6.conf'],
+    notify  => Service['bird6'];
+  }
+
   file { "/etc/bird/bird6.conf.d/${mesh_code}.conf":
     mode => "0644",
     content => template("ffnord/etc/bird/bird6.interface.conf.erb"),
     require => [File['/etc/bird/bird6.conf.d/'],Package['bird6']],
-    notify  => Service['bird6'];
+    notify  => File_line["bird6-${mesh_code}-include"];
   }
 }
 
@@ -84,11 +91,18 @@ define ffnord::bird6::icvpn (
     icvpn_peers  => $icvpn_peerings;
   }
 
+  file_line { "icvpn-include":
+    path => '/etc/bird/bird6.conf',
+    line => 'include "/etc/bird/bird6.conf.d/icvpn-peers.conf";',
+    require => File['/etc/bird/bird6.conf'],
+    notify  => Service['bird6'];
+  }
+
   # Process meta data from tinc directory
-  file { "/etc/bird/bird6.conf.d/bird6.icvpn-peers.conf":
+  file { "/etc/bird/bird6.conf.d/icvpn-peers.conf":
     mode => "0644",
     content => template("ffnord/etc/bird/bird6.icvpn-peers.conf.erb"),
     require => [File['/etc/bird/bird6.conf.d/'],Package['bird6'],Class['ffnord::tinc']],
-    notify  => Service['bird6'];
+    notify  => File_line['icvpn-include'];
   } 
 }
