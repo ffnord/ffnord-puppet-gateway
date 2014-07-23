@@ -65,6 +65,13 @@ anonymous vpn uplink.
 Example puppet code (save e.g. as `/root/gateway.pp`):
 
 ```
+# Global parameters for this host
+class { 'ffnord::params':
+  router_id => "10.35.0.1", # The id of this router, probably the ipv4 address
+                            # of the mesh device of the providing community
+  icvpn_as => "65035"       # The as of the providing community
+}
+
 # You can repeat this mesh block for every community you support
 ffnord::mesh { 'mesh_ffgc':
       mesh_name    => "Freifunk Gotham City",
