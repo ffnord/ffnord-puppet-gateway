@@ -1,4 +1,8 @@
-class ffnord::bird6 () {
+class ffnord::bird6 (
+  $router_id = $ffnord::param::router_id,
+  $icvpn_as  = $ffnord::param::icvpn_as
+) {
+ 
   package { 
     'bird6':
       ensure => installed;
