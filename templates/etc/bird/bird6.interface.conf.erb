@@ -8,6 +8,12 @@ protocol static 'static_<%= @mesh_code %>' {
   table 'mesh_<%= @mesh_code %>';
   # reject route if announced from external
   route <%= @site_ipv6_prefix %>/<%= @site_ipv6_prefixlen %> reject;
+  };
+
+protocol static 'local_<%= @mesh_code %>' {
+  table 'mesh_<%= @mesh_code %>';
+  # reject route if announced from external
+  route <%= @site_ipv6_prefix %>/<%= @site_ipv6_prefixlen %> via "br-<%= @mesh_code%>";
 };
 
 function 'is_self_<%= @mesh_code %>' () {
@@ -19,7 +25,7 @@ function 'is_self_<%= @mesh_code %>' () {
 protocol pipe 'pipe_mesh_<%=@mesh_code%>' {
   table mesh;
   peer table 'mesh_<%= @mesh_code %>';
-  import where 'is_self_<%=@mesh_code %>'();
+  import where ! 'is_self_<%=@mesh_code %>'();
   export where source = RTS_BGP || source = RTS_STATIC;
 };
 
