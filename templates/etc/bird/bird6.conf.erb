@@ -58,8 +58,9 @@ protocol pipe pipe_kernel_mesh {
 
 # template for local route exchange via bgp
 template bgp local_mesh {
-  import where is_ula();; # Is that a wise decision?
+  import where is_ula(); # Is that a wise decision?
   export where source = RTS_BGP;
+  gateway direct;
   next hop self;
 };
 
