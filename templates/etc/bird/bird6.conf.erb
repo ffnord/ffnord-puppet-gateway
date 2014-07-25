@@ -24,6 +24,7 @@ router id <%= @router_id %>;
 # icvpn <-> [mesh] <#> [mesh_ffgc,..] <#> local-peers
 #             ^--------> [kernel(rtable=42)]
 table mesh;
+table kernel_main;
 
 # Filter function to check if an IPv6 Route is a ULA.
 function is_ula() {
@@ -42,6 +43,15 @@ protocol kernel {
   export all;      # Export all routes
 };
 
+# export to kernel main table for local services
+protocol kernel {
+  table kernel_main;
+  scan time 20;
+  import none;
+  export all;
+  persist;
+};
+
 # This pseudo-protocol watches all interface up/down events.
 protocol device {
   scan time 10; # Scan interfaces every 10 seconds 
@@ -51,6 +61,13 @@ protocol device {
 # import everything from mesh table into 
 # kernel table and export no routes into mesh.
 protocol pipe pipe_kernel_mesh {
+  peer table mesh;
+  import all;
+  export none;
+};
+
+protocol pipe pipe_kernel_main_mesh {
+  table kernel_main;
   peer table mesh;
   import all;
   export none;
