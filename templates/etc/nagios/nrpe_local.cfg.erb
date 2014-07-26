@@ -1,3 +1,3 @@
-allowed_hosts=<%= @allowed_hosts %>
+allowed_hosts=127.0.0.1,<%= @allowed_hosts %>
 
 command[check_apt]=/usr/lib/nagios/plugins/check_apt -t 30
