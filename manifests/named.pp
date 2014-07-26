@@ -1,4 +1,17 @@
 class ffnord::named () {
+
+  if defined(Class['ffnord::monitor::nrpe']){
+    file {
+      "/etc/nagios/nrpe.d/check_named":
+        ensure => file,
+        mode => '0644',
+        owner => 'root',
+        group => 'root',
+        content => inline_template("command[check_named]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C named\n"),
+        notify => [Service['nagios-nrpe-server']];
+    }
+  }
+
   package { 
     'bind9':
       ensure => installed;
