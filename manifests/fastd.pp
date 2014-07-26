@@ -14,12 +14,13 @@ define ffnord::fastd( $mesh_name
 
   if defined(Class['ffnord::monitor::nrpe']){
     file {
-      "/etc/nagios/nrpe.d/fastd_${mesh_code}":
+      "/etc/nagios/nrpe.d/check_fastd_${mesh_code}":
         ensure => file,
         mode => '0644',
         owner => 'root',
         group => 'root',
-        content => inline_template("command[check_fastd_${mesh_code}]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C fastd -a \"${mesh_code}-mesh-vpn\"");
+        content => inline_template("command[check_fastd_${mesh_code}]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C fastd -a \"${mesh_code}-mesh-vpn\"\n"),
+        notify => [Service['nagios-nrpe-server']];
     }
   }
 
