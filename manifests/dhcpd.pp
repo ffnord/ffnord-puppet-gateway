@@ -14,31 +14,57 @@ define ffnord::dhcpd (
 
   if $ranges != [] {
 
-    Class[ffnord::dhcpd::base]
-    ->
     file { "/etc/dhcp/interface-${name}.conf":
       ensure => file,
-      content => template("ffnord/etc/dhcp/interface.erb");
-    } ->
+      content => template("ffnord/etc/dhcp/interface.erb"),
+      require => [Package['isc-dhcp-server']],
+      notify => [Service['isc-dhcp-server']];
+    } 
+
     file_line { "ffnord::dhcpd::${name}-rule":
       path => '/etc/dhcp/dhcpd.conf',
       line => "include \"/etc/dhcp/interface-${name}.conf\";",
-      notify => Service[ffnord::dhcp];
+      require => [File['/etc/dhcp/dhcpd.conf']],
+      notify => [Service['isc-dhcp-server']];
     }
   }
 }
 
 class ffnord::dhcpd::base {
-  package { 'isc-dhcp-server': ensure => installed; }
-  ->
+
+  if defined(Class['ffnord::monitor::nrpe']){
+    file {
+      "/etc/nagios/nrpe.d/check_dhcpd":
+        ensure => file,
+        mode => '0644',
+        owner => 'root',
+        group => 'root',
+        content => inline_template("command[check_dhcpd]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C dhcpd\n"),
+        notify => [Service['nagios-nrpe-server']];
+    }
+  }
+
+  package { 
+    'isc-dhcp-server': 
+      ensure => installed;
+  }
+
   file {
     "/etc/dhcp/dhcpd.conf":
       ensure => file,
-      mode   => "0644",
-      source => 'puppet:///modules/ffnord/etc/dhcp/dhcpd.conf';
+      mode   => '0644',
+      owner  => 'root',
+      group  => 'root',
+      source => 'puppet:///modules/ffnord/etc/dhcp/dhcpd.conf',
+      require => [Package['isc-dhcp-server']],
+      notify => [Service['isc-dhcp-server']];
   }
 }
 
 class ffnord::dhcpd::service {
-  service { 'ffnord::dhcp': name => "isc-dhcp-server", ensure => running, enable => true; }
+  service { 
+    'isc-dhcp-server': 
+      ensure => running, 
+      enable => true; 
+  }
 }
