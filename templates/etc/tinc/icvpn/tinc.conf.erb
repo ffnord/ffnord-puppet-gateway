@@ -6,5 +6,8 @@ Port = 655
 Hostnames = yes
 
 <% @icvpn_peers.each do |peer| -%>
-ConnectTo = <%=peer%>
+<% meta = YAML.load_file("/etc/tinc/icvpn/meta/" + peer + ".yaml") -%>
+<% meta[peer]['icvpn-peers'].each_pair do |name,node| -%>
+ConnectTo = <%=name%>
+<% end -%>
 <% end -%>
