@@ -35,6 +35,7 @@ class ffnord::vpn (
 class ffnord::vpn::provider () {
   service {'openvpn':
     ensure  => running,
+    hasrestart => true,
     require => Package['openvpn'],
     notify => Class['ffnord::vpn'];
   }

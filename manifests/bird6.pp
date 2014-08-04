@@ -47,6 +47,7 @@ class ffnord::bird6 (
     'bird6': 
       ensure => running,
       enable => true,
+      hasrestart => true,
       require => Package['bird6'];
   }
 

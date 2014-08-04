@@ -49,6 +49,7 @@ class ffnord::radvd::base () {
     'radvd': 
       enable => true, 
       ensure => running,
+      hasrestart => true,
       require => [File['/etc/radvd.conf.d'],Package['radvd']]; 
   }
 }

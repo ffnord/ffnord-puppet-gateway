@@ -16,5 +16,5 @@ class ffnord::monitor::munin ( $host
 # TODO: delete not needed plugins
        '/etc/munin/plugin-conf.d/vnstat': ensure => file, content => '[vnstat_eth0_monthly_rxtx]
 env.estimate 1';
-  } -> service { 'munin-node': ensure => running, enable => true; } 
+  } -> service { 'munin-node': ensure => running, hasrestart => true, enable => true; } 
 }

@@ -4,7 +4,7 @@ class ffnord::resources::fastd {
 
   Class[ffnord::resources::repos]
   -> package { 'ffnord::resources::fastd': name => "fastd", ensure => installed;}
-  -> service { 'ffnord::resources::fastd': name => "fastd", ensure => running, enable => true; }
+  -> service { 'ffnord::resources::fastd': name => "fastd", hasrestart => true, ensure => running, enable => true; }
 
 }
 

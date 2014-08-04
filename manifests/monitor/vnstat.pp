@@ -21,6 +21,7 @@ class ffnord::monitor::vnstat () {
     'vnstat':
       ensure  => running,
       enable  => true,
+      hasrestart => true,
       require => [Package['vnstat']];
   }
 }

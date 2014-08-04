@@ -21,6 +21,7 @@ class ffnord::named () {
     'bind9':
       ensure => running,
       enable => true,
+      hasrestart => true,
       require => [Package['bind9'],File['/etc/bind/named.conf.options']]
   }
 

@@ -12,6 +12,7 @@ class ffnord::monitor::nrpe ( $allowed_hosts
   service {
     'nagios-nrpe-server':
        ensure => running,
+       hasrestart => true,
        enable => true;
   }
 

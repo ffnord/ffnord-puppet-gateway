@@ -64,7 +64,8 @@ class ffnord::dhcpd::base {
 class ffnord::dhcpd::service {
   service { 
     'isc-dhcp-server': 
-      ensure => running, 
-      enable => true; 
+      ensure => running,
+      hasrestart => true,
+      enable => true;
   }
 }

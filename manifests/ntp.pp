@@ -16,6 +16,7 @@ class ffnord::ntp () {
   service { 
     'ntp':
       enable => true,
+      hasrestart => true,
       ensure => running;
   }
 }
