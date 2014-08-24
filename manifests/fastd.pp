@@ -14,7 +14,7 @@ define ffnord::fastd( $mesh_name
 
   if defined(Class['ffnord::monitor::nrpe']){
     file {
-      "/etc/nagios/nrpe.d/check_fastd_${mesh_code}":
+      "/etc/nagios/nrpe.d/check_fastd_${mesh_code}.cfg":
         ensure => file,
         mode => '0644',
         owner => 'root',

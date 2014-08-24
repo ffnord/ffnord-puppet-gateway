@@ -25,7 +25,7 @@ class ffnord::radvd::base () {
 
   if defined(Class['ffnord::monitor::nrpe']){
     file {
-      "/etc/nagios/nrpe.d/check_radvd":
+      "/etc/nagios/nrpe.d/check_radvd.cfg":
         ensure => file,
         mode => '0644',
         owner => 'root',

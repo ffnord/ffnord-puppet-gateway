@@ -2,7 +2,7 @@ class ffnord::named () {
 
   if defined(Class['ffnord::monitor::nrpe']){
     file {
-      "/etc/nagios/nrpe.d/check_named":
+      "/etc/nagios/nrpe.d/check_named.cfg":
         ensure => file,
         mode => '0644',
         owner => 'root',

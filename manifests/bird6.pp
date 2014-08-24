@@ -6,7 +6,7 @@ class ffnord::bird6 (
 
   if defined(Class['ffnord::monitor::nrpe']){
     file {
-      "/etc/nagios/nrpe.d/check_bird6":
+      "/etc/nagios/nrpe.d/check_bird6.cfg":
         ensure => file,
         mode => '0644',
         owner => 'root',

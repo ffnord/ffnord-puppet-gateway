@@ -34,7 +34,7 @@ class ffnord::dhcpd::base {
 
   if defined(Class['ffnord::monitor::nrpe']){
     file {
-      "/etc/nagios/nrpe.d/check_dhcpd":
+      "/etc/nagios/nrpe.d/check_dhcpd.cfg":
         ensure => file,
         mode => '0644',
         owner => 'root',

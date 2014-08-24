@@ -2,7 +2,7 @@ class ffnord::monitor::vnstat () {
 
   if defined(Class['ffnord::monitor::nrpe']){
     file {
-      "/etc/nagios/nrpe.d/check_vnstatd":
+      "/etc/nagios/nrpe.d/check_vnstatd.cfg":
         ensure => file,
         mode => '0644',
         owner => 'root',
