@@ -96,7 +96,7 @@ ip46tables -A forward -i <%=@name%> -j <%=@chain%>-forward
 define ffnord::firewall::forward (
   $chain = "mesh" # Possible values are "mesh","wan"
 ) {
- file { "/etc/iptables.d/800-forward-accept-${name}": 
+ file { "/etc/iptables.d/800-${chain}-forward-ACCEPT-${name}": 
    ensure => file,
    owner => "root",
    group => "root",
