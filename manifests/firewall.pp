@@ -68,7 +68,7 @@ define ffnord::firewall::service (
 <% @chains.each do |chain| -%>
 <% @protos.each do |proto| -%>
 <% @ports.each do |port| -%>
-ip46tables -A <%=chain%>-input -p <%=proto%> -m <%=proto%> --dport <%=@port%> -j ACCEPT
+ip46tables -A <%=chain%>-input -p <%=proto%> -m <%=proto%> --dport <%=port%> -j ACCEPT
 <% end -%>
 <% end -%>
 <% end -%>
