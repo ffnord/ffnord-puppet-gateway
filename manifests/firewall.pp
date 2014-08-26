@@ -14,43 +14,43 @@ class ffnord::firewall {
       owner => 'root',
       group => 'root',
       mode => '0755',
-      source => "puppet:///ffnord/usr/local/bin/build-firewall";
+      source => "puppet:///modules/ffnord/usr/local/bin/build-firewall";
     '/etc/iptables.d/000-RESET': 
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///ffnord/etc/iptables.d/000-RESET";
+      source => "puppet:///modules/ffnord/etc/iptables.d/000-RESET";
     '/etc/iptables.d/001-FORWARD-PreProcessing': 
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///ffnord/etc/iptables.d/001-FORWARD-PreProcessing";
+      source => "puppet:///modules/ffnord/etc/iptables.d/001-FORWARD-PreProcessing";
     '/etc/iptables.d/001-INPUT-PreProcessing': 
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///ffnord/etc/iptables.d/001-INPUT-PreProcessing";
+      source => "puppet:///modules/ffnord/etc/iptables.d/001-INPUT-PreProcessing";
     '/etc/iptables.d/500-Allow-SSH':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///ffnord/etc/iptables.d/500-Allow-SSH";
+      source => "puppet:///modules/ffnord/etc/iptables.d/500-Allow-SSH";
     '/etc/iptables.d/900-FORWARD-drop':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///ffnord/etc/iptables.d/900-FORWARD-drop";
+      source => "puppet:///modules/ffnord/etc/iptables.d/900-FORWARD-drop";
     '/etc/iptables.d/900-INPUT-drop':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///ffnord/etc/iptables.d/900-INPUT-drop";
+      source => "puppet:///modules/ffnord/etc/iptables.d/900-INPUT-drop";
   }
 }
 
