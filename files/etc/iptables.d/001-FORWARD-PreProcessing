@@ -1,0 +1,18 @@
+# Initial processing of input chain on filter table
+# Packages which are not directly ACCEPTed or DROPed are pushed to the forward chain
+ip46tables -N forward
+ip46tables -N mesh-forward
+ip46tables -N wan-forward
+
+# connection tracking
+ip46tables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+ip46tables -A FORWARD -m conntrack --ctstate INVALID -j DROP
+
+# udp specific connection tracking
+ip46tables -A FORWARD -p udp -m conntrack --ctstate NEW -j forward
+ip4tables -A FORWARD -p udp -j REJECT --reject-with icmp-port-unreachable
+ip6tables -A FORWARD -p udp -j REJECT --reject-with icmp6-port-unreachable
+
+# tcp specific connection tracking
+ip46tables -A FORWARD -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j forward
+ip46tables -A FORWARD -p tcp -j REJECT --reject-with tcp-reset

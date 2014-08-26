@@ -1,0 +1,4 @@
+# Drop all packages not ACCEPTed to this point
+ip46tables -A input -j DROP
+ip46tables -A mesh-input -j DROP
+ip46tables -A wan-input -j DROP

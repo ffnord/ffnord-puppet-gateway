@@ -1,0 +1,4 @@
+# Drop all packages which are not ACCEPTed to this point
+ip46tables -A forward -j DROP
+ip46tables -A mesh-forward -j DROP
+ip46tables -A wan-forward  -j DROP

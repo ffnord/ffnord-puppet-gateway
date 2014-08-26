@@ -1,0 +1,23 @@
+# Initial processing of input chain on filter table
+# Packages which are not directly ACCEPTed or DROPed are pushed to the input chain
+ip46tables -N input
+ip46tables -N mesh-input
+ip46tables -N wan-input
+
+# Accept all packages for loopback device
+ip46tables -A INPUT -i lo -j ACCEPT
+# Accept all icmp packages
+ip46tables -A INPUT -p icmp -j ACCEPT
+
+# Connection Tracking
+ip46tables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+ip46tables -A INPUT -m conntrack --ctstate INVALID -j DROP
+
+# udp specific connection tracking
+ip46tables -A INPUT -p udp -m conntrack --ctstate NEW -j input
+ip4tables -A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable
+ip6tables -A INPUT -p udp -j REJECT --reject-with icmp6-port-unreachable
+
+# tcp specific connection tracking
+ip46tables -A INPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j input
+ip46tables -A INPUT -p tcp -j REJECT --reject-with tcp-reset

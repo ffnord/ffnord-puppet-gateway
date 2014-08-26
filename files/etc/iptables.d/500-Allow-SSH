@@ -1,0 +1,3 @@
+# Allow ssh on wan and mesh
+ip46tables -A wan-input -p tcp -m tcp --dport 22    -j ACCEPT
+ip46tables -A mesh-input -p tcp -m tcp --dport 22    -j ACCEPT
