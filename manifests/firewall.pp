@@ -1,3 +1,27 @@
+/** Simple and stupid firewall handling.
+ *  
+ * We simple define the firewall rules by putting them into ordered files.
+ * This way we can place new rules at any position into the chains.
+ * The predefined ruleset first resets the Xtables rulesets and 
+ * handles connection tracking, jumping the packages into seperated
+ * chains or directly drop them. 
+ * Packages accepted for further processing are then be sorted into
+ * zone specific chaines. 
+ * 
+ * We have two zones in this setup: mesh and wan
+ * Each with a forward and a input chain: mesh-forward, mesh-input, ...
+ * 
+ * The order of execution is matched to meaning by the following list:
+ * 
+ * 000 RESET all the rules
+ * 001 Preprocessing
+ * 100 Zone selection
+ * 500+ Service/Port acceptance
+ * 800 Forwarding acceptance
+ * 900 Drop the rest
+ * 900+ Mangle/Postrouting handling
+ */
+
 class ffnord::firewall {
 
   file { 
