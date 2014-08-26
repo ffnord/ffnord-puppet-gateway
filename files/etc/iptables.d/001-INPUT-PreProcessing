@@ -7,7 +7,8 @@ ip46tables -N wan-input
 # Accept all packages for loopback device
 ip46tables -A INPUT -i lo -j ACCEPT
 # Accept all icmp packages
-ip46tables -A INPUT -p icmp -j ACCEPT
+ip4tables -A INPUT -p icmp -j ACCEPT
+ip6tables -A INPUT -p icmpv6 -j ACCEPT
 
 # Connection Tracking
 ip46tables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
