@@ -103,7 +103,6 @@ define ffnord::firewall::forward (
    mode => "0644",
    content => inline_template("# Process packages from device <%=@name%>
 ip46tables -A mesh-forward -o <%=@name%> -j ACCEPT
-"),
-   require => Ffnord::Firewall::Device[$name];
+");
  }
 }
