@@ -19,4 +19,10 @@ class ffnord::ntp () {
       hasrestart => true,
       ensure => running;
   }
+  ->
+  ffnord::firewall::service { 'ntpd':
+    ports => ['123'],
+    protos => ['udp'],
+    chains => ['mesh']
+  }
 }

@@ -62,4 +62,9 @@ class ffnord::tinc (
      hour    => '6',
      require => Vcsrepo['/etc/tinc/icvpn/'];
   }
+
+  ffnord::firewall::service { "icvpn":
+    ports  => ['655'],
+    chains => ['wan']
+  }
 }

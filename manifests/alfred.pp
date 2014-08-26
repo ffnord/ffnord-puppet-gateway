@@ -49,4 +49,10 @@ class ffnord::alfred () {
      minute  => '*',
      require => [Vcsrepo['/opt/alfred-announce'], Vcsrepo['/opt/alfred']];
   }
+  
+  ffnord::firewall::service { 'alfred':
+    proto => ["udp"],
+    chains => ["mesh"],
+    ports => ['16962'],
+  }
 }
