@@ -57,6 +57,8 @@ class ffnord::vpn::provider () {
         notify => [Service['nagios-nrpe-server']];
     }
   }
+
+  ffnord::monitor::vnstat::device { 'tun-anonvpn': }
 }
 
 class ffnord::vpn::provider::mullvad () {
