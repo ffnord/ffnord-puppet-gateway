@@ -112,7 +112,7 @@ define ffnord::firewall::device (
   $chain = "mesh" # Possible values are "mesh","wan"
 ) {
 
- include ffnord::firmware
+ include ffnord::firewall
 
  file { "/etc/iptables.d/100-device-${name}": 
    ensure => file,
@@ -132,7 +132,7 @@ define ffnord::firewall::forward (
   $chain = "mesh" # Possible values are "mesh","wan"
 ) {
 
- include ffnord::firmware
+ include ffnord::firewall
 
  file { "/etc/iptables.d/800-${chain}-forward-ACCEPT-${name}": 
    ensure => file,
