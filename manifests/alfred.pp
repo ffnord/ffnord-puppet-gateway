@@ -51,7 +51,7 @@ class ffnord::alfred () {
   }
   
   ffnord::firewall::service { 'alfred':
-    proto => ["udp"],
+    protos => ["udp"],
     chains => ["mesh"],
     ports => ['16962'],
   }
