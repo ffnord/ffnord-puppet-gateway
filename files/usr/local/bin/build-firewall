@@ -4,12 +4,12 @@ IP4TABLES=$(which iptables)
 IP6TABLES=$(which ip6tables)
 
 function ip4tables() {
-  echo iptables $*
+  echo -e "\t iptables $*"
   $IP4TABLES $*
 }
 
 function ip6tables() {
-  echo ip6tables $*
+  echo -e "\t ip6tables $*"
   $IP6TABLES $*
 }
 
@@ -19,6 +19,6 @@ function ip46tables() {
 }
 
 for rules in /etc/iptables.d/*; do
-   echo $rules
+   echo "File: $rules"
    . $rules
 done
