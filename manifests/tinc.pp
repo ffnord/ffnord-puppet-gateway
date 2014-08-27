@@ -63,7 +63,7 @@ class ffnord::tinc (
      require => Vcsrepo['/etc/tinc/icvpn/'];
   }
 
-  ffnord::firewall::forward { "icvpn":
+  ffnord::firewall::device { "icvpn":
     chain => 'mesh'
   }
 
