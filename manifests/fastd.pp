@@ -49,7 +49,7 @@ define ffnord::fastd( $mesh_name
   ffnord::firewall::service { "fastd-${mesh_code}":
     ports  => [$fastd_port],
     protos => ['udp'],
-    chains => ['mesh']
+    chains => ['wan']
   }
 
 }
