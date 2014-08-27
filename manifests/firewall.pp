@@ -20,6 +20,10 @@
  * 800 Forwarding acceptance
  * 900 Drop the rest
  * 900+ Mangle/Postrouting handling
+ *
+ * ATTENTION: The firewall rules will not triggered by this class.
+ *            You have to invoke the build-firewall script yourself.
+ * 
  */
 
 class ffnord::firewall {
