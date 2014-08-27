@@ -33,6 +33,9 @@ class ffnord::vpn (
 }
 
 class ffnord::vpn::provider () {
+
+  include ffnord::firewall
+
   service {'openvpn':
     ensure  => running,
     hasrestart => true,
@@ -59,6 +62,21 @@ class ffnord::vpn::provider () {
   }
 
   ffnord::monitor::vnstat::device { 'tun-anonvpn': }
+
+  ffnord::firewall::forward { 'tun-anonvpn':
+    chain => 'mesh'
+  }
+
+  # Define Firewall rule for masquerade
+  file {
+    '/etc/iptables.d/910-Masquerade-tun-anonvpn':
+     ensure => file,
+     owner => 'root',
+     group => 'root',
+     mode => '0644',
+     content => 'ip4tables -t nat -A POSTROUTING -o tun-anonvpn -j MASQUERADE',
+     require => [File['/etc/iptables.d/']],
+  }
 }
 
 class ffnord::vpn::provider::mullvad () {

@@ -51,6 +51,12 @@ class ffnord::bird6 (
       require => Package['bird6'];
   }
 
+  ffnord::firewall::service { "bird6":
+    ports  => ['179'],
+    protos => ['tcp'],
+    chains => ['mesh']
+  }
+
 }
 
 define ffnord::bird6::mesh (

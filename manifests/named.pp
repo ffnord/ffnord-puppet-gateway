@@ -32,6 +32,12 @@ class ffnord::named () {
       require => [Package['bind9']],
       notify  => [Service['bind9']];
   }
+
+  ffnord::firewall::service { 'named':
+    chains => ['mesh'],
+    ports  => ['53'],
+    protos => ['udp','tcp'];
+  }
 }
 
 

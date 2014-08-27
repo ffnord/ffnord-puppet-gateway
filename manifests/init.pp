@@ -21,6 +21,7 @@ define ffnord::mesh(
   # TODO Update README
 
   include ffnord::ntp
+  include ffnord::firewall
 
   # Determine ipv{4,5} network prefixes and ivp4 netmask
   $mesh_ipv4_prefix   = inline_template("<%= IPAddr.new(@mesh_ipv4) %>")
@@ -32,7 +33,7 @@ define ffnord::mesh(
   $mesh_ipv6_prefixlen = inline_template("<%= @mesh_ipv6.split('/')[1] %>")
   $mesh_ipv6_address   = inline_template("<%= @mesh_ipv6.split('/')[0] %>")
 
-
+  Class['ffnord::firewall'] ->
   ffnord::bridge { "bridge_${mesh_code}":
     mesh_name            => $mesh_name,
     mesh_code            => $mesh_code,

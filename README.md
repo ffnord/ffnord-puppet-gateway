@@ -9,8 +9,9 @@ The idea is to implement the step-by-step guide on http://wiki.freifunk.net/Frei
 Basically this is a complete rewrite of the puppet scripts provided by the
 Freifunk Hamburg Community.
 
-The 'ffnord::mesh' block will setup a bridge, fastd, batman, ntp, dhcpd, dns (bind9), 
-radvd and bird6. There are types for setting up monitoring, icvpn, anonymous vpn and alfred announcements.
+The 'ffnord::mesh' block will setup a bridge, fastd, batman, ntp, dhcpd, dns (bind9),
+radvd, bird6 and firewall rules vor IPv4 and IPv6.
+There are types for setting up monitoring, icvpn, anonymous vpn and alfred announcements.
 
 ## Open Problems
 
@@ -26,6 +27,7 @@ radvd and bird6. There are types for setting up monitoring, icvpn, anonymous vpn
 * Bird IPv4 Route exchange
 * named/bind9 Freifunk/Hackint/DN42 TLDs
 * The announce script for alfred is functional iff only one mesh device is present.
+* Apply firewall rules automatially, when all rules are defined.
 
 ## Usage
 
@@ -69,7 +71,8 @@ Example puppet code (save e.g. as `/root/gateway.pp`):
 class { 'ffnord::params':
   router_id => "10.35.0.1", # The id of this router, probably the ipv4 address
                             # of the mesh device of the providing community
-  icvpn_as => "65035"       # The as of the providing community
+  icvpn_as => "65035",      # The as of the providing community
+  wan_devices => ['eth0']   # A array of devices which should be in the wan zone
 }
 
 # You can repeat this mesh block for every community you support
@@ -174,12 +177,18 @@ gc-gw4:
   ipv6: "fd35:f308:a922::ff04"
 ```
 
+### Firewall
+
+The firewall rules created are collected in `/etc/iptables.d`, they are not applied
+automatically! You have to call `build-firewall` to apply them.
+
 ### Run Puppet
 
 To apply the puppet manifest (e.g. saved as `gateway.pp`) run:
 
 ```
 puppet apply --verbose /root/gateway.pp
+build-firewall
 ```
 
 The verbose flag is optional and shows all changes.

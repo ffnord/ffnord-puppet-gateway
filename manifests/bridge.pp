@@ -32,5 +32,11 @@ define ffnord::bridge( $mesh_code
       require => [ File_Line["/etc/iproute2/rt_tables"]
                  , Class[ffnord::resources::sysctl] 
                  ];
+  } ->
+  ffnord::firewall::device { "br-${mesh_code}":
+    chain => "mesh"
+  } ->
+  ffnord::firewall::forward { "br-${mesh_code}":
+    chain => "mesh"
   }
 }

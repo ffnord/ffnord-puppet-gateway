@@ -45,6 +45,11 @@ define ffnord::fastd( $mesh_name
     provider => git,
     source   => $fastd_peers_git,
     notify   => Class[ffnord::resources::fastd::auto_fetch_keys];
+  } ->
+  ffnord::firewall::service { "fastd-${mesh_code}":
+    ports  => [$fastd_port],
+    protos => ['udp'],
+    chains => ['wan']
   }
 
 }

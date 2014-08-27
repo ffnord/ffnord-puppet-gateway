@@ -24,4 +24,9 @@ class ffnord::monitor::nrpe ( $allowed_hosts
       group => 'root',
       content => template('ffnord/etc/nagios/nrpe_local.cfg.erb');
   }
+
+  ffnord::firewall::service { 'nrpe':
+    ports => ['5666'],
+    chains => ['wan'];
+  }
 }
