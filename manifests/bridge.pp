@@ -33,10 +33,10 @@ define ffnord::bridge( $mesh_code
                  , Class[ffnord::resources::sysctl] 
                  ];
   } ->
-  ffnord::firewall::device {
+  ffnord::firewall::device { "br-${mesh_code}":
     chain => "mesh"
   } ->
-  ffnord::firewall::forward {
+  ffnord::firewall::forward { "br-${mesh_code}":
     chain => "mesh"
   }
 }
