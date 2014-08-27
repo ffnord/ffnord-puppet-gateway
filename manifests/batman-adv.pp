@@ -13,6 +13,6 @@ define ffnord::batman-adv( $mesh_code
   file_line {
    'root_bashrc_batffki':
      path => '/root/.bashrc',
-     line => "alias batctl-ffki='batctl -m bat-${mesh_code}'"
+     line => "alias batctl-${mesh_code}='batctl -m bat-${mesh_code}'"
   }
 }
