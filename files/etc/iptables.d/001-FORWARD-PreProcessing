@@ -8,6 +8,10 @@ ip46tables -N wan-forward
 ip46tables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 ip46tables -A FORWARD -m conntrack --ctstate INVALID -j DROP
 
+# icmp handling, TODO icmp border handling
+ip4tables -A FORWARD -p icmp -j ACCEPT
+ip6tables -A FORWARD -p icmpv6 -j ACCEPT
+
 # udp specific connection tracking
 ip46tables -A FORWARD -p udp -m conntrack --ctstate NEW -j forward
 ip4tables -A FORWARD -p udp -j REJECT --reject-with icmp-port-unreachable
