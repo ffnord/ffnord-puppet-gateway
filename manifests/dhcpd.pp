@@ -60,7 +60,7 @@ class ffnord::dhcpd::base {
       notify => [Service['isc-dhcp-server']];
   }
   
-  ffnord::firewall::service {
+  ffnord::firewall::service { 'dhcpd':
     chains => ['mesh'],
     ports  => ['67','68'],
     protos => ['udp'];
