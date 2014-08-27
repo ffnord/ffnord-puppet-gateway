@@ -33,6 +33,9 @@ class ffnord::vpn (
 }
 
 class ffnord::vpn::provider () {
+
+  include ffnord::firewall
+
   service {'openvpn':
     ensure  => running,
     hasrestart => true,
@@ -56,6 +59,21 @@ class ffnord::vpn::provider () {
         content => inline_template("command[check_openvpn_anonvpn]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C openvpn -a \"ovpn-anonvpn\"\n"),
         notify => [Service['nagios-nrpe-server']];
     }
+  }
+
+  ffnord::firewall::forward { 'tun-anonvpn':
+    chain => 'mesh'
+  }
+
+  # Define Firewall rule for masquerade
+  file {
+    '/etc/iptables.d/910-Masquerade-tun-anonvpn':
+     ensure => file,
+     owner => 'root',
+     group => 'root',
+     mode => '0644',
+     content => 'ip4tables -t nat -A POSTROUTING -o tun-anonvpn -j MASQUERADE',
+     require => [File['/etc/iptables.d/']],
   }
 }
 
