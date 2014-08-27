@@ -26,7 +26,9 @@
  * 
  */
 
-class ffnord::firewall {
+class ffnord::firewall (
+  $wan_devices = $ffnord::params::wan_devices
+) inherits ffnord::params {
 
   file { 
     '/etc/iptables.d/': 
@@ -82,6 +84,10 @@ class ffnord::firewall {
       mode => '0644',
       source => "puppet:///modules/ffnord/etc/iptables.d/900-INPUT-drop",
       require => File['/etc/iptables.d/'];
+  }
+
+  ffnord::firewall::device { $wan_devices:
+    chain => 'wan';
   }
 }
 
