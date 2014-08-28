@@ -3,8 +3,7 @@ class ffnord::monitor::nrpe ( $allowed_hosts
   package { 
     'nagios-nrpe-server': 
       ensure => installed,
-      notify => [Service['nagios-nrpe-server']],
-      require => [File['/etc/nagios/nrpe_local.cfg']];
+      notify => Service['nagios-nrpe-server'];
     'cron-apt': 
       ensure => installed;
   } 
@@ -13,7 +12,8 @@ class ffnord::monitor::nrpe ( $allowed_hosts
     'nagios-nrpe-server':
        ensure => running,
        hasrestart => true,
-       enable => true;
+       enable => true,
+       require => [Package['nagios-nrpe-server'],File['/etc/nagios/nrpe_local.cfg']];
   }
 
   file { 
@@ -22,6 +22,7 @@ class ffnord::monitor::nrpe ( $allowed_hosts
       mode => '0644',
       owner => 'root',
       group => 'root',
+      require => Package['nagios-nrpe-server'],
       content => template('ffnord/etc/nagios/nrpe_local.cfg.erb');
   }
 
