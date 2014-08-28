@@ -40,6 +40,7 @@ class ffnord::dhcpd::base {
         owner => 'root',
         group => 'root',
         content => inline_template("command[check_dhcpd]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C dhcpd\n"),
+        require => [Class['ffnord::monitor::nrpe']],
         notify => [Service['nagios-nrpe-server']];
     }
   }

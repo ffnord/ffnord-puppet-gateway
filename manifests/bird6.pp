@@ -12,6 +12,7 @@ class ffnord::bird6 (
         owner => 'root',
         group => 'root',
         content => inline_template("command[check_bird6]=/usr/lib/nagios/plugins/check_procs -w 1:1 -c 1:1 -C bird6\n"),
+        require => [Class['ffnord::monitor::nrpe']],
         notify => [Service['nagios-nrpe-server']];
     }
   }
