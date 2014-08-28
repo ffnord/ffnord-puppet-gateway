@@ -31,7 +31,7 @@ class ffnord::radvd::base () {
         owner => 'root',
         group => 'root',
         content => inline_template("command[check_radvd]=/usr/lib/nagios/plugins/check_procs -w 2:2 -c 2:2 -C radvd"),
-        require => [Class['ffnord::monitor::nrpe']],
+        require => [Package['nagios-nrpe-server']],
         notify => [Service['nagios-nrpe-server']];
     }
   }

@@ -8,7 +8,7 @@ class ffnord::named () {
         owner => 'root',
         group => 'root',
         content => inline_template("command[check_named]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C named\n"),
-        require => [Class['ffnord::monitor::nrpe']],
+        require => [Package['nagios-nrpe-server']],
         notify => [Service['nagios-nrpe-server']];
     }
   }
