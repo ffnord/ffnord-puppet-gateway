@@ -47,6 +47,12 @@ class ffnord::tinc (
       mode => '0755';
   }
 
+  file_line {
+    'icvpn-auto-boot':
+      path => '/etc/tinc/nets.boot',
+      line => "icvpn";
+  }
+
   vcsrepo { "/etc/tinc/icvpn/":
     ensure   => present,
     provider => git,
