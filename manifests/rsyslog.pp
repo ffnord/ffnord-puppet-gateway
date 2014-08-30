@@ -24,6 +24,12 @@ class ffnord::rsyslog {
       owner => 'root',
       group => 'root',
       source => 'puppet:///modules/ffnord/etc/rsyslog.d/local0.conf';
+    '/etc/rsyslog.d/local7.conf':
+      ensure => file,
+      mode => '0644',
+      owner => 'root',
+      group => 'root',
+      source => 'puppet:///modules/ffnord/etc/rsyslog.d/local7.conf';
     '/etc/rsyslog.d/dhcp.conf':
       ensure => file,
       mode => '0644',
