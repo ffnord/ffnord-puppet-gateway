@@ -48,7 +48,7 @@ class ffnord::bird6 (
     'bird6': 
       ensure => running,
       enable => true,
-      hasrestart => true,
+      restart => "/usr/sbin/birdc6 configure",
       require => Package['bird6'];
   }
 
