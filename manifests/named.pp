@@ -29,7 +29,7 @@ class ffnord::named () {
   file {
     '/etc/bind/named.conf.options':
       ensure  => file,
-      source  => "puppet:///ffnord/etc/bind/named.conf.options",
+      source  => "puppet:///modules/ffnord/etc/bind/named.conf.options",
       require => [Package['bind9']],
       notify  => [Service['bind9']];
   }

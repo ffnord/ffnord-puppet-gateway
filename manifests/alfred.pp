@@ -8,7 +8,7 @@ class ffnord::alfred () {
   file { '/etc/init.d/alfred':
     ensure => file,
     mode => "0755",
-    source => "puppet:///ffnord/etc/init.d/alfred";
+    source => "puppet:///modules/ffnord/etc/init.d/alfred";
   }
 
   package { 

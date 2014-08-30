@@ -10,7 +10,7 @@ class ffnord::vpn (
     '/usr/local/bin/check-gateway':
       ensure => file,
       mode => "0755",
-      source => 'puppet:///ffnord/usr/local/bin/check-gateway';
+      source => 'puppet:///modules/ffnord/usr/local/bin/check-gateway';
   }
   Class[ffnord::resources::ffnord] ->
   file_line { 
@@ -132,14 +132,14 @@ class ffnord::vpn::provider::hideio (
       owner => "root",
       group => "root",
       mode => "0644",
-      source => "puppet:///ffnord/etc/openvpn/hideio.root.pem",
+      source => "puppet:///modules/ffnord/etc/openvpn/hideio.root.pem",
       require => [File['/etc/openvpn/hideio']];
     '/etc/openvpn/anonvpn-up.sh':
       ensure => file,
       owner => "root",
       group => "root",
       mode => "0755",
-      source => "puppet:///ffnord/etc/openvpn/anonvpn-up.sh",
+      source => "puppet:///modules/ffnord/etc/openvpn/anonvpn-up.sh",
       require => [File['/etc/openvpn/hideio']];
   }
 }
