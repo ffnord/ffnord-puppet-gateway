@@ -2,4 +2,4 @@
 
 cd /var/lib/icvpn-meta/ && git pull -q
 
-/opt/icvpn-scripts/mkdns -f bind -d /var/lib/icvpn-meta > /etc/bind/named.conf.icvpn-meta
+/opt/icvpn-scripts/mkdns -f bind -s /var/lib/icvpn-meta > /etc/bind/named.conf.icvpn-meta
