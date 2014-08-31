@@ -9,7 +9,15 @@ class ffnord::resources::meta {
        ensure => present,
        provider => git,
        source => "https://github.com/freifunk/icvpn-scripts.git",
-       require => Vcsrepo['/var/lib/icvpn-meta/'];
+       require => [
+         Vcsrepo['/var/lib/icvpn-meta/'],
+         Package['python-yaml']
+       ];
+  }
+
+  package {
+    'python-yaml':
+      ensure => installed;
   }
 
   file { 
@@ -18,7 +26,7 @@ class ffnord::resources::meta {
       owner => 'root',
       group => 'root',
       mode => '0755',
-      source => "puppet:///modules/ffnord/usr/local/bin/update-meta",
+      source => "puppet:///modules/ffnord/usr/local/bin/update-meta";
   }
 
   exec {
