@@ -15,6 +15,9 @@ class ffnord::resources::meta {
   file { 
     '/usr/local/bin/update-meta':
       ensure => file,
+      owner => 'root',
+      group => 'root',
+      mode => '0755',
       source => "puppet:///modules/ffnord/usr/local/bin/update-meta",
   }
 
