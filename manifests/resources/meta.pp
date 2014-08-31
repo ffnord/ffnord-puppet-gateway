@@ -1,0 +1,40 @@
+class ffnord::resources::meta {
+
+  vcsrepo { 
+     '/var/lib/icvpn-meta/':
+       ensure => present,
+       provider => git,
+       source => "https://github.com/freifunk/icvpn-meta.git";
+     '/opt/icvpn-scripts/':
+       ensure => present,
+       provider => git,
+       source => "https://github.com/freifunk/icvpn-scripts.git",
+       require => Vcsrepo['/var/lib/icvpn-meta/'];
+  }
+
+  file { 
+    '/usr/local/bin/update-meta':
+      ensure => file,
+      source => "puppet:///modules/ffnord/usr/local/bin/update-meta",
+  }
+
+  exec {
+    'update-meta':
+      command => '/usr/local/bin/update-meta',
+      require => [
+        Vcsrepo['/var/lib/icvpn-meta/'],
+        File['/usr/local/bin/update-meta'],
+      ];
+  }
+
+  cron {
+    'update-icvpn-meta':
+      command => '/usr/local/bin/update-meta',
+      user => root,
+      minute => '0',
+      require => [
+        Vcsrepo['/etc/tinc/icvpn/'],
+        File['/usr/local/bin/update-meta']
+      ];
+  }
+}
