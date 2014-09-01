@@ -8,6 +8,6 @@ cd /var/lib/icvpn-meta/ && git pull -q
 
 ICVPN=${ICVPN:-0}
 if [ $ICVPN = 1 ] ; then
-  /opt/icvpn-scripts/mkbird -6 -s /var/lib/icvpn-meta -d icvpn -x ${ICVPN_EXCLUDE} > /etc/bird/bird6.conf.d/icvpn-peers.conf
+  /opt/icvpn-scripts/mkbgp -6 -s /var/lib/icvpn-meta -d icvpn -x ${ICVPN_EXCLUDE} > /etc/bird/bird6.conf.d/icvpn-peers.conf
   /usr/sbin/birdc6 configure
 fi
