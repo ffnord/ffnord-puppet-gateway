@@ -16,7 +16,11 @@ class ffnord::tinc (
     'tinc':
       ensure => running,
       enable => true,
-      require => [ Package['tinc'], File['/etc/tinc/icvpn/tinc.conf'] ],
+      require => [
+        Package['tinc'], 
+        File['/etc/tinc/icvpn/tinc.conf'],
+        File_line['icvpn-auto-boot']
+      ],
       subscribe => File['/etc/tinc/icvpn/tinc.conf'];
   }
 
@@ -62,7 +66,8 @@ class ffnord::tinc (
   file_line {
     'icvpn-auto-boot':
       path => '/etc/tinc/nets.boot',
-      line => "icvpn";
+      line => "icvpn",
+      require => Package['tinc'];
   }
 
   vcsrepo { "/etc/tinc/icvpn/":
