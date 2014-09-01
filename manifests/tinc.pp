@@ -20,6 +20,18 @@ class ffnord::tinc (
       subscribe => File['/etc/tinc/icvpn/tinc.conf'];
   }
 
+  if defined(Class['ffnord::monitor::nrpe']){
+    file {
+      "/etc/nagios/nrpe.d/check_tinc_icvpn.cfg":
+        ensure => file,
+        mode => '0644',
+        owner => 'root',
+        group => 'root',
+        content => inline_template("command[check_tinc_icvpn]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C tinc -a \"-n icvpn\"\n"),
+        require => [Package['nagios-nrpe-server']],
+        notify => [Service['nagios-nrpe-server']];
+    }
+  }
 
   file {
     '/etc/tinc/icvpn/tinc.conf':
