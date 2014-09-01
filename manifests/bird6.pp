@@ -49,7 +49,8 @@ class ffnord::bird6 (
       ensure => running,
       enable => true,
       restart => "/usr/sbin/birdc6 configure",
-      require => Package['bird6'];
+      require => Package['bird6'],
+      subscribe => File['/etc/bird/bird6.conf'];
   }
 
   ffnord::firewall::service { "bird6":
@@ -131,11 +132,17 @@ define ffnord::bird6::icvpn (
     "ffnord::config::icvpn_exclude":
       path => '/etc/ffnord',
       line => "ICVPN_EXCLUDE=${icvpn_exclude_peerings}",
-      before => Class['ffnord::resources::meta'];
+      before => [
+        Class['ffnord::resources::meta'],
+        Service['bird6']
+      ];
     "ffnord::config::icvpn":
       path => '/etc/ffnord',
       line => "ICVPN=1",
-      before => Class['ffnord::resources::meta'];
+      before => [
+        Class['ffnord::resources::meta'],
+        Service['bird6']
+      ];
   } 
 
   # Process meta data from tinc directory
