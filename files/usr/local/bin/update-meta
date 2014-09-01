@@ -1,5 +1,13 @@
 #!/bin/bash
 
+. /etc/ffnord
+
 cd /var/lib/icvpn-meta/ && git pull -q
 
 /opt/icvpn-scripts/mkdns -f bind -s /var/lib/icvpn-meta > /etc/bind/named.conf.icvpn-meta
+
+ICVPN=${ICVPN:-0}
+if [ $ICVPN = 1 ] ; then
+  /opt/icvpn-scripts/mkbird -6 -s /var/lib/icvpn-meta -d icvpn -x ${ICVPN_EXCLUDE} > /etc/bird/bird6.conf.d/icvpn-peers.conf
+  /usr/sbin/birdc6 configure
+fi

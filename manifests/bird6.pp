@@ -94,12 +94,13 @@ define ffnord::bird6::icvpn (
   $icvpn_as,
   $icvpn_ipv4_address,
   $icvpn_ipv6_address,
-  $icvpn_peerings = [],
+  $icvpn_exclude_peerings = [],
 
   $tinc_keyfile,
   ){
 
   include ffnord::bird6
+  include ffnord::resources::meta
 
   $icvpn_name = $name
 
@@ -113,18 +114,42 @@ define ffnord::bird6::icvpn (
     icvpn_peers  => $icvpn_peerings;
   }
 
-  file_line { "icvpn-include":
-    path => '/etc/bird/bird6.conf',
-    line => 'include "/etc/bird/bird6.conf.d/icvpn-peers.conf";',
-    require => File['/etc/bird/bird6.conf'],
-    notify  => Service['bird6'];
-  }
+  file_line { 
+    "icvpn-template":
+      path => '/etc/bird/bird6.conf',
+      line => 'include "/etc/bird/bird6.conf.d/icvpn-template.conf";',
+      require => File['/etc/bird/bird6.conf'],
+      notify  => Service['bird6'];
+    "icvpn-include":
+      path => '/etc/bird/bird6.conf',
+      line => 'include "/etc/bird/bird6.conf.d/icvpn-peers.conf";',
+      require => [
+        File['/etc/bird/bird6.conf'],
+        Class['ffnord::resources::meta']
+      ],
+      notify  => Service['bird6'];
+    "ffnord::config::icvpn_exclude":
+      path => '/etc/ffnord',
+      line => "ICVPN_EXCLUDE=${icvpn_exclude_peerings}",
+      before => Class['ffnord::resources::meta'];
+    "ffnord::config::icvpn":
+      path => '/etc/ffnord',
+      line => "ICVPN=1",
+      before => Class['ffnord::resources::meta'];
+  } 
 
   # Process meta data from tinc directory
-  file { "/etc/bird/bird6.conf.d/icvpn-peers.conf":
+  file { "/etc/bird/bird6.conf.d/icvpn-template.conf":
     mode => "0644",
-    content => template("ffnord/etc/bird/bird6.icvpn-peers.conf.erb"),
-    require => [File['/etc/bird/bird6.conf.d/'],Package['bird6'],Class['ffnord::tinc']],
-    notify  => File_line['icvpn-include'];
+    content => template("ffnord/etc/bird/bird6.icvpn-template.conf.erb"),
+    require => [ 
+      File['/etc/bird/bird6.conf.d/'],
+      Package['bird6'],
+      Class['ffnord::tinc'],
+    ],
+    notify  => [
+      File_line['icvpn-include'],
+      File_line['icvpn-template']
+    ];
   } 
 }
