@@ -19,14 +19,10 @@ There are types for setting up monitoring, icvpn, anonymous vpn and alfred annou
   this module, you can check this with 'hostname -f'.
 * The configured dns server only provide support for the root zone.
   Custom tlds are currently not supported.  
-* Since puppet renders all templates during initial processing, you have
-  to clone the icvpn repo by hand before starting the puppet manifest.
 
 ## TODO
 
 * Bird IPv4 Route exchange
-* named/bind9 Freifunk/Hackint/DN42 TLDs
-* The announce script for alfred is functional iff only one mesh device is present.
 * Apply firewall rules automatially, when all rules are defined.
 
 ## Usage
@@ -52,9 +48,6 @@ downloaded manually):
 ```
 cd /etc/puppet/modules
 git clone https://github.com/ffnord/ffnord-puppet-gateway ffnord
-cd /etc/
-mkdir tinc
-git clone https://github.com/sargon/icvpn 
 ```
 
 ### Parameters
@@ -112,7 +105,7 @@ ffnord::bird6::icvpn { 'gotham_city0':
   icvpn_as => 65035,
   icvpn_ipv4_address => "10.112.0.1",
   icvpn_ipv6_address => "fec0::a:cf:0:35",
-  icvpn_peerings     => [kiel],
+  icvpn_exclude_peerings     => [gotham],
   tinc_keyfile       => "/root/tinc_rsa_key.priv"
 }
 
