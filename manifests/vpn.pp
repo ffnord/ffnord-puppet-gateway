@@ -51,7 +51,7 @@ class ffnord::vpn::provider () {
 
   if defined(Class['ffnord::monitor::nrpe']){
     file {
-      "/etc/nagios/nrpe.d/check_openvpn.cfg":
+      "/etc/nagios/nrpe.d/check_openvpn_anonvpn.cfg":
         ensure => file,
         mode => '0644',
         owner => 'root',
