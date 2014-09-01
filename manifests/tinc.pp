@@ -73,7 +73,7 @@ class ffnord::tinc (
   vcsrepo { "/etc/tinc/icvpn/":
     ensure   => present,
     provider => git,
-    source   => "https://github.com/sargon/icvpn.git",
+    source   => "https://github.com/freifunk/icvpn.git",
     require => Package['tinc']
   }
 
