@@ -13,17 +13,31 @@ class ffnord::monitor::nrpe ( $allowed_hosts
        ensure => running,
        hasrestart => true,
        enable => true,
-       require => [Package['nagios-nrpe-server'],File['/etc/nagios/nrpe_local.cfg']];
+       require => [
+         Package['nagios-nrpe-server'],
+         File['/etc/nagios/nrpe.d/allowed_hosts.cfg'],
+         File['/etc/nagios/nrpe.d/check_apt.cfg']
+       ];
   }
 
   file { 
-    '/etc/nagios/nrpe_local.cfg': 
+    '/etc/nagios/nrpe.d/allowed_hosts.cfg': 
       ensure => file, 
       mode => '0644',
       owner => 'root',
       group => 'root',
       require => Package['nagios-nrpe-server'],
-      content => template('ffnord/etc/nagios/nrpe_local.cfg.erb');
+      content => template('ffnord/etc/nagios/nrpe.d/allowed_hosts.cfg.erb');
+  }
+
+  file { 
+    '/etc/nagios/nrpe.d/check_apt.cfg':
+      ensure => file,
+      mode => '0644',
+      owner => 'root',
+      group => 'root',
+      require => Package['nagios-nrpe-server'],
+      source => "puppet:///modules/ffnord/etc/nagios/nrpe.d/check_apt.cfg";
   }
 
   ffnord::firewall::service { 'nrpe':
