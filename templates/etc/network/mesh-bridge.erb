@@ -2,28 +2,28 @@
 auto br-<%= @mesh_code %>
 iface br-<%= @mesh_code %> inet6 static
   bridge-ports none
-  pre-up    /sbin/ip -6 rule pref 31000 add iif $IFACE table 42
-  pre-up    /sbin/ip -6 rule pref 31000 add oif $IFACE table 42
-  pre-up    /sbin/ip -6 rule pref 31001 add iif $IFACE unreachable
-  pre-up    /sbin/ip -6 rule pref 31001 add oif $IFACE unreachable
-  post-down /sbin/ip -6 rule pref 31000 del iif $IFACE table 42
-  post-down /sbin/ip -6 rule pref 31000 del oif $IFACE table 42
-  post-down /sbin/ip -6 rule pref 31001 del iif $IFACE unreachable
-  post-down /sbin/ip -6 rule pref 31001 del oif $IFACE unreachable
+  pre-up    /sbin/ip -6 rule add pref 31000 iif $IFACE table 42
+  pre-up    /sbin/ip -6 rule add pref 31000 oif $IFACE table 42
+  pre-up    /sbin/ip -6 rule add pref 31001 iif $IFACE unreachable
+  pre-up    /sbin/ip -6 rule add pref 31001 oif $IFACE unreachable
+  post-down /sbin/ip -6 rule del pref 31000 iif $IFACE table 42
+  post-down /sbin/ip -6 rule del pref 31000 oif $IFACE table 42
+  post-down /sbin/ip -6 rule del pref 31001 iif $IFACE unreachable
+  post-down /sbin/ip -6 rule del pref 31001 oif $IFACE unreachable
   pre-up     /sbin/ip -6 route replace unreachable default table 42 || true
   post-up    /sbin/ip -6 route replace <%= @mesh_ipv6_prefix %>/<%= @mesh_ipv6_prefixlen %> dev $IFACE table 42
   address <%= @mesh_ipv6_address %>
   # TODO bits configurable
   netmask <%= @mesh_ipv6_prefixlen %>
 iface br-<%= @mesh_code %> inet static
-  pre-up    /sbin/ip rule pref 31000 add iif $IFACE table 42
-  pre-up    /sbin/ip rule pref 31000 add oif $IFACE table 42
-  pre-up    /sbin/ip rule pref 31001 add iif $IFACE unreachable
-  pre-up    /sbin/ip rule pref 31001 add oif $IFACE unreachable
-  post-down /sbin/ip rule pref 31000 del iif $IFACE table 42
-  post-down /sbin/ip rule pref 31000 del oif $IFACE table 42
-  post-down /sbin/ip rule pref 31001 del iif $IFACE unreachable
-  post-down /sbin/ip rule pref 31001 del oif $IFACE unreachable
+  pre-up    /sbin/ip rule add pref 31000 iif $IFACE table 42
+  pre-up    /sbin/ip rule add pref 31000 oif $IFACE table 42
+  pre-up    /sbin/ip rule add pref 31001 iif $IFACE unreachable
+  pre-up    /sbin/ip rule add pref 31001 oif $IFACE unreachable
+  post-down /sbin/ip rule del pref 31000 iif $IFACE table 42
+  post-down /sbin/ip rule del pref 31000 oif $IFACE table 42
+  post-down /sbin/ip rule del pref 31001 iif $IFACE unreachable
+  post-down /sbin/ip rule del pref 31001 oif $IFACE unreachable
   pre-up     /sbin/ip route replace unreachable default table 42 || true
   post-up    /sbin/ip route add <%= @mesh_ipv4_prefix %>/<%= @mesh_ipv4_prefixlen %> dev $IFACE table 42
   address <%= @mesh_ipv4_address %>
