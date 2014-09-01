@@ -19,6 +19,7 @@ There are types for setting up monitoring, icvpn, anonymous vpn and alfred annou
   this module, you can check this with 'hostname -f'.
 * The configured dns server only provide support for the root zone.
   Custom tlds are currently not supported.  
+* Bird6 must be reconfigured after a puppet run, otherwise the icvpn protocols are not available
 
 ## TODO
 
