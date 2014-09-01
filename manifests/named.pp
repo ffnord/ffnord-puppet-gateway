@@ -1,5 +1,7 @@
 class ffnord::named () {
 
+  include ffnord::resources::meta
+
   if defined(Class['ffnord::monitor::nrpe']){
     file {
       "/etc/nagios/nrpe.d/check_named.cfg":
@@ -13,7 +15,7 @@ class ffnord::named () {
     }
   }
 
-  package { 
+  package {
     'bind9':
       ensure => installed;
   }
@@ -23,7 +25,12 @@ class ffnord::named () {
       ensure => running,
       enable => true,
       hasrestart => true,
-      require => [Package['bind9'],File['/etc/bind/named.conf.options']]
+      require => [
+        Package['bind9'],
+        File['/etc/bind/named.conf.options'],
+        File_line['icvpn-meta'],
+        Class['ffnord::resources::meta']
+      ]
   }
 
   file {
@@ -32,6 +39,16 @@ class ffnord::named () {
       source  => "puppet:///modules/ffnord/etc/bind/named.conf.options",
       require => [Package['bind9']],
       notify  => [Service['bind9']];
+  }
+
+  file_line {
+    'icvpn-meta':
+       path => '/etc/bind/named.conf',
+       line => 'include "/etc/bind/named.conf.icvpn-meta";',
+       before => Class['ffnord::resources::meta'],
+       require => [
+         Package['bind9']
+       ];
   }
 
   ffnord::firewall::service { 'named':
