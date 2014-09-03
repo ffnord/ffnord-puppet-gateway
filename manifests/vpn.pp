@@ -16,12 +16,15 @@ class ffnord::vpn (
   file_line { 
     "ffnord::config::gw_interface":
       path => '/etc/ffnord',
+      match => '^GW_VPN_INTERFACE=.*',
       line => "GW_VPN_INTERFACE=${gw_vpn_interface}";
     "ffnord::config::gw_control":
       path => '/etc/ffnord',
+      match => '^GW_CONTROL_IP=.*',
       line => "GW_CONTROL_IP=${gw_control_ip}";
     "ffnord::config::gw_bandwidth":
       path => '/etc/ffnord',
+      match => 'GW_BANDWIDTH=.*',
       line => "GW_BANDWIDTH=${gw_bandwidth}";
   } 
   cron {

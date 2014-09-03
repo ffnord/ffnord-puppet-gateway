@@ -131,6 +131,7 @@ define ffnord::bird6::icvpn (
       notify  => Service['bird6'];
     "ffnord::config::icvpn_exclude":
       path => '/etc/ffnord',
+      match => '^ICVPN_EXCLUDE=.*',
       line => "ICVPN_EXCLUDE=${icvpn_exclude_peerings}",
       before => [
         Class['ffnord::resources::meta'],
@@ -138,6 +139,7 @@ define ffnord::bird6::icvpn (
       ];
     "ffnord::config::icvpn":
       path => '/etc/ffnord',
+      match => '^ICVPN=.*',
       line => "ICVPN=1",
       before => [
         Class['ffnord::resources::meta'],
