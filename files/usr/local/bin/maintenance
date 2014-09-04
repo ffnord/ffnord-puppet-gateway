@@ -1,0 +1,23 @@
+#!/bin/bash
+
+. /etc/ffnord
+
+case $1 in
+  on)
+    sed -i -e 's/^MAINTENANCE=.*$/MAINTENANCE='$(date +%s)'/' /etc/ffnord
+    ;;
+  off)
+    sed -i -e 's/^MAINTENANCE=.*$/MAINTENANCE=0/' /etc/ffnord
+    ;;
+  status)
+    MAINTENANCE=${MAINTENANCE:-0}
+    if test $MAINTENANCE -eq 0; then
+      echo "Maintenance is off"
+    else
+      echo "Maintenance is on since ${MAINTENANCE}"
+    fi
+    ;;
+  *)
+    echo "Usage $0 [on|off|status]"
+    ;;
+esac

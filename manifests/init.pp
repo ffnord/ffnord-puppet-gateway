@@ -21,6 +21,7 @@ define ffnord::mesh(
   # TODO Update README
 
   include ffnord::ntp
+  include ffnord::maintenance
   include ffnord::firewall
 
   # Determine ipv{4,5} network prefixes and ivp4 netmask

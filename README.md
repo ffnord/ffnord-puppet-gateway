@@ -20,11 +20,13 @@ There are types for setting up monitoring, icvpn, anonymous vpn and alfred annou
 * The configured dns server only provide support for the root zone.
   Custom tlds are currently not supported.  
 * Bird6 must be reconfigured after a puppet run, otherwise the icvpn protocols are not available
+* When touching the network devices on a rerun named should be restarted.
 
 ## TODO
 
 * Bird IPv4 Route exchange
 * Apply firewall rules automatially, when all rules are defined.
+* Deactivate radvd in maintenance mode
 
 ## Usage
 
@@ -189,3 +191,21 @@ The verbose flag is optional and shows all changes.
 To be even more catious you can also add the `--noop` flag to only show changes
 but not apply them.
 
+## Maintenance Mode
+
+To allow administrative operations on a gateway without harming user connections
+you should bring the gateway into maintenance mode:
+
+```
+maintenance on
+```
+
+This will deactivate the gateway feature of batman in the next run of check-gateway.
+And after DHCP-Lease-Time there should be no user device with a default route to
+the gateway. 
+
+To deactivate maintenance mode and reactivate the batman-adv gateway feature:
+
+```
+maintenance off
+```
