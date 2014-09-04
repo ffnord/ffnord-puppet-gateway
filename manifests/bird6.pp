@@ -44,8 +44,8 @@ class ffnord::bird6 (
       notify => Service['bird6'];
   } 
 
-  service { 
-    'bird6': 
+  service {
+    'bird6':
       ensure => running,
       enable => true,
       restart => "/usr/sbin/birdc6 configure",
@@ -87,7 +87,10 @@ define ffnord::bird6::mesh (
     mode => "0644",
     content => template("ffnord/etc/bird/bird6.interface.conf.erb"),
     require => [File['/etc/bird/bird6.conf.d/'],Package['bird6']],
-    notify  => File_line["bird6-${mesh_code}-include"];
+    notify  => [
+      File_line["bird6-${mesh_code}-include"],
+      Service['bird6']
+    ]
   }
 }
 
@@ -133,17 +136,17 @@ define ffnord::bird6::icvpn (
       path => '/etc/ffnord',
       match => '^ICVPN_EXCLUDE=.*',
       line => "ICVPN_EXCLUDE=${icvpn_exclude_peerings}",
+      notify => Service['bird6'],
       before => [
-        Class['ffnord::resources::meta'],
-        Service['bird6']
+        Class['ffnord::resources::meta']
       ];
     "ffnord::config::icvpn":
       path => '/etc/ffnord',
       match => '^ICVPN=.*',
       line => "ICVPN=1",
+      notify => Service['bird6'],
       before => [
         Class['ffnord::resources::meta'],
-        Service['bird6']
       ];
   } 
 
@@ -157,6 +160,7 @@ define ffnord::bird6::icvpn (
       Class['ffnord::tinc'],
     ],
     notify  => [
+      Service['bird6'],
       File_line['icvpn-include'],
       File_line['icvpn-template']
     ];
