@@ -52,7 +52,7 @@ class ffnord::alfred () {
   
   ffnord::firewall::service { 'alfred':
     protos => ["udp"],
-    chains => ["mesh"],
+    chains => ["mesh","bat"],
     ports => ['16962'],
   }
 }
