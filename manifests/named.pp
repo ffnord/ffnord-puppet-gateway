@@ -25,7 +25,7 @@ class ffnord::named () {
       ensure => running,
       enable => true,
       hasrestart => true,
-      restart => '/usr/sbin/service bind9 reload',
+      restart => '/usr/sbin/rndc reload',
       require => [
         Package['bind9'],
         File['/etc/bind/named.conf.options'],
