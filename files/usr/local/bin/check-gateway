@@ -24,7 +24,6 @@ for MESH in /sys/class/net/*/mesh; do
 OLD_STATE="$(cat $MESH/gw_mode)"
 [ "$OLD_STATE" == "$NEW_STATE" ] && continue
          echo $NEW_STATE > $MESH/gw_mode
-         echo ${GW_BANDWIDTH}MBit/${GW_BANDWIDTH}MBit > $MESH/gw_bandwidth
          logger "batman gateway mode changed to $NEW_STATE"
 done
 

@@ -22,10 +22,6 @@ class ffnord::vpn (
       path => '/etc/ffnord',
       match => '^GW_CONTROL_IP=.*',
       line => "GW_CONTROL_IP=${gw_control_ip}";
-    "ffnord::config::gw_bandwidth":
-      path => '/etc/ffnord',
-      match => 'GW_BANDWIDTH=.*',
-      line => "GW_BANDWIDTH=${gw_bandwidth}";
   } 
   cron {
    'check-gateway':
