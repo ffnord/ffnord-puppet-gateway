@@ -97,30 +97,36 @@ ffnord::mesh { 'mesh_ffgc':
                      ]
       }
 
-class {'ffnord::vpn::provider::hideio':
-  openvpn_server => "nl-7.hide.io",
-  openvpn_port   => 3478,
-  openvpn_user   => "wayne"
-  openvpn_password => "brucessecretpw",
+class {
+  'ffnord::vpn::provider::hideio':
+    openvpn_server => "nl-7.hide.io",
+    openvpn_port   => 3478,
+    openvpn_user   => "wayne"
+    openvpn_password => "brucessecretpw",
 }
 
-ffnord::bird6::icvpn { 'gotham_city0':
-  icvpn_as => 65035,
-  icvpn_ipv4_address => "10.112.0.1",
-  icvpn_ipv6_address => "fec0::a:cf:0:35",
-  icvpn_exclude_peerings     => [gotham],
-  tinc_keyfile       => "/root/tinc_rsa_key.priv"
+ffnord::bird6::icvpn {
+  'gotham_city0':
+    icvpn_as => 65035,
+    icvpn_ipv4_address => "10.112.0.1",
+    icvpn_ipv6_address => "fec0::a:cf:0:35",
+    icvpn_exclude_peerings     => [gotham],
+    tinc_keyfile       => "/root/tinc_rsa_key.priv"
 }
 
-class { 'ffnord::monitor::munin':
-      , host => '10.35.31.1'
+class {
+  'ffnord::monitor::munin':
+    host => '10.35.31.1'
 }
 
-class { 'ffnord::monitor::nrpe':
-      , allowed_hosts => '10.35.31.1'
-      }
+class {
+  'ffnord::monitor::nrpe':
+    allowed_hosts => '10.35.31.1'
+}
 
-class { 'ffnord::alfred':}
+class { 'ffnord::alfred': }
+
+class { 'ffnord::etckeeper': }
 ```
 
 #### Mesh Type
