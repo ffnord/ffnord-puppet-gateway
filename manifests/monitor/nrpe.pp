@@ -45,3 +45,20 @@ class ffnord::monitor::nrpe ( $allowed_hosts
     chains => ['wan'];
   }
 }
+
+define ffnord::monitor::nrpe::check_command (
+  $command
+) {
+  if defined(Class['ffnord::monitor::nrpe']) {
+    file {
+      "/etc/nagios/nrpe.d/check_${name}.cfg":
+        ensure => file,
+        mode => '0644',
+        owner => 'root',
+        group => 'root',
+        content => inline_template("command[check_${name}]=${command}\n"),
+        require => Package['nagios-nrpe-server'],
+        notify => Service['nagios-nrpe-server'];
+    }
+  }
+}
