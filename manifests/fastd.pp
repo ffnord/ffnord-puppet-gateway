@@ -45,4 +45,6 @@ define ffnord::fastd( $mesh_name
     chains => ['wan']
   }
 
+  ffnord::etckeeper::ignore { "/etc/fastd/${mesh_code}-mesh-vpn/peers/": }
+
 }

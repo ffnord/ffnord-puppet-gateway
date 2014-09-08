@@ -69,6 +69,10 @@ class ffnord::tinc (
     require => Package['tinc']
   }
 
+  ffnord::etckeeper::ignore {
+    "/etc/tinc/icvpn/":
+  }
+
   cron {
    'update-icvpn':
      command => 'cd /etc/tinc/icvpn/ && git pull -q',
