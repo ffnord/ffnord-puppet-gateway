@@ -17,6 +17,9 @@ class ffnord::etckeeper {
     'etckeeper_dotfiles':
        path => '/etc/.gitignore',
        line => '.*';
+    'etckepper_unignore_etckeeper':
+       path => '/etc/.gitignore',
+       line => '!.etckeeper';
   } ->
 
   package {
