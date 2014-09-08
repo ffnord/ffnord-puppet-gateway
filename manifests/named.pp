@@ -2,17 +2,9 @@ class ffnord::named () {
 
   include ffnord::resources::meta
 
-  if defined(Class['ffnord::monitor::nrpe']){
-    file {
-      "/etc/nagios/nrpe.d/check_named.cfg":
-        ensure => file,
-        mode => '0644',
-        owner => 'root',
-        group => 'root',
-        content => inline_template("command[check_named]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C named\n"),
-        require => [Package['nagios-nrpe-server']],
-        notify => [Service['nagios-nrpe-server']];
-    }
+  ffnord::monitor::nrpe::check_command {
+    "named":
+      command => '/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C named';
   }
 
   package {

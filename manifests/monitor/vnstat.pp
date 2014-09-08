@@ -1,16 +1,8 @@
 class ffnord::monitor::vnstat () {
 
-  if defined(Class['ffnord::monitor::nrpe']){
-    file {
-      "/etc/nagios/nrpe.d/check_vnstatd.cfg":
-        ensure => file,
-        mode => '0644',
-        owner => 'root',
-        group => 'root',
-        content => inline_template("command[check_vnstatd]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C vnstatd\n"),
-        require => [Package['nagios-nrpe-server']],
-        notify => [Service['nagios-nrpe-server']];
-    }
+  ffnord::monitor::nrpe::check_command {
+    "vnstatd":
+      command => '/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C vnstatd';
   }
 
   package { 

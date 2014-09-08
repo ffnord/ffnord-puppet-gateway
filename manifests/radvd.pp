@@ -23,17 +23,9 @@ define ffnord::radvd (
 
 class ffnord::radvd::base () {
 
-  if defined(Class['ffnord::monitor::nrpe']){
-    file {
-      "/etc/nagios/nrpe.d/check_radvd.cfg":
-        ensure => file,
-        mode => '0644',
-        owner => 'root',
-        group => 'root',
-        content => inline_template("command[check_radvd]=/usr/lib/nagios/plugins/check_procs -w 2:2 -c 2:2 -C radvd"),
-        require => [Package['nagios-nrpe-server']],
-        notify => [Service['nagios-nrpe-server']];
-    }
+  ffnord::monitor::nrpe::check_command {
+    "radvd":
+      command => '/usr/lib/nagios/plugins/check_procs -w 2:2 -c 2:2 -C radvd';
   }
 
   file { 

@@ -47,18 +47,10 @@ class ffnord::vpn::provider () {
   }
 
   class { 'ffnord::vpn': }
-
-  if defined(Class['ffnord::monitor::nrpe']){
-    file {
-      "/etc/nagios/nrpe.d/check_openvpn_anonvpn.cfg":
-        ensure => file,
-        mode => '0644',
-        owner => 'root',
-        group => 'root',
-        content => inline_template("command[check_openvpn_anonvpn]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C openvpn -a \"ovpn-anonvpn\"\n"),
-        require => [Package['nagios-nrpe-server']],
-        notify => [Service['nagios-nrpe-server']];
-    }
+ 
+  ffnord::monitor::nrpe::check_command {
+    "openvpn_anonvpn":
+      command => '/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C openvpn -a "ovpn-anonvpn"';
   }
 
   ffnord::monitor::vnstat::device { 'tun-anonvpn': }

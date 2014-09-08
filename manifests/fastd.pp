@@ -12,17 +12,9 @@ define ffnord::fastd( $mesh_name
   include ffnord::resources::fastd
   include ffnord::resources::fastd::auto_fetch_keys
 
-  if defined(Class['ffnord::monitor::nrpe']){
-    file {
-      "/etc/nagios/nrpe.d/check_fastd_${mesh_code}.cfg":
-        ensure => file,
-        mode => '0644',
-        owner => 'root',
-        group => 'root',
-        content => inline_template("command[check_fastd_${mesh_code}]=/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C fastd -a \"${mesh_code}-mesh-vpn\"\n"),
-        require => [Package['nagios-nrpe-server']],
-        notify => [Service['nagios-nrpe-server']];
-    }
+  ffnord::monitor::nrpe::check_command {
+    "fastd_${mesh_code}":
+      command => "/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C fastd -a \"${mesh_code}-mesh-vpn\"";
   }
 
   file {

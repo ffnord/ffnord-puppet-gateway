@@ -3,18 +3,9 @@ class ffnord::bird6 (
   $icvpn_as  = $ffnord::params::icvpn_as
 ) inherits ffnord::params {
  
-
-  if defined(Class['ffnord::monitor::nrpe']){
-    file {
-      "/etc/nagios/nrpe.d/check_bird6.cfg":
-        ensure => file,
-        mode => '0644',
-        owner => 'root',
-        group => 'root',
-        content => inline_template("command[check_bird6]=/usr/lib/nagios/plugins/check_procs -w 1:1 -c 1:1 -C bird6\n"),
-        require => [Package['nagios-nrpe-server']],
-        notify => [Service['nagios-nrpe-server']];
-    }
+  ffnord::monitor::nrpe::check_command {
+    "bird6":
+      command => '/usr/lib/nagios/plugins/check_procs -w 1:1 -c 1:1 -C bird6';
   }
 
   package { 
