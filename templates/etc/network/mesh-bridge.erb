@@ -2,6 +2,7 @@
 auto br-<%= @mesh_code %>
 iface br-<%= @mesh_code %> inet6 static
   bridge-ports none
+  pre-up    /sbin/ip -6 route add fe80::/64 dev $IFACE table 42
   pre-up    /sbin/ip -6 rule add pref 31000 iif $IFACE table 42
   pre-up    /sbin/ip -6 rule add pref 31000 oif $IFACE table 42
   pre-up    /sbin/ip -6 rule add pref 31001 iif $IFACE unreachable
