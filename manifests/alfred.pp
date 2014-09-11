@@ -20,6 +20,8 @@ class ffnord::alfred () {
       ensure => installed;
     'python3':
       ensure => installed;
+    'ethtool':
+      ensure => installed;
   }
 
   exec { 'alfred':
@@ -39,7 +41,7 @@ class ffnord::alfred () {
     ensure => present,
     provider => git,
     source => "https://github.com/ffnord/ffnord-gateway-alfred.git",
-    require => Package['python3']
+    require => Package['python3'],Package['ethtool']
   }
 
   cron {
