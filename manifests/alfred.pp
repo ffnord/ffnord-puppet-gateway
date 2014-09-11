@@ -46,7 +46,7 @@ class ffnord::alfred () {
 
   cron {
    'update-alfred-announce':
-     command => 'PATH=/opt/alfred/:$PATH /opt/alfred-announce/announce.sh',
+     command => 'PATH=/opt/alfred/:/bin:/usr/bin:/sbin:$PATH /opt/alfred-announce/announce.sh',
      user    => root,
      minute  => '*',
      require => [Vcsrepo['/opt/alfred-announce'], Vcsrepo['/opt/alfred']];
