@@ -5,9 +5,11 @@
 case $1 in
   on)
     sed -i -e 's/^MAINTENANCE=.*$/MAINTENANCE='$(date +%s)'/' /etc/ffnord
+    /etc/init.d/radvd stop #stoppe RADVD
     ;;
   off)
     sed -i -e 's/^MAINTENANCE=.*$/MAINTENANCE=0/' /etc/ffnord
+    /etc/init.d/radvd start #starte RADVD
     ;;
   status)
     MAINTENANCE=${MAINTENANCE:-0}
