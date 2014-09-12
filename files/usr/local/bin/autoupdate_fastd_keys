@@ -21,11 +21,11 @@ do
 
   # Automagically commit local changes
   # This preserves local changes
-  git commit -m "CRON: auto commit"
+  git commit -m "CRON: auto commit" 1>/dev/null
 
   # Pull latest changes from upstream
   git fetch
-  git merge origin/master -m "Auto Merge"
+  git merge origin/master -q -m "Auto Merge"
 
   # Get new version hash
   GIT_NEW_REVISION=$(getCurrentVersion)
