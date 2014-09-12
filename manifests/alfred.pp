@@ -41,7 +41,7 @@ class ffnord::alfred () {
     ensure => present,
     provider => git,
     source => "https://github.com/ffnord/ffnord-gateway-alfred.git",
-    require => Package['python3'],Package['ethtool']
+    require => [Package['python3'],Package['ethtool']];
   }
 
   cron {
