@@ -2,12 +2,46 @@
 
 . /etc/ffnord
 
-cd /var/lib/icvpn-meta/ && git pull -q
+function getCurrentVersion() {
+  # Get hash from latest revision
+  git log --format=format:%H -1
+}
 
-/opt/icvpn-scripts/mkdns -f bind -s /var/lib/icvpn-meta > /etc/bind/named.conf.icvpn-meta
+cd /var/lib/icvpn-meta/
 
-ICVPN=${ICVPN:-0}
-if [ $ICVPN = 1 ] ; then
-  /opt/icvpn-scripts/mkbgp -6 -s /var/lib/icvpn-meta -d icvpn -x ${ICVPN_EXCLUDE} > /etc/bird/bird6.conf.d/icvpn-peers.conf
-  /usr/sbin/birdc6 configure
+# Get current version hash
+GIT_REVISION=$(getCurrentVersion)
+
+git fetch -q origin master
+
+# Revert all local changes and merge 
+git reset -q origin/master
+
+git pull -q origin master 
+
+# Get current version hash
+GIT_NEW_REVISION=$(getCurrentVersion)
+
+if [ $GIT_REVISION != $GIT_NEW_REVISION ]
+then
+  # Version has changed we need to update
+  ICVPN=${ICVPN:-0}
+  
+  # Output version changes
+  git log --oneline "${GIT_REVISION}..HEAD" 
+  echo 
+
+  echo bind9: regenerating configuration
+  /opt/icvpn-scripts/mkdns -f bind -s /var/lib/icvpn-meta > /etc/bind/named.conf.icvpn-meta
+  echo bind9: reload
+  /usr/sbin/rndc reload
+
+  if [ $ICVPN = 1 ] ; then
+    echo
+    echo bird6: regenerating icvpn peers
+    /opt/icvpn-scripts/mkbgp -6 -s /var/lib/icvpn-meta -d icvpn -x ${ICVPN_EXCLUDE} > /etc/bird/bird6.conf.d/icvpn-peers.conf
+    echo bird6: reload 
+    # We only want errors
+    /usr/sbin/birdc6 configure 1>/dev/null 
+  fi
 fi
