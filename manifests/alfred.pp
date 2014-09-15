@@ -11,6 +11,12 @@ class ffnord::alfred () {
     source => "puppet:///modules/ffnord/etc/init.d/alfred";
   }
 
+  file { '/usr/local/bin/alfred-announce':
+    ensure => file,
+    mode => "0755",
+    source => "puppet:///modules/ffnord/usr/local/bin/alfred-announce";
+  }
+
   package { 
     'build-essential':
       ensure => installed;
@@ -46,10 +52,10 @@ class ffnord::alfred () {
 
   cron {
    'update-alfred-announce':
-     command => 'PATH=/opt/alfred/:/bin:/usr/bin:/sbin:$PATH /opt/alfred-announce/announce.sh',
+     command => 'PATH=/opt/alfred/:/bin:/usr/bin:/sbin:$PATH /usr/local/bin/alfred-announce',
      user    => root,
      minute  => '*',
-     require => [Vcsrepo['/opt/alfred-announce'], Vcsrepo['/opt/alfred']];
+     require => [Vcsrepo['/opt/alfred-announce'], Vcsrepo['/opt/alfred'],File['/usr/local/bin/alfred-announce']];
   }
   
   ffnord::firewall::service { 'alfred':
