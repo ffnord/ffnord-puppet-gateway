@@ -15,7 +15,7 @@ GIT_REVISION=$(getCurrentVersion)
 git fetch -q origin master
 
 # Revert all local changes and merge 
-git reset -q origin/master
+git reset -q --hard origin/master
 
 git pull -q origin master 
 
