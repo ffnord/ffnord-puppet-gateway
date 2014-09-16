@@ -28,7 +28,7 @@ define ffnord::bridge( $mesh_code
     "start_bridge_interface_${mesh_code}":
       command => "/sbin/ifup br-${mesh_code}",
       unless  => "/bin/ip link show dev br-${mesh_code} 2> /dev/null",
-      notify  => Ffnord::Monitor::Vnstat::Device["br-${mesh_code}"],
+      before  => Ffnord::Monitor::Vnstat::Device["br-${mesh_code}"],
       require => [ File_Line["/etc/iproute2/rt_tables"]
                  , Class[ffnord::resources::sysctl] 
                  ];
