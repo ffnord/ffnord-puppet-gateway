@@ -22,7 +22,7 @@ git pull -q origin master
 # Get current version hash
 GIT_NEW_REVISION=$(getCurrentVersion)
 
-if [ $GIT_REVISION != $GIT_NEW_REVISION ]
+if [ $GIT_REVISION != $GIT_NEW_REVISION ] || [ ! -f /etc/bind/named.conf.icvpn-meta ]
 then
   # Version has changed we need to update
   ICVPN=${ICVPN:-0}
