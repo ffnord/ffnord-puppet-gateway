@@ -4,6 +4,8 @@ class ffnord::monitor::nrpe ( $allowed_hosts
     'nagios-nrpe-server': 
       ensure => installed,
       notify => Service['nagios-nrpe-server'];
+    'nagios-plugins':
+      ensure => installed;
     'cron-apt': 
       ensure => installed;
   } 
