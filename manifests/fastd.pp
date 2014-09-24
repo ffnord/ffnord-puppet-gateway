@@ -26,9 +26,9 @@ define ffnord::fastd( $mesh_name
              notify => Service[ffnord::resources::fastd],
              content => template('ffnord/etc/fastd/fastd.conf.erb');
     "/etc/fastd/${mesh_code}-mesh-vpn/secret.conf":
-      ensure  => file,
-              mode    => '0600',
-              content => inline_template('secret "<%= @fastd_secret %>";');
+      ensure => file,
+      source => $fastd_secret,
+      mode => '0600',
   } ->
   ffnord::batman-adv { "ffnord_batman_adv_${mesh_code}":
     mesh_code => $mesh_code;
