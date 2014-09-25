@@ -60,7 +60,7 @@ Basically there is one type for mesh network, which pulls
 in all the magic and classes for the icvpn connection, monitoring and
 anonymous vpn uplink.
 
-Please make sure that your fastd key-file looks like this:
+Please make sure that the content of your fastd key-file looks like this:
 ```
 secret "<********>";
 ```
