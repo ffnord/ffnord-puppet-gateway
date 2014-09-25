@@ -60,6 +60,13 @@ Basically there is one type for mesh network, which pulls
 in all the magic and classes for the icvpn connection, monitoring and
 anonymous vpn uplink.
 
+Please make sure that your fastd key-file looks like this:
+```
+secret "<********>";
+```
+The stars are replaced by your privat fastd key
+
+
 Example puppet code (save e.g. as `/root/gateway.pp`):
 
 ```
