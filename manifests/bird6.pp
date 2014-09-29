@@ -2,6 +2,8 @@ class ffnord::bird6 (
   $router_id = $ffnord::params::router_id,
   $icvpn_as  = $ffnord::params::icvpn_as
 ) inherits ffnord::params {
+
+  require ffnord::resources::repos
  
   ffnord::monitor::nrpe::check_command {
     "bird6":
@@ -10,7 +12,11 @@ class ffnord::bird6 (
 
   package { 
     'bird6':
-      ensure => installed;
+      ensure => installed,
+      require => [
+        File['/etc/apt/preferences.d/bird'],
+        Apt::Source['debian-backports']
+      ];
   }
  
   file {
@@ -23,6 +29,12 @@ class ffnord::bird6 (
     '/etc/bird/':
       ensure => directory,
       mode => '0755';
+    '/etc/apt/preferences.d/bird':
+      ensure => file,
+      mode => "0644",
+      owner => root,
+      group => root,
+      source => "puppet:///modules/ffnord/etc/apt/preferences.d/bird";
     '/etc/bird/bird6.conf':
       ensure => file,
       mode => "0644",
