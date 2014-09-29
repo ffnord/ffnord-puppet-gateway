@@ -44,7 +44,6 @@ class ffnord::resources::meta {
       user => root,
       minute => '0',
       require => [
-        Vcsrepo['/etc/tinc/icvpn/'],
         File['/usr/local/bin/update-meta']
       ];
   }
