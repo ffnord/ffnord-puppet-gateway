@@ -17,4 +17,5 @@ on up "
  ip link set address <%= @mesh_mac %> dev bat-<%= @mesh_code %>
  ifup bat-<%= @mesh_code %>
  ip link set up dev $INTERFACE
+ service alfred start bat-<%= @mesh_code %>
 ";

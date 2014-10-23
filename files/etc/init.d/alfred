@@ -22,20 +22,38 @@ test -x $DAEMON || exit 0
 STATUSREFRESH=10
 OMIT_SENDSIGS=0
 
+start() {
+  local MASTER="$1"
+  local BATIF="$2"
+  start-stop-daemon --start --quiet --oknodo --background \
+    --pidfile "/var/run/alfred.${MASTER}.pid" --make-pidfile \
+    --exec "$DAEMON" -- -m -i "$MASTER" -b "$BATIF" --  || STATUS=1 
+}
+
 case "$1" in
 start)
   log_daemon_msg "Starting $DESC"
 
-  # autostart alfred instances
-  for MESH in /sys/class/net/*/mesh; do
-    BATIF=$(echo $MESH | sed -r 's/\/sys\/class\/net\/(.*)\/mesh/\1/')
-    MASTER=$(echo $BATIF | sed -r 's/bat/br/')
-    start-stop-daemon --start --quiet --oknodo --background\
-      --pidfile /var/run/alfred.$MASTER.pid --make-pidfile \
-      --exec $DAEMON -- -m -i ${MASTER} -b ${BATIF} --  || STATUS=1
-    log_progress_msg "$MASTER"
-  done
-  log_end_msg ${STATUS:-0}
+  if [ $# -eq 2 ] ; then
+    MESH="$2"
+    if [ -e "/sys/class/net/${MESH}/mesh" ] ; then
+      MASTER=$(echo "$MESH" | sed -r 's/bat/br/')
+      start "$MASTER" "$MESH"
+      log_progress_msg "$MASTER"
+      log_end_msg ${STATUS:-0}
+    else
+      log_failure_msg "${MESH} is no mesh device"
+    fi
+  else
+    # autostart alfred instances
+    for MESH in /sys/class/net/*/mesh; do
+      BATIF=$(echo "$MESH" | sed -r 's/\/sys\/class\/net\/(.*)\/mesh/\1/')
+      MASTER=$(echo "$BATIF" | sed -r 's/bat/br/')
+      start "$MASTER" "$BATIF"
+      log_progress_msg "$MASTER"
+    done
+    log_end_msg ${STATUS:-0}
+  fi
 
   ;;
 stop)
