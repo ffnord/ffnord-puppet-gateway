@@ -54,5 +54,10 @@ class ffnord::rsyslog {
       owner => 'root',
       group => 'root',
       source => 'puppet:///modules/ffnord/etc/logrotate.d/fastd';
+   '/var/log/fastd/':
+      ensure => directory,
+      mode => '0755',
+      owner => 'root',
+      group => 'root';
   }
 }
