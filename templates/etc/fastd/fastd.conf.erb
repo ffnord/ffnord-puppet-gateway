@@ -1,6 +1,7 @@
 # managed by puppet -- editing is futile
 
-log to syslog level info;
+log to syslog level error;
+log to syslog as "fastd-debug" level debug;
 interface "<%= @mesh_code %>-mesh-vpn";
 method "salsa2012+gmac";    # new method, between gateways for the moment (faster)
 method "xsalsa20-poly1305"; # old method

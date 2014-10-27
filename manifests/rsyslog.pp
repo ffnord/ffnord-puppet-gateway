@@ -2,6 +2,8 @@ class ffnord::rsyslog {
   package {
     'rsyslog':
       ensure => installed;
+    'logrotate':
+      ensure => installed;
   }
   
   service {
@@ -39,5 +41,18 @@ class ffnord::rsyslog {
       group => 'root',
       source => 'puppet:///modules/ffnord/etc/rsyslog.d/dhcp.conf',
       notify => Service['rsyslog'];
+    '/etc/rsyslog.d/fastd.conf':
+      ensure => file,
+      mode => '0644',
+      owner => 'root',
+      group => 'root',
+      source => 'puppet:///modules/ffnord/etc/rsyslog.d/fastd.conf',
+      notify => Service['rsyslog'];
+    '/etc/logrotate.d/fastd':
+      ensure => file,
+      mode => '0644',
+      owner => 'root',
+      group => 'root',
+      source => 'puppet:///modules/ffnord/etc/logrotate.d/fastd';
   }
 }
