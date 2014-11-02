@@ -23,6 +23,26 @@ function ip46tables() {
   ip6tables $*
 }
 
+## Create a filter rule which blocks the given ip-range
+# IPv4 Verion
+# #1: iptables chain
+# #2: IP-Range to block in a iptables compatible format
+function block4(){
+  local chain="$1"
+  local iprange="$2"
+  ip4tables -t filter -A "$chain" -s "$iprange" -j DROP
+}
+
+## Create a filter rule which blocks the given ip-range
+# IPv6 Version
+# #1: iptables chain
+# #2: IP-Range to block in a iptables compatible format
+function block6(){
+  local chain="$1"
+  local iprange="$2"
+  ip6tables -t filter -A "$chain" -s "$iprange" -j DROP
+}
+
 for rules in /etc/iptables.d/*; do
    echo "File: $rules"
    . $rules
