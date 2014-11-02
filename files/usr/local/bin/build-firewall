@@ -3,16 +3,21 @@
 IP4TABLES=$(which iptables)
 IP6TABLES=$(which ip6tables)
 
+## Wrapper function for iptables - IPv4 version
 function ip4tables() {
   echo -e "\t iptables $*"
   $IP4TABLES $*
 }
 
+## Wrapper function for iptables - IPv6 version
 function ip6tables() {
   echo -e "\t ip6tables $*"
   $IP6TABLES $*
 }
 
+## Wrapper function for iptables - IPv{4,6} version
+# should only be used for statements which apply
+# for both iptables versions.
 function ip46tables() {
   ip4tables $*
   ip6tables $*
