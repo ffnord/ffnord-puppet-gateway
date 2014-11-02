@@ -78,6 +78,14 @@ class ffnord::firewall (
       mode => '0644',
       source => "puppet:///modules/ffnord/etc/iptables.d/001-INPUT-PreProcessing",
       require => File['/etc/iptables.d/'];
+    '/etc/iptables.d/200-block-ranges':
+      ensure => file,
+      replace => 'no', # Don't replace local changes in this file
+      owner => 'root',
+      group => 'root',
+      mode => '0644',
+      source => "puppet:///modules/ffnord/etc/iptables.d/200-block-ranges",
+      require => File['/etc/iptables.d/'];
     '/etc/iptables.d/500-Allow-SSH':
       ensure => file,
       owner => 'root',
