@@ -136,23 +136,12 @@ define ffnord::bird6::icvpn (
         Class['ffnord::resources::meta']
       ],
       notify  => Service['bird6'];
-    "ffnord::config::icvpn_exclude":
-      path => '/etc/ffnord',
-      match => '^ICVPN_EXCLUDE=.*',
-      line => "ICVPN_EXCLUDE=${icvpn_exclude_peerings}",
-      notify => Service['bird6'],
-      before => [
-        Class['ffnord::resources::meta']
-      ];
-    "ffnord::config::icvpn":
-      path => '/etc/ffnord',
-      match => '^ICVPN=.*',
-      line => "ICVPN=1",
-      notify => Service['bird6'],
-      before => [
-        Class['ffnord::resources::meta'],
-      ];
   } 
+
+  ffnord::resources::ffnord::field {
+    "ICVPN": value => '1';
+    "ICVPN_EXCLUDE": value => "${icvpn_exclude_peerings}";
+  }
 
   # Process meta data from tinc directory
   file { "/etc/bird/bird6.conf.d/icvpn-template.conf":
