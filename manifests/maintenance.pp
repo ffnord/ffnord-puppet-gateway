@@ -5,11 +5,8 @@ class ffnord::maintenance (
 
   Class['ffnord::resources::ffnord'] ->
 
-  file_line {
-    'ffnord::config::maintenance':
-       path => '/etc/ffnord',
-       match => '^MAINTENANCE=.*',
-       line => "MAINTENANCE=${maintenance}"
+  ffnord::resources::ffnord::field {
+    "MAINTENANCE": value => "${maintenance}";
   }
 
   file {

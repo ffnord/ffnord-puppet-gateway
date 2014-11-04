@@ -12,17 +12,12 @@ class ffnord::vpn (
       mode => "0755",
       source => 'puppet:///modules/ffnord/usr/local/bin/check-gateway';
   }
-  Class[ffnord::resources::ffnord] ->
-  file_line { 
-    "ffnord::config::gw_interface":
-      path => '/etc/ffnord',
-      match => '^GW_VPN_INTERFACE=.*',
-      line => "GW_VPN_INTERFACE=${gw_vpn_interface}";
-    "ffnord::config::gw_control":
-      path => '/etc/ffnord',
-      match => '^GW_CONTROL_IP=.*',
-      line => "GW_CONTROL_IP=${gw_control_ip}";
-  } 
+
+  ffnord::resources::ffnord::field {
+    "GW_VPN_INTERFACE": value => "${gw_vpn_interface}";
+    "GW_CONTROL_IP": value => "${gw_control_ip}";
+  }
+
   cron {
    'check-gateway':
      command => '/usr/local/bin/check-gateway',
