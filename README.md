@@ -104,6 +104,10 @@ ffnord::mesh { 'mesh_ffgc':
                      ]
       }
 
+ffnord::named::zone {
+  'ffgc': zone_git => 'git://somehost/ffgc-zone.git';
+}
+
 class {
   'ffnord::vpn::provider::hideio':
     openvpn_server => "nl-7.hide.io",
@@ -153,6 +157,22 @@ ffnord :: mesh { '<mesh_code>':
 
   dhcp_ranges = [], # dhcp pool
   dns_servers = [], # other dns servers in your network
+}
+```
+
+#### Named Zone Type
+
+This type enables you to receive a zone file from a git repository, include
+it into the named configuration and setup a cron job for pulling changes in.
+By default the cronjob will pull every 30min. 
+
+The provided configuration should not rely on relative path but use
+the absolute path prefixed with '/etc/bind/zones/${name}/'.
+
+```
+ffnord::named::zone {
+  '<name>':
+     zone_git; # zone file repo
 }
 ```
 
