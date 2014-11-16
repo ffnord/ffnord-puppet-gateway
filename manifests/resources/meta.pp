@@ -48,3 +48,9 @@ class ffnord::resources::meta {
       ];
   }
 }
+
+define ffnord::resources::meta::dns_zone_exclude(){
+  ffnord::resources::ffnord::field {
+    "DNS_ZONE_EXCLUDE_${name}": value => "${name}";
+  }
+}

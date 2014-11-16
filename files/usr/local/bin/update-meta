@@ -31,8 +31,14 @@ then
   git log --oneline "${GIT_REVISION}..HEAD" 
   echo 
 
+  # Buildup parameters for excluded zones
+  excluded_zones=''
+  for zone in ${!DNS_ZONE_EXCLUDE*}; do 
+    excluded_zones="${excluded_zones} -x ${!zone}"
+  done
+
   echo bind9: regenerating configuration
-  /opt/icvpn-scripts/mkdns -f bind -s /var/lib/icvpn-meta > /etc/bind/named.conf.icvpn-meta
+  /opt/icvpn-scripts/mkdns -f bind ${excluded_zones} -s /var/lib/icvpn-meta > /etc/bind/named.conf.icvpn-meta
   echo bind9: reload
   /usr/sbin/rndc reload
 
