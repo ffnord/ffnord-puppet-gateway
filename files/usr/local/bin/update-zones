@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ -d "/etc/bind/zones/" ] ; then
+  for zone in /etc/bind/zones/*; do
+    if [ -d "$zone" ]; then
+      cd "$zone"
+      if [ -e "./.git" ] ; then
+        git pull -q > /dev/null
+      else
+        echo "Error: '$zone' is not a git repository!"
+      fi
+    fi
+  done
+else 
+  echo "Error: '/etc/bind/zones/' is not an directory!"
+fi
+

@@ -51,6 +51,78 @@ class ffnord::named () {
   }
 }
 
+## ffnord::named::zone
+# Define a custom zone and receive the zone file from a git repository.
+#
+# The here defined resource is assuming that the configuration file
+# is named '${zone_name}.conf'.
+define ffnord::named::zone (
+  $zone_git, # git repo with zone files
+) {
+  include ffnord::named
+
+  $zone_name = $name
+
+  file{
+    "/etc/bind/zones/":
+      ensure => directory,
+      owner => 'root',
+      group => 'root',
+      mode => '0755',
+      require => Package['bind9'];
+  }
+
+  vcsrepo { "/etc/bind/zones/${zone_name}/":
+    ensure   => present,
+    provider => git,
+    source   => $zone_git,
+    require  => [
+      File["/etc/bind/zones/"],
+    ];
+  }
+
+  file{
+    "/etc/bind/zones/${zone_name}/.git/hooks/post-merge":
+      ensure => file,
+      owner => 'root',
+      group => 'root',
+      mode => '0755',
+      content => "#!/bin/sh\n/usr/sbin/rndc reload",
+      require => Vcsrepo["/etc/bind/zones/${zone_name}/"];
+  }
+
+  file_line {
+    "zone-${zone_name}":
+      path => '/etc/bind/named.conf',
+      line => "include \"/etc/bind/zones/${zone_name}/${zone_name}.conf\";",
+      require => [
+        Vcsrepo["/etc/bind/zones/${zone_name}/"]
+      ];
+  }
+
+  file {
+    '/usr/local/bin/update-zones':
+     ensure => file,
+     owner => 'root',
+     group => 'root',
+     mode => '0755',
+     source => 'puppet:///modules/ffnord/usr/local/bin/update-zones',
+     require =>  Vcsrepo["/etc/bind/zones/${zone_name}/"];
+  }
+
+  cron {
+    'update-zones':
+      command => '/usr/local/bin/update-zones',
+      user => root,
+      minute => [0,30],
+      require => File['/usr/local/bin/update-zones'];
+  }
+
+  ffnord::resources::meta::dns_zone_exclude { 
+    "${zone_name}": 
+      before => Exec['update-meta'];
+  }
+}
 
 define ffnord::named::mesh (
   $mesh_ipv4_address,
