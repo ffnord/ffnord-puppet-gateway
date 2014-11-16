@@ -1,37 +1,11 @@
-#!/bin/bash
+#!/bin/bash /usr/local/include/ffnord-update.common
 
-. /etc/ffnord
+REPOSITORY=/var/lib/icvpn-meta/
 
-function getCurrentVersion() {
-  # Get hash from latest revision
-  git log --format=format:%H -1
-}
-
-cd /var/lib/icvpn-meta/
-
-# Get current version hash
-GIT_REVISION=$(getCurrentVersion)
-
-git fetch -q origin master
-
-# Revert all local changes and merge 
-git reset -q --hard origin/master
-
-git pull -q origin master 
-
-# Get current version hash
-GIT_NEW_REVISION=$(getCurrentVersion)
-
-if [ $GIT_REVISION != $GIT_NEW_REVISION ] || [ ! -f /etc/bind/named.conf.icvpn-meta ]
-then
-  # Version has changed we need to update
+reload() {
   ICVPN=${ICVPN:-0}
-  
-  # Output version changes
-  git log --oneline "${GIT_REVISION}..HEAD" 
-  echo 
 
-  # Buildup parameters for excluded zones
+  # Build-Up parameters for excluded zones
   excluded_zones=''
   for zone in ${!DNS_ZONE_EXCLUDE*}; do 
     excluded_zones="${excluded_zones} -x ${!zone}"
@@ -43,11 +17,13 @@ then
   /usr/sbin/rndc reload
 
   if [ $ICVPN = 1 ] ; then
+    excluded_peers=""
+    [ -n "${ICVPN_EXCLUDE}" ] && excluded_peers="-x ${ICVPN_EXCLUDE}"
     echo
     echo bird6: regenerating icvpn peers
-    /opt/icvpn-scripts/mkbgp -6 -s /var/lib/icvpn-meta -d icvpn -x ${ICVPN_EXCLUDE} > /etc/bird/bird6.conf.d/icvpn-peers.conf
+    /opt/icvpn-scripts/mkbgp -6 -s /var/lib/icvpn-meta -d icvpn $excluded_peers > /etc/bird/bird6.conf.d/icvpn-peers.conf
     echo bird6: reload 
     # We only want errors
     /usr/sbin/birdc6 configure 1>/dev/null 
   fi
-fi
+}
