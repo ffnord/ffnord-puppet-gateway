@@ -45,6 +45,16 @@ define ffnord::fastd( $mesh_name
     chains => ['wan']
   }
 
+  file {
+    "/etc/fastd/${mesh_code}-mesh-vpn/peers/.git/hooks/post-merge":
+       ensure => file,
+       owner => 'root',
+       group => 'root',
+       mode => '0755',
+       content => "#!/bin/sh\n/usr/local/bin/update-fastd-keys reload",
+       require => Vcsrepo["/etc/fastd/${mesh_code}-mesh-vpn/peers"];
+  }
+
   ffnord::etckeeper::ignore { "/etc/fastd/${mesh_code}-mesh-vpn/peers/": }
 
 }
