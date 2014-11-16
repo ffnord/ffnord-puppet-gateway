@@ -117,6 +117,11 @@ define ffnord::named::zone (
       minute => [0,30],
       require => File['/usr/local/bin/update-zones'];
   }
+
+  ffnord::resources::meta::dns_zone_exclude { 
+    "${zone_name}": 
+      before => Exec['update-meta'];
+  }
 }
 
 define ffnord::named::mesh (
