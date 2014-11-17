@@ -58,6 +58,7 @@ class ffnord::named () {
 # is named '${zone_name}.conf'.
 define ffnord::named::zone (
   $zone_git, # git repo with zone files
+  $exclude_meta = '' # optinal exclude zone from icvpn-meta
 ) {
   include ffnord::named
 
@@ -118,9 +119,11 @@ define ffnord::named::zone (
       require => File['/usr/local/bin/update-zones'];
   }
 
-  ffnord::resources::meta::dns_zone_exclude { 
-    "${zone_name}": 
-      before => Exec['update-meta'];
+  if $exclude_meta != '' {
+    ffnord::resources::meta::dns_zone_exclude { 
+      "${exclude_meta}": 
+        before => Exec['update-meta'];
+    }
   }
 }
 
