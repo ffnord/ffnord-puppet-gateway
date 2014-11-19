@@ -88,7 +88,7 @@ define ffnord::named::zone (
       owner => 'root',
       group => 'root',
       mode => '0755',
-      content => "#!/bin/sh\n/usr/sbin/rndc reload",
+      content => "#!/bin/sh\n/usr/local/bin/update-zones reload",
       require => Vcsrepo["/etc/bind/zones/${zone_name}/"];
   }
 
@@ -113,7 +113,7 @@ define ffnord::named::zone (
 
   cron {
     'update-zones':
-      command => '/usr/local/bin/update-zones',
+      command => '/usr/local/bin/update-zones pull',
       user => root,
       minute => [0,30],
       require => File['/usr/local/bin/update-zones'];
