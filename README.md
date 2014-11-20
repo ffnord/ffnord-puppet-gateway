@@ -84,8 +84,9 @@ ffnord::mesh { 'mesh_ffgc':
       mesh_code    => "ffgc",
       mesh_as      => 65035,
       mesh_mac     => "de:ad:be:ef:de:ad",
-      mesh_ipv6    => "fd35:f308:a922::ff00/64
-      mesh_ipv4    => "10.35.0.1/19"
+      mesh_ipv6    => "fd35:f308:a922::ff00/64,
+      mesh_ipv4    => "10.35.0.1/19",
+      mesh_peerings => "/root/mesh_peerings.yaml",
 
       fastd_secret => "/root/fastd_secret.key",
       fastd_port   => 10035,
@@ -112,7 +113,7 @@ class {
   'ffnord::vpn::provider::hideio':
     openvpn_server => "nl-7.hide.io",
     openvpn_port   => 3478,
-    openvpn_user   => "wayne"
+    openvpn_user   => "wayne",
     openvpn_password => "brucessecretpw",
 }
 
