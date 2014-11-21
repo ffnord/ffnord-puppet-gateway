@@ -26,7 +26,6 @@ There are types for setting up monitoring, icvpn, anonymous vpn and alfred annou
 
 * Bird IPv4 Route exchange
 * Apply firewall rules automatially, when all rules are defined.
-* Deactivate radvd in maintenance mode
 
 ## Usage
 
