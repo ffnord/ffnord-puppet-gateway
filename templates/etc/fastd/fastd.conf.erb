@@ -3,8 +3,9 @@
 log to syslog level error;
 log to syslog as "fastd-debug" level debug;
 interface "<%= @mesh_code %>-mesh-vpn";
-method "salsa2012+gmac";    # new method, between gateways for the moment (faster)
-method "xsalsa20-poly1305"; # old method
+method "salsa2012+umac";    # since fastd v15
+method "salsa2012+gmac";
+method "xsalsa20-poly1305"; # deprecated
 bind 0.0.0.0:<%= @fastd_port %>;
 hide ip addresses yes;
 hide mac addresses yes;
