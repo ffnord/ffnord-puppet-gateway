@@ -77,6 +77,15 @@ define ffnord::mesh(
     site_ipv6_prefixlen => $mesh_ipv6_prefixlen,
     icvpn_as => $mesh_as;
   } -> 
+  ffnord::bird::mesh { "bird-${mesh_code}":
+    mesh_code => $mesh_code,
+    mesh_ipv4_address => $mesh_ipv4_address,
+    mesh_ipv6_address => $mesh_ipv6_address,
+    mesh_peerings => $mesh_peerings,
+    site_ipv4_prefix => $mesh_ipv4_prefix,
+    site_ipv4_prefixlen => $mesh_ipv4_prefixlen,
+    icvpn_as => $mesh_as;
+  } ->
   ffnord::named::mesh { "${mesh_code}":
     mesh_ipv4_address => $mesh_ipv4_address,
     mesh_ipv4_prefix  => $mesh_ipv4_prefix,
@@ -85,7 +94,6 @@ define ffnord::mesh(
     mesh_ipv6_prefix  => $mesh_ipv6_prefix,
     mesh_ipv6_prefixlen => $mesh_ipv6_prefixlen;
   }
-  # ffnord::bird{4}
   # ffnord::opkg::mirror
   # ffnord::firmware mirror
 }
