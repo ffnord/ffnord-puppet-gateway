@@ -77,7 +77,7 @@ protocol pipe pipe_kernel_main_mesh {
 template bgp local_mesh {
   import where is_ula(); # Is that a wise decision?
   export where source = RTS_BGP;
-  gateway direct;
+  direct;
   next hop self;
 };
 
