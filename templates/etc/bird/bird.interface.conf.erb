@@ -10,12 +10,6 @@ protocol static 'static_<%= @mesh_code %>' {
   route <%= @site_ipv4_prefix %>/<%= @site_ipv4_prefixlen %> reject;
   };
 
-protocol static 'local_<%= @mesh_code %>' {
-  table 'mesh_<%= @mesh_code %>';
-  # reject route if announced from external
-  route <%= @site_ipv4_prefix %>/<%= @site_ipv4_prefixlen %> via "br-<%= @mesh_code%>";
-};
-
 function 'is_self_<%= @mesh_code %>' () {
   return (proto = "static_<%= @mesh_code %>");
 };
