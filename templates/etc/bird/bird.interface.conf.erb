@@ -31,7 +31,7 @@ template bgp 'local_mesh_<%=@mesh_code%>' from local_mesh {
   local as <%=@icvpn_as%>;
 };
 <% peerings = YAML.load_file(@mesh_peerings); -%>
-<% peerings.each_pair do |name,node| %>
+<% peerings.each_pair do |name,node| -%>
 
 protocol bgp 'local_<%=@mesh_code%>_<%=name%>' from 'local_mesh_<%= @mesh_code %>' {
   neighbor <%= node['ipv4'] %> as <%= @icvpn_as %>; 
