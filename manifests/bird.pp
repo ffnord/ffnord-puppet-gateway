@@ -70,6 +70,7 @@ define ffnord::bird::mesh (
   $mesh_code,
 
   $mesh_ipv4_address,
+  $range_ipv4,
   $mesh_ipv6_address,
   $mesh_peerings, # YAML data file for local peerings
 
