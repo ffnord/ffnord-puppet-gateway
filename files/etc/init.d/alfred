@@ -15,6 +15,7 @@
 test $DEBIAN_SCRIPT_DEBUG && set -v -x
 
 DAEMON=/opt/alfred/alfred
+DAEMON_VIS=/opt/alfred/vis/batadv-vis
 DESC="alfred"
 test -x $DAEMON || exit 0
 
@@ -28,6 +29,10 @@ start() {
   start-stop-daemon --start --quiet --oknodo --background \
     --pidfile "/var/run/alfred.${MASTER}.pid" --make-pidfile \
     --exec "$DAEMON" -- -m -i "$MASTER" -b "$BATIF" --  || STATUS=1 
+
+  start-stop-daemon --start --quiet --oknodo --background \
+    --pidfile "/var/run/alfred.${MASTER}.pid" --make-pidfile \
+    --exec "$DAEMON_VIS" -- -s -i "$BATIF" -- || STATUS=1 
 }
 
 case "$1" in
