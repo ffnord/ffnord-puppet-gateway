@@ -98,15 +98,7 @@ define ffnord::bird6::icvpn (
 
   $icvpn_name = $name
 
-  class { 'ffnord::tinc': 
-    tinc_name    => $icvpn_name,
-    tinc_keyfile => $tinc_keyfile,
-
-    icvpn_ipv4_address => $icvpn_ipv4_address,
-    icvpn_ipv6_address => $icvpn_ipv6_address,
-
-    icvpn_peers  => $icvpn_peerings;
-  }
+  include ffnord::icvpn
 
   file_line { 
     "icvpn-template":
@@ -123,11 +115,6 @@ define ffnord::bird6::icvpn (
       ],
       notify  => Service['bird6'];
   } 
-
-  ffnord::resources::ffnord::field {
-    "ICVPN": value => '1';
-    "ICVPN_EXCLUDE": value => "${icvpn_exclude_peerings}";
-  }
 
   # Process meta data from tinc directory
   file { "/etc/bird/bird6.conf.d/icvpn-template.conf":
