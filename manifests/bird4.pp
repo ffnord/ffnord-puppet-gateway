@@ -26,16 +26,6 @@ class ffnord::bird4 (
       owner => root,
       group => root,
       require => File['/etc/bird/bird.conf'];
-# the following two definitions raise a duplicate definition warning with bird6
-#   '/etc/bird/':
-#     ensure => directory,
-#     mode => '0755';
-#   '/etc/apt/preferences.d/bird':
-#     ensure => file,
-#     mode => "0644",
-#     owner => root,
-#     group => root,
-#     source => "puppet:///modules/ffnord/etc/apt/preferences.d/bird";
     '/etc/bird/bird.conf':
       ensure => file,
       mode => "0644",
@@ -58,12 +48,7 @@ class ffnord::bird4 (
       subscribe => File['/etc/bird/bird.conf'];
   }
 
-  ffnord::firewall::service { "bird":
-    ports  => ['179'],
-    protos => ['tcp'],
-    chains => ['mesh']
-  }
-
+  include ffnord::resources::bird
 }
 
 define ffnord::bird4::mesh (

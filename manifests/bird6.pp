@@ -26,15 +26,6 @@ class ffnord::bird6 (
       owner => root,
       group => root,
       require => File['/etc/bird/bird6.conf'];
-    '/etc/bird/':
-      ensure => directory,
-      mode => '0755';
-    '/etc/apt/preferences.d/bird':
-      ensure => file,
-      mode => "0644",
-      owner => root,
-      group => root,
-      source => "puppet:///modules/ffnord/etc/apt/preferences.d/bird";
     '/etc/bird/bird6.conf':
       ensure => file,
       mode => "0644",
@@ -57,12 +48,7 @@ class ffnord::bird6 (
       subscribe => File['/etc/bird/bird6.conf'];
   }
 
-  ffnord::firewall::service { "bird6":
-    ports  => ['179'],
-    protos => ['tcp'],
-    chains => ['mesh']
-  }
-
+  include ffnord::resources::bird
 }
 
 define ffnord::bird6::mesh (
