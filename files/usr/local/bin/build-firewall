@@ -43,6 +43,43 @@ function block6(){
   ip6tables -t filter -A "$chain" -s "$iprange" -j DROP
 }
 
+## Rate Limit 
+# IPv{4,6} Version
+function rate_limit46(){
+  rate_limit4 $@
+  rate_limit6 $@
+}
+
+## Rate Limit - Introduce rate limiting for services.
+# IPv4 Version
+# #1: Name of the service
+# #2: Time to match with in second
+# #3: count until hit
+function rate_limit4() {
+  local service="$1"
+  local seconds="$2"
+  local hitcount="$3"
+  shift 3
+  echo -e "\t Rate Limit ${service} with ${seconds} seconds and a hitcount of ${hitcount}"
+  ip4tables -m recent --name "$service" --update --seconds "$seconds" --hitcount "$hitcount" -j DROP $*
+  ip4tables -m recent --name "$service" --set $*
+}
+
+## Rate Limit - Introduce rate limiting for services.
+# IPv6 Version
+# #1: Name of the service
+# #2: Time to match with in second
+# #3: count until hit
+function rate_limit6() {
+  local service="$1"
+  local seconds="$2"
+  local hitcount="$3"
+  shift 3
+  echo -e "\t Rate Limit ${service} with ${seconds} seconds and a hitcount of ${hitcount}"
+  ip6tables -m recent --name "$service" --update --seconds "$seconds" --hitcount "$hitcount" -j DROP $*
+  ip6tables -m recent --name "$service" --set $*
+}
+
 for rules in /etc/iptables.d/*; do
    echo "File: $rules"
    . $rules

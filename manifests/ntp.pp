@@ -23,6 +23,9 @@ class ffnord::ntp () {
   ffnord::firewall::service { 'ntpd':
     ports => ['123'],
     protos => ['udp'],
-    chains => ['mesh']
+    chains => ['mesh'],
+    rate_limit => true,
+    rate_limit_seconds => 3600,
+    rate_limit_hitcount => 10, 
   }
 }

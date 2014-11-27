@@ -118,8 +118,12 @@ define ffnord::firewall::service (
  $protos = ["tcp"],  # Possible values "tcp,udp"
  $chains = ["mesh"], # Possible values "mesh,wan"
  $ports = [],
+ $rate_limit = false, # rate limit
+ $rate_limit_seconds  = 60, # rate limit Seconds
+ $rate_limit_hitcount = 10 # rate limit hitcount
 ) {
- file { "/etc/iptables.d/500-Allow-${name}": 
+
+ file { "/etc/iptables.d/500-Allow-${name}":
    ensure => file,
    owner => "root",
    group => "root",
@@ -128,6 +132,9 @@ define ffnord::firewall::service (
 <% @chains.each do |chain| -%>
 <% @protos.each do |proto| -%>
 <% @ports.each do |port| -%>
+<% if @rate_limit -%>
+rate_limit46 \"<%=@name%>\" <%=@rate_limit_seconds%> <%=@rate_limit_hitcount%> -A <%=chain%>-input -p <%=proto%> -m <%=proto%> --dport <%=port%> 
+<% end -%>
 ip46tables -A <%=chain%>-input -p <%=proto%> -m <%=proto%> --dport <%=port%> -j ACCEPT -m comment --comment '<%=@name%>'
 <% end -%>
 <% end -%>
