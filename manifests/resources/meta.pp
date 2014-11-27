@@ -1,5 +1,7 @@
 class ffnord::resources::meta {
 
+  include ffnord::resources::update
+
   vcsrepo { 
      '/var/lib/icvpn-meta/':
        ensure => present,
@@ -15,23 +17,35 @@ class ffnord::resources::meta {
        ];
   }
 
+  file {
+    "/var/lib/icvpn-meta/.git/hooks/post-merge":
+       ensure => file,
+       owner => 'root',
+       group => 'root',
+       mode => '0755',
+       content => "#!/bin/sh\n/usr/local/bin/update-meta reload",
+       require => Vcsrepo['/var/lib/icvpn-meta/'];
+  }
+
   package {
     'python-yaml':
       ensure => installed;
   }
+
 
   file { 
     '/usr/local/bin/update-meta':
       ensure => file,
       owner => 'root',
       group => 'root',
-      mode => '0755',
-      source => "puppet:///modules/ffnord/usr/local/bin/update-meta";
+      mode => '0754',
+      source => "puppet:///modules/ffnord/usr/local/bin/update-meta",
+      require => Class['ffnord::resources::update'];
   }
 
   exec {
     'update-meta':
-      command => '/usr/local/bin/update-meta',
+      command => '/usr/local/bin/update-meta reload',
       require => [
         Vcsrepo['/var/lib/icvpn-meta/'],
         File['/usr/local/bin/update-meta'],
@@ -40,7 +54,7 @@ class ffnord::resources::meta {
 
   cron {
     'update-icvpn-meta':
-      command => '/usr/local/bin/update-meta',
+      command => '/usr/local/bin/update-meta pull',
       user => root,
       minute => '0',
       require => [

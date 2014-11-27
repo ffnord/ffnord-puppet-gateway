@@ -1,0 +1,34 @@
+# Common functions for pulling and updating data from git repositorys.
+# Cron jobs should call pull on script deriving from this, which
+# should, when changes are incoming, call reload in the post-update hook.
+# 
+# When calling by hand you could decide if you just reload and thus rebuild
+# ,restart or whatever or pull in new data and then do the upper stuff.
+# 
+
+source /etc/ffnord
+source $1
+
+case $2 in
+  pull)
+    if [ "x$(type -t pull)" == 'xfunction' ] ; then
+      shift
+      pull $@
+    else 
+      cd "$REPOSITORY"
+      git pull
+    fi
+    ;;
+  reload)
+    if [ "x$(type -t reload)" == 'xfunction' ] ; then
+      shift
+      reload $@
+    else 
+      echo "Nothing to do."
+    fi
+    ;;
+  *)
+    echo "Usage: $(basename "$1") [pull|reload|help]"
+    ;;
+esac  
+

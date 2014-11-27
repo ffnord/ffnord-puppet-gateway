@@ -1,17 +1,14 @@
-#!/bin/bash
+#!/bin/bash /usr/local/include/ffnord-update.common
 
-if [ -d "/etc/bind/zones/" ] ; then
-  for zone in /etc/bind/zones/*; do
-    if [ -d "$zone" ]; then
-      cd "$zone"
-      if [ -e "./.git" ] ; then
-        git pull -q > /dev/null
-      else
-        echo "Error: '$zone' is not a git repository!"
-      fi
+pull() {
+  for ZONE in $(find /etc/bind/zones -mindepth 1 -maxdepth 1 -type d); do
+    if [ -d "${ZONE}/.git" ]; then
+      cd "$ZONE"
+      git pull -q
     fi
   done
-else 
-  echo "Error: '/etc/bind/zones/' is not an directory!"
-fi
+}
 
+reload() {
+  rndc reload
+}
