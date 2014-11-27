@@ -101,12 +101,12 @@ define ffnord::bird6::icvpn (
   include ffnord::icvpn
 
   file_line { 
-    "icvpn-template":
+    "icvpn-template6":
       path => '/etc/bird/bird6.conf',
       line => 'include "/etc/bird/bird6.conf.d/icvpn-template.conf";',
       require => File['/etc/bird/bird6.conf'],
       notify  => Service['bird6'];
-    "icvpn-include":
+    "icvpn-include6":
       path => '/etc/bird/bird6.conf',
       line => 'include "/etc/bird/bird6.conf.d/icvpn-peers.conf";',
       require => [
