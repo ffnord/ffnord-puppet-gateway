@@ -1,4 +1,4 @@
-class ffnord::bird (
+class ffnord::bird4 (
   $router_id = $ffnord::params::router_id,
   $icvpn_as  = $ffnord::params::icvpn_as
 ) inherits ffnord::params {
@@ -66,7 +66,7 @@ class ffnord::bird (
 
 }
 
-define ffnord::bird::mesh (
+define ffnord::bird4::mesh (
   $mesh_code,
 
   $mesh_ipv4_address,
@@ -80,7 +80,7 @@ define ffnord::bird::mesh (
   $site_ipv4_prefixlen,
 ) {
 
-  include ffnord::bird
+  include ffnord::bird4
 
   file_line { "bird-${mesh_code}-include":
     path => '/etc/bird/bird.conf',
@@ -100,7 +100,7 @@ define ffnord::bird::mesh (
   }
 }
 
-define ffnord::bird::icvpn (
+define ffnord::bird4::icvpn (
   $icvpn_as,
   $icvpn_ipv4_address,
   $icvpn_ipv6_address,
@@ -109,7 +109,7 @@ define ffnord::bird::icvpn (
   $tinc_keyfile,
   ){
 
-  include ffnord::bird
+  include ffnord::bird4
   include ffnord::resources::meta
 
   $icvpn_name = $name
