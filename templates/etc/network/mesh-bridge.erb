@@ -6,7 +6,6 @@ iface br-<%= @mesh_code %> inet6 static
   pre-up    /sbin/ip -6 rule add pref 31001 iif $IFACE unreachable
   post-down /sbin/ip -6 rule del pref 31000 iif $IFACE table 42
   post-down /sbin/ip -6 rule del pref 31001 iif $IFACE unreachable
-  pre-up     /sbin/ip -6 route replace unreachable default table 42 || true
   post-up    /sbin/ip -6 route replace <%= @mesh_ipv6_prefix %>/<%= @mesh_ipv6_prefixlen %> dev $IFACE table 42
   address <%= @mesh_ipv6_address %>
   # TODO bits configurable
@@ -16,7 +15,6 @@ iface br-<%= @mesh_code %> inet static
   pre-up    /sbin/ip rule add pref 31001 iif $IFACE unreachable
   post-down /sbin/ip rule del pref 31000 iif $IFACE table 42
   post-down /sbin/ip rule del pref 31001 iif $IFACE unreachable
-  pre-up     /sbin/ip route replace unreachable default table 42 || true
   post-up    /sbin/ip route add <%= @mesh_ipv4_prefix %>/<%= @mesh_ipv4_prefixlen %> dev $IFACE table 42
   address <%= @mesh_ipv4_address %>
   netmask <%= @mesh_ipv4_netmask %>
