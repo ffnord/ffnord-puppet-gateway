@@ -117,7 +117,7 @@ class {
     openvpn_password => "brucessecretpw",
 }
 
-ffnord::bird6::icvpn {
+ffnord::icvpn::setup {
   'gotham_city0':
     icvpn_as => 65035,
     icvpn_ipv4_address => "10.112.0.1",
@@ -181,7 +181,7 @@ ffnord::named::zone {
 
 #### ICVPN Type
 ```
-ffnord :: bird6::icvpn {
+ffnord :: icvpn::setup {
   icvpn_as,            # AS of the community peering
   icvpn_ipv4_address,  # transfer network IPv4 address
   icvpn_ipv6_address,  # transfer network IPv6 address
