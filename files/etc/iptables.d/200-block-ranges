@@ -13,3 +13,12 @@ block4 wan-input 192.168.0.0/16  # RFC 1918
 block4 wan-input 10.0.0.0/8      # RFC 1918
 block4 wan-input 172.16.0.0/12   # RFC 1918
 block4 wan-input 169.254.0.0/16  # RFC 3927
+# ipv6 ingress filtering
+# TODO implement for uplink
+block6 wan-input 2001:DB8::/32   # example network
+block6 wan-input fc00::/7        # ula
+block6 wan-input fec0::/10       # site-local
+block6 wan-input ::ffff/96       # v6mapped
+block6 wan-input 2001:10::/28    # orchid (rfc 4843)
+block6 wan-input 3ffe::/16       # 6bone
+block6 wan-input ff00::/8        # multicast
