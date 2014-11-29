@@ -1,0 +1,4 @@
+## Block incoming request from defined ipv{4,6} ranges.
+# This file is created by puppet, but will not be overwritten.
+# Example:
+# block4 wan-input 192.168.0.0/24
