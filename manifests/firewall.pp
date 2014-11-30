@@ -86,6 +86,13 @@ class ffnord::firewall (
       mode => '0644',
       source => "puppet:///modules/ffnord/etc/iptables.d/200-block-ranges",
       require => File['/etc/iptables.d/'];
+    '/etc/iptables.d/200-block-bcp38':
+      ensure => file,
+      owner => 'root',
+      group => 'root',
+      mode => '0644',
+      source => "puppet:///modules/ffnord/etc/iptables.d/200-block-bcp38",
+      require => File['/etc/iptables.d/'];
     '/etc/iptables.d/500-Allow-SSH':
       ensure => file,
       owner => 'root',
