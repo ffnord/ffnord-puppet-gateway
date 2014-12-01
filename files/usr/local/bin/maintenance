@@ -1,5 +1,9 @@
 #!/bin/bash
 
+##This is small script that stops the radvd service and puts a timestamp in the
+##/etc/ffnord file. This timestamp is read out when ask for status. So we know
+##when the maintenance mode was activated.
+
 . /etc/ffnord
 
 case $1 in
@@ -16,7 +20,7 @@ case $1 in
     if test $MAINTENANCE -eq 0; then
       echo "Maintenance is off"
     else
-      echo "Maintenance is on since ${MAINTENANCE}"
+      echo "Maintenance is on since $(date --date=date -d @${MAINTENANCE})"
     fi
     ;;
   *)
