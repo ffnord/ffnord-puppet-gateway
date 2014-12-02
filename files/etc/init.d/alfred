@@ -31,8 +31,17 @@ start() {
     --exec "$DAEMON" -- -m -i "$MASTER" -b "$BATIF" --  || STATUS=1 
 
   start-stop-daemon --start --quiet --oknodo --background \
-    --pidfile "/var/run/alfred.${MASTER}.pid" --make-pidfile \
+    --pidfile "/var/run/batadv-vis.${MASTER}.pid" --make-pidfile \
     --exec "$DAEMON_VIS" -- -s -i "$BATIF" -- || STATUS=1 
+}
+
+stop_pid() {
+  local PIDFILE="$1"
+  if [ -e "$PIDFILE" ] ; then
+    PID="$(cat "$PIDFILE")"
+    kill -9 "$PID" || true
+    rm -f "$PIDFILE"
+  fi
 }
 
 case "$1" in
@@ -64,11 +73,10 @@ start)
 stop)
   log_daemon_msg "Stopping $DESC"
 
-  for PIDFILE in `ls /var/run/alfred.*.pid 2> /dev/null`; do
-    NAME=`echo $PIDFILE | cut -c17-`
-    NAME=${NAME%%.pid}
-    kill `cat $PIDFILE` || true
-    rm -f $PIDFILE
+  for PIDFILE in $(find /var/run/* -name "alfred.*.pid" -type f); do
+    NAME="$(basename "$PIDFILE" .pid | sed 's/[^\.]*\.//')"
+    stop_pid "$PIDFILE"
+    stop_pid "$(echo "$PIDFILE" | sed 's/alfred/batadv-vis/')"
     log_progress_msg "$NAME"
   done
   log_end_msg 0
