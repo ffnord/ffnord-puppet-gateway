@@ -11,6 +11,7 @@
 ### END INIT INFO
 
 . /lib/lsb/init-functions
+. /etc/ffnord
 
 test $DEBIAN_SCRIPT_DEBUG && set -v -x
 
@@ -28,7 +29,7 @@ start() {
   local BATIF="$2"
   start-stop-daemon --start --quiet --oknodo --background \
     --pidfile "/var/run/alfred.${MASTER}.pid" --make-pidfile \
-    --exec "$DAEMON" -- -m -i "$MASTER" -b "$BATIF" --  || STATUS=1 
+    --exec "$DAEMON" -- ${ALFRED_OPTS}  -i "$MASTER" -b "$BATIF" --  || STATUS=1 
 
   start-stop-daemon --start --quiet --oknodo --background \
     --pidfile "/var/run/batadv-vis.${MASTER}.pid" --make-pidfile \
