@@ -10,7 +10,7 @@ class ffnord::ntp () {
       mode => "0644",
       owner => "root",
       group => "root",
-      content => template('ffnord/etc/ntp.conf.erb');
+      source => "puppet:///modules/ffnord/etc/ntp.conf",
   } 
   ->
   service { 
