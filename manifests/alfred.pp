@@ -1,4 +1,6 @@
-class ffnord::alfred () { 
+class ffnord::alfred (
+  $master = false
+) { 
   vcsrepo { '/opt/alfred':
     ensure => present,
     provider => git,
@@ -62,5 +64,11 @@ class ffnord::alfred () {
     protos => ["udp"],
     chains => ["mesh","bat"],
     ports => ['16962'],
+  }
+
+  if $master {
+    ffnord::resources::ffnord::field { "ALFRED_OPTS": value => '-m'; }
+  } else {
+    ffnord::resources::ffnord::field { "ALFRED_OPTS": value => ''; }
   }
 }
