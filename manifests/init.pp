@@ -47,6 +47,10 @@ define ffnord::mesh(
     mesh_ipv4_prefixlen  => $mesh_ipv4_prefixlen
   } ->
   Class['ffnord::ntp'] ->
+  ffnord::ntp::allow { "${mesh_code}":
+    ipv4_net => $mesh_ipv4,
+    ipv6_net => $mesh_ipv6
+  } ->
   ffnord::dhcpd { "br-${mesh_code}":
     mesh_code    => $mesh_code,
     ipv4_address => $mesh_ipv4_address,
