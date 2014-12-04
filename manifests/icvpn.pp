@@ -32,14 +32,22 @@ define ffnord::icvpn::setup (
     icvpn_peers  => $icvpn_peerings;
   }
 
-  ffnord::bird4::icvpn { $name:
-    icvpn_as => $icvpn_as,
-    icvpn_ipv4_address => $icvpn_ipv4_address,
-    icvpn_ipv6_address => $icvpn_ipv6_address,
-    tinc_keyfile => $tinc_keyfile }
-  ffnord::bird6::icvpn { $name:
-    icvpn_as => $icvpn_as,
-    icvpn_ipv4_address => $icvpn_ipv4_address,
-    icvpn_ipv6_address => $icvpn_ipv6_address,
-    tinc_keyfile => $tinc_keyfile }
+  if $ffnord::params::include_bird4 == false and $ffnord::params::include_bird6 == false {
+    fail("At least bird4 or bird6 needs to be activated for ICVPN.")
+  }
+
+  if $ffnord::params::include_bird4 {
+    ffnord::bird4::icvpn { $name:
+      icvpn_as => $icvpn_as,
+      icvpn_ipv4_address => $icvpn_ipv4_address,
+      icvpn_ipv6_address => $icvpn_ipv6_address,
+      tinc_keyfile => $tinc_keyfile }
+  }
+  if $ffnord::params::include_bird6 {
+    ffnord::bird6::icvpn { $name:
+      icvpn_as => $icvpn_as,
+      icvpn_ipv4_address => $icvpn_ipv4_address,
+      icvpn_ipv6_address => $icvpn_ipv6_address,
+      tinc_keyfile => $tinc_keyfile }
+  }
 }
