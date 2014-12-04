@@ -127,8 +127,8 @@ define ffnord::bird6::icvpn (
     ],
     notify  => [
       Service['bird6'],
-      File_line['icvpn-include'],
-      File_line['icvpn-template']
+      File_line['icvpn-include6'],
+      File_line['icvpn-template6']
     ];
   } 
 }
