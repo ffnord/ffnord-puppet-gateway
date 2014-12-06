@@ -3,6 +3,7 @@ define ffnord::mesh(
   $mesh_code,        # Code of your community, e.g.: ffgc
   $mesh_as,          # AS of your community
   $mesh_mac,         # mac address mesh device: 52:54:00:bd:e6:d4
+  $mesh_mtu = 1426,  # mtu used, default only suitable for fastd via ipv4
   $mesh_ipv4,        # ipv4 address in cidr notation, e.g. 10.35.0.1/19
   $mesh_ipv6,        # ipv6 address in cidr notation, e.g. fd35:f308:a922::ff00/64
   $mesh_peerings,    # path to the local peerings description yaml file
@@ -63,6 +64,7 @@ define ffnord::mesh(
     mesh_name => $mesh_name,
     mesh_code => $mesh_code,
     mesh_mac  => $mesh_mac,
+    mesh_mtu  => $mesh_mtu,
     fastd_secret => $fastd_secret,
     fastd_port   => $fastd_port,
     fastd_peers_git => $fastd_peers_git;

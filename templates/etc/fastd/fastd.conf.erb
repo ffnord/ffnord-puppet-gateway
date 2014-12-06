@@ -10,7 +10,7 @@ bind any:<%= @fastd_port %>;
 hide ip addresses yes;
 hide mac addresses yes;
 include "secret.conf";
-mtu 1406; # 1492 - IPv6 Header - fastd Header...
+mtu <%= @mesh_mtu %>; # 1492 - IPv{4,6} Header - fastd Header...
 include peers from "peers";
 on up "
  modprobe batman-adv
