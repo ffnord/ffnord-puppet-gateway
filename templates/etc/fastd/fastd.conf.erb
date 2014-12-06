@@ -11,6 +11,7 @@ hide ip addresses yes;
 hide mac addresses yes;
 include "secret.conf";
 mtu 1426; # 1492 - IPv4 Header - fastd Header...
+status socket "/var/run/fastd-status.<%= @mesh_code %>.sock";
 include peers from "peers";
 on up "
  modprobe batman-adv
