@@ -3,6 +3,7 @@ define ffnord::mesh(
   $mesh_code,        # Code of your community, e.g.: ffgc
   $mesh_as,          # AS of your community
   $mesh_mac,         # mac address mesh device: 52:54:00:bd:e6:d4
+  $range_ipv4,       # ipv4 range allocated to community in cidr notation, e.g. 10.35.0.1/16
   $mesh_ipv4,        # ipv4 address in cidr notation, e.g. 10.35.0.1/19
   $mesh_ipv6,        # ipv6 address in cidr notation, e.g. fd35:f308:a922::ff00/64
   $mesh_peerings,    # path to the local peerings description yaml file
@@ -72,15 +73,6 @@ define ffnord::mesh(
     mesh_ipv6_prefix     => $mesh_ipv6_prefix,
     mesh_ipv6_prefixlen  => $mesh_ipv6_prefixlen;
   } ->
-  ffnord::bird6::mesh { "bird6-${mesh_code}":
-    mesh_code => $mesh_code,
-    mesh_ipv4_address => $mesh_ipv4_address,
-    mesh_ipv6_address => $mesh_ipv6_address,
-    mesh_peerings => $mesh_peerings,
-    site_ipv6_prefix => $mesh_ipv6_prefix,
-    site_ipv6_prefixlen => $mesh_ipv6_prefixlen,
-    icvpn_as => $mesh_as;
-  } -> 
   ffnord::named::mesh { "${mesh_code}":
     mesh_ipv4_address => $mesh_ipv4_address,
     mesh_ipv4_prefix  => $mesh_ipv4_prefix,
@@ -89,7 +81,31 @@ define ffnord::mesh(
     mesh_ipv6_prefix  => $mesh_ipv6_prefix,
     mesh_ipv6_prefixlen => $mesh_ipv6_prefixlen;
   }
-  # ffnord::bird{4}
+
+  if $ffnord::params::include_bird6 {
+    ffnord::bird6::mesh { "bird6-${mesh_code}":
+      mesh_code => $mesh_code,
+      mesh_ipv4_address => $mesh_ipv4_address,
+      mesh_ipv6_address => $mesh_ipv6_address,
+      mesh_peerings => $mesh_peerings,
+      site_ipv6_prefix => $mesh_ipv6_prefix,
+      site_ipv6_prefixlen => $mesh_ipv6_prefixlen,
+      icvpn_as => $mesh_as;
+    }
+  }
+  if $ffnord::params::include_bird4 {
+    ffnord::bird4::mesh { "bird4-${mesh_code}":
+      mesh_code => $mesh_code,
+      mesh_ipv4_address => $mesh_ipv4_address,
+      range_ipv4 => $range_ipv4,
+      mesh_ipv6_address => $mesh_ipv6_address,
+      mesh_peerings => $mesh_peerings,
+      site_ipv4_prefix => $mesh_ipv4_prefix,
+      site_ipv4_prefixlen => $mesh_ipv4_prefixlen,
+      icvpn_as => $mesh_as;
+    }
+  }
+ 
   # ffnord::opkg::mirror
   # ffnord::firmware mirror
 }

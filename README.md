@@ -85,6 +85,7 @@ ffnord::mesh { 'mesh_ffgc':
       mesh_mac     => "de:ad:be:ef:de:ad",
       mesh_ipv6    => "fd35:f308:a922::ff00/64,
       mesh_ipv4    => "10.35.0.1/19",
+      range_ipv4   => "10.35.0.0/16",
       mesh_peerings => "/root/mesh_peerings.yaml",
 
       fastd_secret => "/root/fastd_secret.key",
@@ -116,7 +117,7 @@ class {
     openvpn_password => "brucessecretpw",
 }
 
-ffnord::bird6::icvpn {
+ffnord::icvpn::setup {
   'gotham_city0':
     icvpn_as => 65035,
     icvpn_ipv4_address => "10.112.0.1",
@@ -148,6 +149,8 @@ ffnord :: mesh { '<mesh_code>':
   mesh_as,          # AS of your community
   mesh_mac,         # mac address mesh device: 52:54:00:bd:e6:d4
   mesh_ipv6,        # ipv6 address of mesh device in cidr notation, e.g. 10.35.0.1/19
+  range_ipv4,       # ipv4 range allocated to community, this might be different to
+                    # the one used in the mesh in cidr notation, e.g. 10.35.0.1/19
   mesh_ipv4,        # ipv4 address of mesh device in cidr notation, e.g. fd35:f308:a922::ff00/64
   mesh_peerings,    # path to the local peerings description yaml file
 
@@ -178,7 +181,7 @@ ffnord::named::zone {
 
 #### ICVPN Type
 ```
-ffnord :: bird6::icvpn {
+ffnord :: icvpn::setup {
   icvpn_as,            # AS of the community peering
   icvpn_ipv4_address,  # transfer network IPv4 address
   icvpn_ipv6_address,  # transfer network IPv6 address
