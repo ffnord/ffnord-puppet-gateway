@@ -1,6 +1,7 @@
 define ffnord::fastd( $mesh_name
                      , $mesh_code
                      , $mesh_mac
+                     , $mesh_mtu = 1426
 
                      , $fastd_secret
                      , $fastd_port

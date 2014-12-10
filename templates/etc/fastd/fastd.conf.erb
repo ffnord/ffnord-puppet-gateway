@@ -6,11 +6,11 @@ interface "<%= @mesh_code %>-mesh-vpn";
 method "salsa2012+umac";    # since fastd v15
 method "salsa2012+gmac";
 method "xsalsa20-poly1305"; # deprecated
-bind 0.0.0.0:<%= @fastd_port %>;
+bind any:<%= @fastd_port %>;
 hide ip addresses yes;
 hide mac addresses yes;
 include "secret.conf";
-mtu 1426; # 1492 - IPv4 Header - fastd Header...
+mtu <%= @mesh_mtu %>; # 1492 - IPv{4,6} Header - fastd Header...
 status socket "/var/run/fastd-status.<%= @mesh_code %>.sock";
 include peers from "peers";
 on up "
