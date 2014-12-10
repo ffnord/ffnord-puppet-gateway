@@ -4,6 +4,8 @@ class ffnord::params (
               # This number will be used for the main bird configuration
   $wan_devices, # Network devices which are in the wan zone
   $debian_mirror = 'http://ftp.de.debian.org/debian/',
+  $include_bird4 = true, # support bird
+  $include_bird6 = true, # support bird6
 
   # Default values for ffnord config
   $maintenance = 0, # Shall the maintenance mode be active after installation
