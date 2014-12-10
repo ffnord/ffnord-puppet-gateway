@@ -82,6 +82,11 @@ class ffnord::tinc (
      require => Vcsrepo['/etc/tinc/icvpn/'];
   }
 
+  exec { "update-icvpn-once":
+    command => "/etc/tinc/icvpn/scripts/post-merge",
+    unless => "/bin/grep -c ConnectTo /etc/tinc/icvpn/tinc.conf",
+  }
+
   ffnord::firewall::device { "icvpn":
     chain => 'mesh'
   }
