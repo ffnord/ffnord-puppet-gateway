@@ -19,14 +19,14 @@ class ffnord::uplink::ip (
 ) inherits ffnord::params {
 
   include ffnord::firewall
+  include ffnord::resources::network
+  include ffnord::resources::sysctl
+  include ffnord::bird4
 
   Exec { path => [ "/bin" ] }
   kmod::load { 'dummy':
     ensure => present,
   }
-
-  include ffnord::resources::network
-  include ffnord::resources::sysctl
 
   $nat_netmask_long = inline_template("<%= IPAddr.new('255.255.255.255').mask(@nat_netmask)%>")
 
@@ -69,8 +69,6 @@ iface dummy0 inet static
        require => [File['/etc/iptables.d/']];
   }
 
-  include ffnord::bird4
-
   file_line { "bird-uplink-include":
     path => '/etc/bird/bird.conf',
     line => "include \"/etc/bird/bird.conf.d/uplink.conf\";",
@@ -102,6 +100,7 @@ define ffnord::uplink::tunnel (
   include ffnord::resources::network
   include ffnord::resources::sysctl
   include ffnord::firewall
+  include ffnord::bird4
 
   $endpoint_name = $name
   $local_netmask_long = inline_template("<%= IPAddr.new('255.255.255.255').mask(@local_netmask)%>")
@@ -120,8 +119,6 @@ define ffnord::uplink::tunnel (
                  , Class[ffnord::resources::sysctl]
                  ];
   }
-
-  include ffnord::bird4
 
   file_line { "bird-uplink-${endpoint_name}-include":
     path => '/etc/bird/bird.conf.d/uplink.conf',
