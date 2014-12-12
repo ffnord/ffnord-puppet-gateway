@@ -7,11 +7,11 @@ protocol direct {
 }
 protocol static uplink_hostroute {
   import all;
-  table mesh;
+  table kernel_main;
   route <%= @nat_ip %>/<%= @nat_netmask %> reject;
 }
 template bgp uplink {
-  table mesh;
+  table kernel_main;
   local as <%= @icvpn_as %>;
   import where is_default();
   export where proto = "uplink_hostroute";
