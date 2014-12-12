@@ -27,14 +27,14 @@ define ffnord::mesh(
   include ffnord::firewall
 
   # Determine ipv{4,5} network prefixes and ivp4 netmask
-  $mesh_ipv4_prefix   = inline_template("<%= IPAddr.new(@mesh_ipv4) %>")
-  $mesh_ipv4_prefixlen = inline_template("<%= @mesh_ipv4.split('/')[1] %>")
-  $mesh_ipv4_netmask   = inline_template("<%= IPAddr.new('255.255.255.255').mask(@mesh_ipv4_prefixlen)%>")
-  $mesh_ipv4_address   = inline_template("<%= @mesh_ipv4.split('/')[0] %>")
+  $mesh_ipv4_prefix    = ip_prefix($mesh_ipv4)
+  $mesh_ipv4_prefixlen = ip_prefixlen($mesh_ipv4)
+  $mesh_ipv4_netmask   = ip_netmask($mesh_ipv4)
+  $mesh_ipv4_address   = ip_address($mesh_ipv4)
 
-  $mesh_ipv6_prefix    = inline_template("<%= IPAddr.new(@mesh_ipv6) %>")
-  $mesh_ipv6_prefixlen = inline_template("<%= @mesh_ipv6.split('/')[1] %>")
-  $mesh_ipv6_address   = inline_template("<%= @mesh_ipv6.split('/')[0] %>")
+  $mesh_ipv6_prefix    = ip_prefix($mesh_ipv6)
+  $mesh_ipv6_prefixlen = ip_prefixlen($mesh_ipv6)
+  $mesh_ipv6_address   = ip_address($mesh_ipv6)
 
   Class['ffnord::firewall'] ->
   ffnord::bridge { "bridge_${mesh_code}":
