@@ -43,13 +43,13 @@ define ffnord::ntp::allow(
 
   include ffnord::ntp
 
-  $ipv4_prefix   = inline_template("<%= IPAddr.new(@ipv4_net) %>")
-  $ipv4_prefixlen = inline_template("<%= @ipv4_net.split('/')[1] %>")
-  $ipv4_netmask   = inline_template("<%= IPAddr.new('255.255.255.255').mask(@ipv4_prefixlen)%>")
+  $ipv4_prefix    = ip_prefix($ipv4_net)
+  $ipv4_prefixlen = ip_prefixlen($ipv4_net)
+  $ipv4_netmask   = ip_netmask($ipv4_net)
 
-  $ipv6_prefix    = inline_template("<%= IPAddr.new(@ipv6_net) %>")
-  $ipv6_prefixlen = inline_template("<%= @ipv6_net.split('/')[1] %>")
-  $ipv6_netmask   = inline_template("<%= IPAddr.new('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff').mask(@ipv6_prefixlen)%>")
+  $ipv6_prefix    = ip_prefix($ipv6_net)
+  $ipv6_prefixlen = ip_prefixlen($ipv6_net)
+  $ipv6_netmask   = ip_netmask($ipv6_net)
 
   file_line {
     "ntp_restrict_v4_${name}":
