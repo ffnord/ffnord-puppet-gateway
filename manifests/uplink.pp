@@ -13,8 +13,7 @@ class ffnord::uplink (
 }
 
 class ffnord::uplink::ip (
-  $nat_ip,
-  $nat_netmask,
+  $nat_network,
   $tunnel_network,
 ) inherits ffnord::params {
 
@@ -23,12 +22,13 @@ class ffnord::uplink::ip (
   include ffnord::resources::sysctl
   include ffnord::bird4
 
+  $nat_ip = ip_address($nat_network)
+  $nat_netmask = ip_netmask($nat_network)
+
   Exec { path => [ "/bin" ] }
   kmod::load { 'dummy':
     ensure => present,
   }
-
-  $nat_netmask_long = inline_template("<%= IPAddr.new('255.255.255.255').mask(@nat_netmask)%>")
 
   Class['ffnord::resources::network'] ->
   file {
@@ -38,7 +38,7 @@ class ffnord::uplink::ip (
 auto dummy0
 iface dummy0 inet static
   address <%=@nat_ip%>
-  netmask <%=@nat_netmask_long%>");
+  netmask <%=@nat_netmask%>");
   } ->
   exec {
     "start_dummy_interface_0":
