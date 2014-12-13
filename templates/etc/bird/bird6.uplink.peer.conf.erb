@@ -1,0 +1,4 @@
+protocol bgp uplink_<%= @name %> from v6uplink {
+  source address <%= @local_ipv6 %>;
+  neighbor <%= @remote_ipv6 %> as <%= @remote_as %>;
+};

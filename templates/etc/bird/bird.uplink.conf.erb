@@ -1,0 +1,20 @@
+function is_default() {
+  return (net ~ [0.0.0.0/0]);
+}
+protocol direct {
+  interface "uplink-*";
+  table mesh;
+}
+protocol static uplink_hostroute {
+  import all;
+  table mesh;
+  route <%= @nat_network %> reject;
+}
+template bgp uplink {
+  table mesh;
+  local as <%= @icvpn_as %>;
+  import where is_default();
+  export where proto = "uplink_hostroute";
+  next hop self;
+  multihop 64;
+}

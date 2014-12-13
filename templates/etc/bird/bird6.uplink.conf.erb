@@ -1,0 +1,6 @@
+template bgp v6uplink {
+  table mesh;
+  local as <%= @icvpn_as %>;
+  import where is_default();
+  export where (source = RTS_STATIC_DEVICE);
+};

@@ -106,6 +106,8 @@ define ffnord::bird4::icvpn (
       line => 'include "/etc/bird/bird.conf.d/icvpn-template.conf";',
       require => File['/etc/bird/bird.conf'],
       notify  => Service['bird'];
+  }->
+  file_line {
     "icvpn-include":
       path => '/etc/bird/bird.conf',
       line => 'include "/etc/bird/bird.conf.d/icvpn-peers.conf";',

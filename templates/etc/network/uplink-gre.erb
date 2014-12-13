@@ -1,0 +1,13 @@
+# Uplink via GRE <%= @endpoint_name %>
+auto uplink-<%= @endpoint_name %>
+iface uplink-<%= @endpoint_name %> inet static
+  address <%= @local_ip %>
+  netmask <%= @local_netmask %>
+  pre-up /sbin/ip tunnel add $IFACE mode gre local <%= @local_public_ip %> remote <%= @remote_public_ip %> ttl 255
+  post-up   /sbin/ip link set $IFACE mtu <%= @tunnel_mtu %>
+  post-up   /sbin/sysctl -w net.ipv4.conf.$IFACE.rp_filter=0
+  pre-up    /sbin/ip rule add pref 31000 iif $IFACE table 42
+  pre-up    /sbin/ip rule add pref 31001 iif $IFACE unreachable
+  post-down /sbin/ip rule del pref 31000 iif $IFACE table 42
+  post-down /sbin/ip rule del pref 31001 iif $IFACE unreachable
+  post-down /sbin/ip tunnel del $IFACE

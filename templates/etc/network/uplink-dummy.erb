@@ -1,0 +1,5 @@
+# Dummy interface for NAT IPv4
+auto dummy0
+iface dummy0 inet static
+  address <%=@nat_ip%>
+  netmask <%=@nat_netmask%>
