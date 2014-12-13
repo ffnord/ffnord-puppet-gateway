@@ -8,7 +8,10 @@ MAINTENANCE=${MAINTENANCE:-0}
 
 if test $MAINTENANCE -eq 0; then
 
-    ping -q -I $GW_VPN_INTERFACE $GW_CONTROL_IP -c 4 -i 1 -W 5 >/dev/null 2>&1
+    # ensure that we have the appropriate rule
+    /sbin/ip rule replace from all fwmark 0x1 table 42 preference 32000
+
+    ping -q -m 1 $GW_CONTROL_IP -c 4 -i 1 -W 5 >/dev/null 2>&1
 
     if test $? -eq 0; then
         NEW_STATE=server
@@ -23,9 +26,36 @@ fi
 for MESH in /sys/class/net/*/mesh; do
 OLD_STATE="$(cat $MESH/gw_mode)"
 [ "$OLD_STATE" == "$NEW_STATE" ] && continue
-         echo $NEW_STATE > $MESH/gw_mode
-         logger "batman gateway mode changed to $NEW_STATE"
+    echo $NEW_STATE > $MESH/gw_mode
+    logger "batman gateway mode changed to $NEW_STATE"
+
+    # Check whether gateway modus has been deactivated
+    if [ "$NEW_STATE" == "off" ]; then
+        # Shutdown DHCP server to prevent renewal of leases
+        /usr/sbin/service isc-dhcp-server stop
+    fi
+
+    # Check whether gateway modus has been activated
+    if [ "$NEW_STATE" == "server" ]; then
+        # Restart DHCP server
+        /usr/sbin/service isc-dhcp-server start
+    fi
+    exit 0
 done
 
-# vim: noai:ts=4:sw=4:ff=unix:ft=text:fdm=marker
+if [ "$NEW_STATE" == "server" ]; then
+    /usr/sbin/service isc-dhcp-server status 2>&1> /dev/null
+    if [[ $? -ne 0 ]]
+    then
+        /usr/sbin/service isc-dhcp-server restart
+    fi
+fi
+if [ "$NEW_STATE" == "off" ]; then
+    /usr/sbin/service isc-dhcp-server status 2>&1> /dev/null
+    if [[ $? -eq 0 ]]
+    then
+        /usr/sbin/service isc-dhcp-server stop
+    fi
+fi
 
+# vim: noai:ts=4:sw=4:ff=unix:ft=text:fdm=marker
