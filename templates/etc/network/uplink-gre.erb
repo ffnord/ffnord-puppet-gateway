@@ -2,7 +2,7 @@
 auto uplink-<%= @endpoint_name %>
 iface uplink-<%= @endpoint_name %> inet static
   address <%= @local_ip %>
-  netmask <%= @local_netmask_long %>
+  netmask <%= @local_netmask %>
   pre-up /sbin/ip tunnel add $IFACE mode gre local <%= @local_public_ip %> remote <%= @remote_public_ip %> ttl 255
   post-up   /sbin/ip link set $IFACE mtu <%= @tunnel_mtu %>
   post-up   /sbin/sysctl -w net.ipv4.conf.$IFACE.rp_filter=0

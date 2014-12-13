@@ -90,8 +90,7 @@ iface dummy0 inet static
 define ffnord::uplink::tunnel (
   $local_public_ip,
   $remote_public_ip,
-  $local_ip,
-  $local_netmask,
+  $local_ipv4,
   $tunnel_mtu = 1426,
   $remote_ip,
   $remote_as,
@@ -103,7 +102,8 @@ define ffnord::uplink::tunnel (
   include ffnord::bird4
 
   $endpoint_name = $name
-  $local_netmask_long = inline_template("<%= IPAddr.new('255.255.255.255').mask(@local_netmask)%>")
+  $local_ip = ip_address($local_ipv4)
+  $local_netmask = ip_netmask($local_ipv4)
 
   Class['ffnord::resources::network'] ->
   file {
