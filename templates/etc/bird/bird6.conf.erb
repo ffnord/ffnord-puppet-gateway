@@ -36,6 +36,11 @@ function is_ula() {
 function is_freifunk() {
   return net ~ [ 2001:0bf7::/32+,   # Foerderverein freie Netzwerke e.V.
                  2a03:2260::/29+ ]; # Freifunk Rheinland e.V.
+};
+
+# Filter function to check if an IPv6 Route is a Default route.
+function is_default() {
+  return net ~ [ ::0/0 ];
 }
 
 # don't use kernel's routes for bird, but export bird's 
@@ -76,7 +81,7 @@ protocol pipe pipe_kernel_mesh {
 protocol pipe pipe_kernel_main_mesh {
   table kernel_main;
   peer table mesh;
-  import all;
+  import where ! is_default();
   export none;
 };
 
