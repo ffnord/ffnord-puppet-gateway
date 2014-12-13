@@ -13,12 +13,12 @@ module Puppet::Parser::Functions
   EOS
   ) do |args|
     ip_address = args[0]
+    Puppet::Parser::Functions.function('ip_prefixlen')
     if IPAddr.new(ip_address).ipv6?()
       net = IPAddr.new('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')
-      return net.mask(ip_address).to_string()
     else
       net = IPAddr.new('255.255.255.255')
-      return net.mask(ip_address).to_string()
     end
+    return net.mask(function_ip_prefixlen([ip_address])).to_string()
   end
 end
