@@ -8,7 +8,7 @@ protocol direct {
 protocol static uplink_hostroute {
   import all;
   table mesh;
-  route <%= @nat_ip %>/<%= @nat_netmask %> reject;
+  route <%= @nat_network %> reject;
 }
 template bgp uplink {
   table mesh;
