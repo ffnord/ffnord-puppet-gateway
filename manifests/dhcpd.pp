@@ -68,3 +68,66 @@ class ffnord::dhcpd::service {
       enable => true;
   }
 }
+
+define ffnord::dhcpd::static (
+  $static_git, # git repo with static file
+) {
+  include ffnord::dhcpd::base
+
+  $static_name = $name
+
+  file{
+    "/etc/dhcp/statics/":
+      ensure => directory,
+      owner => 'root',
+      group => 'root',
+      mode => '0755',
+      require => Package['isc-dhcp-server'];
+  }
+
+  vcsrepo { "/etc/dhcp/statics/${static_name}/":
+    ensure   => present,
+    provider => git,
+    source   => $static_git,
+    require  => [
+      File["/etc/dhcp/statics/"],
+    ];
+  }
+
+  file{
+    "/etc/dhcp/statics/${static_name}/.git/hooks/post-merge":
+      ensure => file,
+      owner => 'root',
+      group => 'root',
+      mode => '0755',
+      content => "#!/bin/sh\n/usr/local/bin/update-statics reload",
+      require => Vcsrepo["/etc/dhcp/statics/${static_name}/"];
+  }
+
+  file_line {
+    "static-${static_name}":
+      path => "/etc/dhcp/interface-br-${static_name}.conf",
+      line => "include \"/etc/dhcp/statics/${static_name}/static.conf\";",
+      require => [
+        Vcsrepo["/etc/dhcp/statics/${static_name}/"]
+      ];
+  }
+
+  file {
+    '/usr/local/bin/update-statics':
+     ensure => file,
+     owner => 'root',
+     group => 'root',
+     mode => '0755',
+     source => 'puppet:///modules/ffnord/usr/local/bin/update-statics',
+     require =>  Vcsrepo["/etc/dhcp/statics/${static_name}/"];
+  }
+
+  cron {
+    'update-statics':
+      command => '/usr/local/bin/update-statics pull',
+      user => root,
+      minute => [0,30],
+      require => File['/usr/local/bin/update-statics'];
+  }
+}
