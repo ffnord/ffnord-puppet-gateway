@@ -110,6 +110,10 @@ ffnord::named::zone {
   'ffgc': zone_git => 'git://somehost/ffgc-zone.git';
 }
 
+ffnord::dhcpd::static {
+  'ffgc': static_git => 'git://somehost/ffgc-static.git';
+}
+
 class {
   'ffnord::vpn::provider::hideio':
     openvpn_server => "nl-7.hide.io",
@@ -178,6 +182,24 @@ the absolute path prefixed with '/etc/bind/zones/${name}/'.
 ffnord::named::zone {
   '<name>':
      zone_git; # zone file repo
+}
+```
+
+#### DHCPd static type
+
+This type enables you to receive a file with static dhcp assignments from a git repository, include
+it into the dhcp configuration and setup a cron job for pulling changes in.
+By default the cronjob will pull every 30min.
+
+The provided configuration should not rely on relative path but use
+the absolute path prefixed with '/etc/dhcp/statics/${name}/'.
+The name should be the same as the community the static assignments belong to.
+There has to be a file named static.conf in the repo.
+
+```
+ffnord::dhcpd::static {
+  '<name>':
+     static_git; # dhcp static file repo
 }
 ```
 
