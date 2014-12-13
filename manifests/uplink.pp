@@ -65,7 +65,7 @@ iface dummy0 inet static
        owner => 'root',
        group => 'root',
        mode => '0644',
-       content => 'ip4tables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu',
+       content => 'ip4tables -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu',
        require => [File['/etc/iptables.d/']];
   }
 
