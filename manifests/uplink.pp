@@ -34,11 +34,7 @@ class ffnord::uplink::ip (
   file {
     "/etc/network/interfaces.d/dummy0":
       ensure => file,
-      content => inline_template("# Dummy interface for NAT IPv4
-auto dummy0
-iface dummy0 inet static
-  address <%=@nat_ip%>
-  netmask <%=@nat_netmask%>");
+      content => template("ffnord/etc/network/uplink-dummy.erb");
   } ->
   exec {
     "start_dummy_interface_0":
