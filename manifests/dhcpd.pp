@@ -109,7 +109,8 @@ define ffnord::dhcpd::static (
       path => "/etc/dhcp/interface-br-${static_name}.conf",
       line => "include \"/etc/dhcp/statics/${static_name}/static.conf\";",
       require => [
-        Vcsrepo["/etc/dhcp/statics/${static_name}/"]
+        Vcsrepo["/etc/dhcp/statics/${static_name}/"],
+        File["/etc/dhcp/interface-br-${static_name}.conf"]
       ];
   }
 
