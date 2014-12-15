@@ -1,0 +1,14 @@
+#!/bin/bash /usr/local/include/ffnord-update.common
+
+pull() {
+  for STATIC in $(find /etc/dhcp/statics -mindepth 1 -maxdepth 1 -type d); do
+    if [ -d "${STATIC}/.git" ]; then
+      cd "$STATIC"
+      git pull -q
+    fi
+  done
+}
+
+reload() {
+  /usr/sbin/service isc-dhcp-server restart
+}
