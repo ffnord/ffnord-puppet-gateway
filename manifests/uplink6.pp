@@ -57,6 +57,19 @@ define ffnord::uplink6::bgp (
   }  
 }
 
+define ffnord::uplink6::interface (
+) {
+  include ffnord::firewall
+
+  ffnord::firewall::forward { "${name}":
+    chain => 'mesh'
+  }
+
+  ffnord::firewall::device { "${name}":
+    chain => 'mesh'
+  } 
+}
+
 define ffnord::uplink6::tunnel (
 ) {
 }
