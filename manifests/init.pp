@@ -26,7 +26,7 @@ define ffnord::mesh(
   include ffnord::maintenance
   include ffnord::firewall
 
-  # Determine ipv{4,5} network prefixes and ivp4 netmask
+  # Determine ipv{4,6} network prefixes and ivp4 netmask
   $mesh_ipv4_prefix    = ip_prefix($mesh_ipv4)
   $mesh_ipv4_prefixlen = ip_prefixlen($mesh_ipv4)
   $mesh_ipv4_netmask   = ip_netmask($mesh_ipv4)
