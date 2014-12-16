@@ -13,3 +13,7 @@ ip46tables -N forward
 ip46tables -N bat-forward
 ip46tables -N mesh-forward
 ip46tables -N wan-forward
+
+# Helper Chains
+
+ip46tables -N DROP-log

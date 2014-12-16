@@ -121,6 +121,13 @@ class ffnord::firewall (
       mode => '0644',
       source => "puppet:///modules/ffnord/etc/iptables.d/900-INPUT-drop",
       require => File['/etc/iptables.d/'];
+    '/etc/iptables.d/900-LOG-drop':
+      ensure => file,
+      owner => 'root',
+      group => 'root',
+      mode => '0644',
+      source => "puppet:///modules/ffnord/etc/iptables.d/900-LOG-drop",
+      require => File['/etc/iptables.d/'];
   }
 
   ffnord::firewall::device { $wan_devices:
