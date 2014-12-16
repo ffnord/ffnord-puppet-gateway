@@ -1,9 +1,5 @@
 # Initial processing of input chain on filter table
 # Packages which are not directly ACCEPTed or DROPed are pushed to the forward chain
-ip46tables -N forward
-ip46tables -N bat-forward
-ip46tables -N mesh-forward
-ip46tables -N wan-forward
 
 # connection tracking
 ip46tables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT

@@ -14,7 +14,7 @@
  * The order of execution is matched to meaning by the following list:
  * 
  * 000 RESET all the rules
- * 001 Preprocessing
+ * 050 Preprocessing
  * 100 Zone selection
  * 500+ Service/Port acceptance
  * 800 Forwarding acceptance
@@ -64,19 +64,26 @@ class ffnord::firewall (
       mode => '0644',
       source => "puppet:///modules/ffnord/etc/iptables.d/000-RESET",
       require => File['/etc/iptables.d/'];
-    '/etc/iptables.d/001-FORWARD-PreProcessing': 
+    '/etc/iptables.d/001-CHAINS':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/001-FORWARD-PreProcessing",
+      source => "puppet:///modules/ffnord/etc/iptables.d/001-CHAINS",
       require => File['/etc/iptables.d/'];
-    '/etc/iptables.d/001-INPUT-PreProcessing': 
+    '/etc/iptables.d/050-FORWARD-PreProcessing': 
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/001-INPUT-PreProcessing",
+      source => "puppet:///modules/ffnord/etc/iptables.d/050-FORWARD-PreProcessing",
+      require => File['/etc/iptables.d/'];
+    '/etc/iptables.d/050-INPUT-PreProcessing': 
+      ensure => file,
+      owner => 'root',
+      group => 'root',
+      mode => '0644',
+      source => "puppet:///modules/ffnord/etc/iptables.d/050-INPUT-PreProcessing",
       require => File['/etc/iptables.d/'];
     '/etc/iptables.d/200-block-ranges':
       ensure => file,
