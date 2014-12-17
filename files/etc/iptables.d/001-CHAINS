@@ -1,0 +1,19 @@
+# Chains for package processing
+
+# Default Input Chains
+
+ip46tables -N input
+ip46tables -N bat-input
+ip46tables -N mesh-input
+ip46tables -N wan-input
+
+# Default Forward Chains
+
+ip46tables -N forward
+ip46tables -N bat-forward
+ip46tables -N mesh-forward
+ip46tables -N wan-forward
+
+# Helper Chains
+
+ip46tables -N DROP-log
