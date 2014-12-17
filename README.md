@@ -215,6 +215,29 @@ ffnord :: icvpn::setup {
 }
 ```
 
+#### IPv4 Uplink via GRE Tunnel
+This is a module for an IPv4 Uplink via GRE tunnel and BGP.
+This module and the VPN module are mutually exclusive.
+Define the ffnord::uplink::ip class once and ffnord::uplink::tunnel
+for each tunnel you want to use. See http://wiki.freifunk.net/Freifunk_Hamburg/IPv4Uplink
+for a more detailed description.
+
+```
+class {
+  'ffnord::uplink::ip':
+    nat_network,        # network of IPv4 addresses usable for NAT
+    tunnel_network,     # network of tunnel IPs to exclude from NAT
+}
+ffnord::uplink::tunnel {
+    '<name>':
+      local_public_ip,  # local public IPv4 of this gateway
+      remote_public_ip, # remote public IPv4 of the tunnel endpoint
+      local_ipv4,       # tunnel IPv4 on our side
+      remote_ip,        # tunnel IPv4 on the remote side
+      remote_as,        # ASN of the BGP server announcing a default route for you
+}
+```
+
 #### Peering description
 Be aware that currently the own system mesh address will not be filtered.
 
