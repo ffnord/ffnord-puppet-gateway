@@ -10,10 +10,14 @@ case $1 in
   on)
     sed -i -e 's/^MAINTENANCE=.*$/MAINTENANCE='$(date +%s)'/' /etc/ffnord
     /etc/init.d/radvd stop
+    update-rc.d radvd remove
+    update-rc.d isc-dhcp-server remove
     ;;
   off)
     sed -i -e 's/^MAINTENANCE=.*$/MAINTENANCE=0/' /etc/ffnord
     /etc/init.d/radvd start
+    update-rc.d radvd defaults
+    update-rc.d isc-dhcp-server defaults
     ;;
   status)
     MAINTENANCE=${MAINTENANCE:-0}
