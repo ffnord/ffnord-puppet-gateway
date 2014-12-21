@@ -42,6 +42,7 @@ puppet module install puppetlabs-apt
 puppet module install puppetlabs-vcsrepo
 puppet module install saz-sudo
 puppet module install torrancew-account
+puppet module install camptocamp-kmod
 ```
 
 Then add this module (which is not in the puppet forge, so it has to be
