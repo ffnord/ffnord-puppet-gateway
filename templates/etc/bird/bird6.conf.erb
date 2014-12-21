@@ -87,7 +87,7 @@ protocol pipe pipe_kernel_main_mesh {
 
 # template for local route exchange via bgp
 template bgp local_mesh {
-  import where is_ula() || is_freifunk();
+  import where is_ula() || is_freifunk() || is_default();
   export where source = RTS_BGP;
   direct;
   next hop self;
