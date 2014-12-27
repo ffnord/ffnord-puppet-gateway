@@ -1,0 +1,43 @@
+#!/bin/bash
+
+SOCKFILE=${SOCKFILE:-/var/run/fastd-status.ffki.sock}
+SOCAT=$(which socat)
+
+socketpipe() {
+ "$SOCAT" - UNIX:"$SOCKFILE"
+}
+
+case $1 in
+  peers|p)
+    shift
+    if [ $# -gt 0 ] ; then
+      case $1 in
+        name|n)
+          NAME="$2"
+          shift 2
+          socketpipe | jq ".peers[] | select(.name == \"${NAME}\") | ${@:-.}"
+          ;;
+        mac|m)
+          MAC="$2"
+          shift 2
+          socketpipe | jq ".peers[] | select( .connection | .mac_addresses[]? == \"${MAC}\") | ${@:-.}"
+          ;;
+        *)
+          socketpipe | jq ".peers[] | ${@:-.}"
+          ;;
+      esac
+    else
+      socketpipe | jq '.peers[]'
+    fi
+    ;;
+  connections|c)
+    socketpipe | jq '.peers[] | select( .connection ) | .name' | wc -l
+    ;;
+  statistics|s)
+    shift
+    socketpipe | jq ".statistics[] | ${@:-.}"
+    ;;
+  *|help)
+    echo "Usage $0 [peers,statistics,connections]"
+  ;;
+esac
