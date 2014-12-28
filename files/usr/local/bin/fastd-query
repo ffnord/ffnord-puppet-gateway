@@ -8,6 +8,11 @@ socketpipe() {
  "$SOCAT" - UNIX:"$SOCKFILE"
 }
 
+help_general(){
+  echo "Usage: $0 OBJECT { COMMAND | help }"
+  echo "where OBJECT := { STATISTICS | connections | peers }"
+  echo "      STATISTICS := statistics JQ-STRING"
+}
 
 if [ "x${SOCAT}" = "x" ]; then
   echo "Error: 'socat' not found in PATH"
@@ -48,9 +53,6 @@ case $1 in
     socketpipe | "$JQ" ".statistics[] | ${@:-.}"
     ;;
   *|help)
-    echo "Usage: $0 OBJECT { COMMAND | help }"
-    echo "where OBJECT := { STATISTICS | connections | peers }"
-    echo "      STATISTICS := statistics JQ-STRING"
-
+    help_general
   ;;
 esac
