@@ -38,14 +38,14 @@ case $1 in
         exit 0
         ;;
     esac
-    socketpipe | jq "$QUERY | ${@:-.}"
+    socketpipe | "$JQ" "$QUERY | ${@:-.}"
     ;;
   connections|c)
-    socketpipe | jq '.peers[] | select( .connection ) | .name' | wc -l
+    socketpipe | "$JQ" '.peers[] | select( .connection ) | .name' | wc -l
     ;;
   statistics|s)
     shift
-    socketpipe | jq ".statistics[] | ${@:-.}"
+    socketpipe | "$JQ" ".statistics[] | ${@:-.}"
     ;;
   *|help)
     echo "Usage: $0 OBJECT { COMMAND | help }"
