@@ -1,12 +1,23 @@
 #!/bin/bash
 
 SOCKFILE=${SOCKFILE:-/var/run/fastd-status.ffki.sock}
-SOCAT=$(which socat)
+SOCAT=$(which socat 2>/dev/null)
+JQ=$(which jq 2>/dev/null)
 
 socketpipe() {
  "$SOCAT" - UNIX:"$SOCKFILE"
 }
 
+
+if [ "x${SOCAT}" = "x" ]; then
+  echo "Error: 'socat' not found in PATH"
+  exit 2
+fi
+
+if [ "x${JQ}" = "x" ]; then
+  echo "Error: 'jq' not found in PATH"
+  exit 2
+fi
 case $1 in
   peers|p)
     shift
