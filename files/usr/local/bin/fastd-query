@@ -1,17 +1,19 @@
 #!/bin/bash
 
-SOCKFILE=${SOCKFILE:-/var/run/fastd-status.ffki.sock}
+FASTD_SOCKET=${FASTD_SOCKET:-}
 SOCAT=$(which socat 2>/dev/null)
 JQ=$(which jq 2>/dev/null)
 
 socketpipe() {
- "$SOCAT" - UNIX:"$SOCKFILE"
+ "$SOCAT" - UNIX:"$FASTD_SOCKET"
 }
 
 help_general(){
   echo "Usage: $0 OBJECT { COMMAND | help }"
   echo "where OBJECT := { STATISTICS | connections | peers }"
   echo "      STATISTICS := statistics JQ-STRING"
+  echo
+  echo "The fastd socket is declared by env variable FASTD_SOCKET."
 }
 
 if [ "x${SOCAT}" = "x" ]; then
@@ -23,6 +25,17 @@ if [ "x${JQ}" = "x" ]; then
   echo "Error: 'jq' not found in PATH"
   exit 2
 fi
+
+if [ "x${FASTD_SOCKET}" = "x" ]; then
+  echo "Error: No fastd socket declarded"
+  help_general
+  exit 1
+fi
+
+if [ ! -S "${FASTD_SOCKET}" ]; then
+  echo "Error: File '${FASTD_SOCKET}' does not exists, or is no socket"
+fi
+
 case $1 in
   peers|p)
     shift
