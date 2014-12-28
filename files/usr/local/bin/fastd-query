@@ -10,25 +10,24 @@ socketpipe() {
 case $1 in
   peers|p)
     shift
-    if [ $# -gt 0 ] ; then
-      case $1 in
-        name|n)
-          NAME="$2"
-          shift 2
-          socketpipe | jq ".peers[] | select(.name == \"${NAME}\") | ${@:-.}"
-          ;;
-        mac|m)
-          MAC="$2"
-          shift 2
-          socketpipe | jq ".peers[] | select( .connection | .mac_addresses[]? == \"${MAC}\") | ${@:-.}"
-          ;;
-        *)
-          socketpipe | jq ".peers[] | ${@:-.}"
-          ;;
-      esac
-    else
-      socketpipe | jq '.peers[]'
-    fi
+    QUERY=".peers[]"
+    case $1 in
+      name|n)
+        QUERY="${QUERY} | select(.name == \"${2}\")"
+        shift 2
+        ;;
+      mac|m)
+        QUERY="${QUERY} | select( .connection | .mac_addresses[]? == \"${2}\")"
+        shift 2
+        ;;
+      help|h)
+        echo "Usage: $0 peers name STRING JQ-STRING"
+        echo "       $0 peers mac LLADDR JQ-STRING"
+        echo "       $0 peers JQ-STRING"
+        exit 0
+        ;;
+    esac
+    socketpipe | jq "$QUERY | ${@:-.}"
     ;;
   connections|c)
     socketpipe | jq '.peers[] | select( .connection ) | .name' | wc -l
@@ -38,6 +37,9 @@ case $1 in
     socketpipe | jq ".statistics[] | ${@:-.}"
     ;;
   *|help)
-    echo "Usage $0 [peers,statistics,connections]"
+    echo "Usage: $0 OBJECT { COMMAND | help }"
+    echo "where OBJECT := { STATISTICS | connections | peers }"
+    echo "      STATISTICS := statistics JQ-STRING"
+
   ;;
 esac
