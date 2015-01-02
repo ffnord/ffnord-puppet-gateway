@@ -27,7 +27,8 @@ Developer Documentation
 .. toctree::
    :maxdepth: 2
 
-   internals/index
+   developer/internals
+   developer/testenv
 
 Releases
 --------
