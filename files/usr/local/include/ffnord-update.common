@@ -16,7 +16,7 @@ case $2 in
       pull $@
     else 
       cd "$REPOSITORY"
-      git pull
+      git pull > /dev/null
     fi
     ;;
   reload)
