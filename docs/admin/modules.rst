@@ -2,7 +2,7 @@ Puppet Classes and Types
 ========================
 
 The ffnord-puppet-gateway module provide several puppet resources, in here
-we will discuss all directly usable resources. The omitted once are discussed
+we will discuss all directly usable resources. The omitted one are discussed
 in the developer documentation.
 
 ffnord::params (class)
@@ -58,8 +58,7 @@ ffnord::mesh (type)
 This type introduces a new community to the host, there should be at least one ``ffnord::mesh`` resource in your manifest. Furthermore there have to be one declaration which match the values of the ``ffnord::param`` class.
 
 Currently this makes the host to be a gateway for the introduced community.
-Introducing ``ntpd``, ``dhcpd``, ``firewall``, ``bird``, ``bird6`` and ``fastd`` services
-and configurating the network interfaces ``br-${mesh_code}``.
+Introducing ``ntpd``, ``dhcpd``, ``firewall``, ``bird``, ``bird6``, ``bind9`` and ``fastd`` services and configurating the network interfaces ``br-${mesh_code}``.
 
 .. code-block:: ruby
 
@@ -131,7 +130,7 @@ fastd_port
 * Example value: ``10035``
 
 fastd_peers_git
-...........
+...............
 * Example value: ``'git://somehost/peers.git'``
 
 dhcp_ranges
@@ -144,6 +143,32 @@ dns_servers
 
 ffnord::named::zone (type)
 --------------------------
+When you have a zone that is managed by your community you can import the
+corresponding zone files from a git repository and include it into the local
+running name server. The repo and configuration file in it must forfill some
+requirements:
+
+* There must be an configuration file named ``${resource_name}.conf``
+* All files which are included in the configuratoin file should used a absoulte
+  path beginning with ``/etc/bind/zones/${resource_name}/``.
+
+.. code-block:: ruby
+
+  ffnord::named::zone { 'resource_name':
+    zone_git     => # Path to a git repository
+    exclude_meta => # Optionally exclude zones from icvpn-meta
+  }
+
+Attributes
+``````````
+
+zone_git
+........
+* Example value: ``git://somehost/zone.git``
+
+exclude_meta
+............
+* Default: ``''``
 
 ffnord::dhcpd::static (type)
 ----------------------------

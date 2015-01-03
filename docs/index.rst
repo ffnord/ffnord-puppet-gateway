@@ -16,7 +16,9 @@ Admin Documentation
    :maxdepth: 2
 
    admin/getting_started
+   admin/icvpn-meta.rst
    admin/modules
+   admin/mail
    scripts/index
    configuration/index
 
