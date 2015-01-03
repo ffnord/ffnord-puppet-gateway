@@ -5,5 +5,6 @@ Scripts
    :maxdepth: 2
 
    firewall
-   repository_updates
+   fastd-query
    maintenance
+   ffnord-common
