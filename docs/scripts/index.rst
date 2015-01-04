@@ -8,3 +8,4 @@ Scripts
    fastd-query
    maintenance
    ffnord-common
+   check-gateway
