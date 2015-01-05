@@ -31,9 +31,14 @@ icvpn_as
 ........
 * Example value: ``65034``
 
+This should be ASN of the providing community. The value is currently used for icvpn only,
+for local peerings or iBGP the ASN given in the ``ffnord::mesh`` resource is used.
+
 wan_devices
 ...........
 * Example value: ``['eth0']``
+
+List of WAN devices on the target host. These devices will be in the WAN firewall zone.
 
 debian_mirror
 .............
@@ -43,14 +48,22 @@ include_bird4
 .............
 * Default: ``true``
 
+Shall the IPv4 version of the bird service be deployed.
+
 include_bird6
 .............
 * Default: ``true``
+
+Shall the IPv6 version of the bird service be deployed.
 
 maintenance
 ...........
 * Default: ``0``
 
+You can define a value greater than zero to this attribute to bring the host into maintenance
+mode after puppet run, the value is currently not checked by any manifests in this module.
+So all services will be started after a puppet run, but the maintenance mode critical
+will son after shutdown by the ``check-gateway`` script.
 
 ffnord::mesh (type)
 -------------------
