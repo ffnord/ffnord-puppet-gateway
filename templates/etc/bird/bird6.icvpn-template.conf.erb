@@ -5,6 +5,6 @@ template bgp icvpn {
   table mesh;
   local as <%= @icvpn_as %>;
   source address <%= @icvpn_ipv6_address %>;
-  import where is_ula();
-  export where (source = RTS_BGP) || (source = RTS_STATIC_DEVICE);
+  import where (is_ula() || is_freifunk());
+  export where ((source = RTS_BGP) || (source = RTS_STATIC_DEVICE)) && (is_ula() || is_freifunk());
 };
