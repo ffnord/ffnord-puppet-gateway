@@ -6,5 +6,5 @@ template bgp icvpn {
   local as <%= @icvpn_as %>;
   source address <%= @icvpn_ipv6_address %>;
   import where is_ula();
-  export where (source = RTS_BGP) || (source = RTS_STATIC);
+  export where (source = RTS_BGP) || (source = RTS_STATIC_DEVICE);
 };
