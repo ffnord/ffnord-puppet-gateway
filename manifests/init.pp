@@ -78,6 +78,14 @@ define ffnord::mesh(
   ffnord::named::listen { "${mesh_code}":
     ipv4_address => $mesh_ipv4_address,
     ipv6_address => $mesh_ipv6_address,
+  } ->
+  ffnord::named::allow {
+    "${mesh_code}_v4":
+      ip_prefix    => $mesh_ipv4_prefix,
+      ip_prefixlen => $mesh_ipv4_prefixlen;
+    "${mesh_code}_v6":
+      ip_prefix    => $mesh_ipv6_prefix,
+      ip_prefixlen => $mesh_ipv6_prefixlen;
   }
 
   if $ffnord::params::include_bird6 {
