@@ -5,11 +5,7 @@ options {
   statistics-file "/var/cache/bind/named_stats.txt";
   listen-on port 53 { 127.0.0.1; };
   listen-on-v6 port 53 { ::1; };
-  allow-query {
-    127.0.0.1; ::1; # localhost{,6}
-    # private addr space used in Freifunk, DN42 and Hackint
-    10.0.0.0/8; fc00::/7; 172.16.0.0/12;
-  };
+  allow-query { 127.0.0.1; ::1; 10.0.0.0/8; fc00::/7; 172.16.0.0/12; };
   avoid-v4-udp-ports { range 1 32767; };
   avoid-v6-udp-ports { range 1 32767; };
 };

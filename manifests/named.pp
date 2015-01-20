@@ -166,3 +166,16 @@ define ffnord::named::listen_v6 (
     require => File['/etc/bind/named.conf.options'];
   }
 }
+
+define ffnord::named::allow (
+  $ip_prefix,
+  $ip_prefixlen,
+) {
+
+  include ffnord::named
+
+  exec { "${name}_allow":
+    command => "/bin/sed -i -r 's/(allow-query .*)\\}/\\1 ${ip_prefix}\\/${ip_prefixlen};}/' /etc/bind/named.conf.options",
+    require => File['/etc/bind/named.conf.options'];
+  }
+}
