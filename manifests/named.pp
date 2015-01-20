@@ -127,27 +127,42 @@ define ffnord::named::zone (
   }
 }
 
-define ffnord::named::mesh (
-  $mesh_ipv4_address,
-  $mesh_ipv4_prefix,
-  $mesh_ipv4_prefixlen,
-  $mesh_ipv6_address,
-  $mesh_ipv6_prefix,
-  $mesh_ipv6_prefixlen
+define ffnord::named::listen (
+  $ipv4_address,
+  $ipv6_address,
 ) {
 
- include ffnord::named
+  include ffnord::named
 
- $mesh_code = $name
+  ffnord::named::listen_v4 { "${name}":
+    ipv4_address => $ipv4_address,
+  }
 
- # Extent the listen-on and listen-on-v6 lines in the options block
- exec { "${name}_listen-on":
-   command => "/bin/sed -i -r 's/(listen-on .*)\\}/\\1 ${mesh_ipv4_address};}/' /etc/bind/named.conf.options",
-   require => File['/etc/bind/named.conf.options'];
- }
- 
- exec { "${name}_listen-on-v6":
-   command => "/bin/sed -i -r 's/(listen-on-v6 .*)\\}/\\1 ${mesh_ipv6_address};}/' /etc/bind/named.conf.options",
-   require => File['/etc/bind/named.conf.options'];
- }
+  ffnord::named::listen_v6 { "${name}":
+    ipv6_address => $ipv6_address,
+  }
+}
+
+define ffnord::named::listen_v4 (
+  $ipv4_address,
+) {
+
+  include ffnord::named
+
+  exec { "${name}_listen-on":
+    command => "/bin/sed -i -r 's/(listen-on .*)\\}/\\1 ${ipv4_address};}/' /etc/bind/named.conf.options",
+    require => File['/etc/bind/named.conf.options'];
+  }
+}
+
+define ffnord::named::listen_v6 (
+  $ipv6_address,
+) {
+
+  include ffnord::named
+
+  exec { "${name}_listen-on-v6":
+    command => "/bin/sed -i -r 's/(listen-on-v6 .*)\\}/\\1 ${ipv6_address};}/' /etc/bind/named.conf.options",
+    require => File['/etc/bind/named.conf.options'];
+  }
 }

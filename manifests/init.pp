@@ -75,13 +75,9 @@ define ffnord::mesh(
     mesh_ipv6_prefix     => $mesh_ipv6_prefix,
     mesh_ipv6_prefixlen  => $mesh_ipv6_prefixlen;
   } ->
-  ffnord::named::mesh { "${mesh_code}":
-    mesh_ipv4_address => $mesh_ipv4_address,
-    mesh_ipv4_prefix  => $mesh_ipv4_prefix,
-    mesh_ipv4_prefixlen => $mesh_ipv4_prefixlen,
-    mesh_ipv6_address => $mesh_ipv6_address,
-    mesh_ipv6_prefix  => $mesh_ipv6_prefix,
-    mesh_ipv6_prefixlen => $mesh_ipv6_prefixlen;
+  ffnord::named::listen { "${mesh_code}":
+    ipv4_address => $mesh_ipv4_address,
+    ipv6_address => $mesh_ipv6_address,
   }
 
   if $ffnord::params::include_bird6 {
