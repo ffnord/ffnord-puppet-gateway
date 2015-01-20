@@ -8,7 +8,14 @@ MAINTENANCE=${MAINTENANCE:-0}
 
 if test $MAINTENANCE -eq 0; then
 
-    ping -q -I $GW_VPN_INTERFACE $GW_CONTROL_IP -c 4 -i 1 -W 5 >/dev/null 2>&1
+    # ensure that we have the appropriate rule
+    /sbin/ip rule | grep 32000 2>&1> /dev/null
+    if [[ $? -ne 0 ]]
+    then
+        /sbin/ip rule add from all fwmark 0x1 table 42 preference 32000
+    fi
+
+    ping -q -m 1 $GW_CONTROL_IP -c 4 -i 1 -W 5 >/dev/null 2>&1
 
     if test $? -eq 0; then
         NEW_STATE=server
