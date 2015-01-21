@@ -292,3 +292,16 @@ To deactivate maintenance mode and reactivate the batman-adv gateway feature:
 ```
 maintenance off
 ```
+
+## FASTD Query
+
+For debugging purposes we utilize the status socket of fastd using a little
+helper script called `fastd-query`, which itself is a wrapper around ``socat``
+and ``jq``. An alias ``fastd-query-${mesh_code}`` is created for every
+mesh network. For example you can retrieve the status for some node, where
+the node name is equivalent to the peers filename:
+
+```
+# fastd-query-ffgc peers name gc-gw0 
+```
+
