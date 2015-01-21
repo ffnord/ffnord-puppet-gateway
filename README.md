@@ -244,9 +244,10 @@ This is a module for an IPv6 uplink via BGP (directly connected). Define ffnord:
 ```
 ffnord::uplink6::bgp {
   '<name>':
-    local_ipv6,  # IPv6 of this gateway
-    remote_ipv6, # remote IPv6
-    remote_as,   # ASN of the remote BGP server announcing a default route
+    local_ipv6,      # IPv6 of this gateway
+    remote_ipv6,     # remote IPv6
+    remote_as,       # ASN of the remote BGP server announcing a default route
+    uplink_interface # interface on which the remote BGP server is reachable
 }
 ```
 

@@ -1,3 +1,8 @@
+protocol direct {
+  interface "<%= @uplink_interface %>";
+  table mesh;
+}
+
 template bgp v6uplink {
   table mesh;
   local as <%= @icvpn_as %>;

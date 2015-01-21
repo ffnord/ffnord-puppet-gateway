@@ -26,7 +26,8 @@ class ffnord::uplink6 (
 define ffnord::uplink6::bgp (
   $local_ipv6,
   $remote_ipv6,
-  $remote_as
+  $remote_as,
+  $uplink_interface
 ) {
 
   include ffnord::bird6
