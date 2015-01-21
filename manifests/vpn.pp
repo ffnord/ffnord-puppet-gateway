@@ -10,7 +10,6 @@ class ffnord::vpn (
     'ffnord::resources::checkgw':
       gw_control_ip => $gw_control_ip,
       gw_bandwidth => $gw_bandwidth,
-      gw_vpn_interface => $gw_vpn_interface,
   }
 }
 
