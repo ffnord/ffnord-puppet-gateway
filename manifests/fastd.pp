@@ -56,6 +56,12 @@ define ffnord::fastd( $mesh_name
        require => Vcsrepo["/etc/fastd/${mesh_code}-mesh-vpn/peers"];
   }
 
+  file_line {
+   "root_bashrc_fastd_query_${mesh_code}":
+     path => '/root/.bashrc',
+     line => "alias fastd-query-${mesh_code}='FASTD_SOCKET=/var/run/fastd-status.${mesh_code}.sock fastd-query'"
+  }
+
   ffnord::etckeeper::ignore { "/etc/fastd/${mesh_code}-mesh-vpn/peers/": }
 
 }

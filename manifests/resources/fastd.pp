@@ -6,6 +6,16 @@ class ffnord::resources::fastd {
   -> package { 'ffnord::resources::fastd': name => "fastd", ensure => installed;}
   -> service { 'ffnord::resources::fastd': name => "fastd", hasrestart => true, ensure => running, enable => true; }
 
+  file {
+    '/usr/local/bin/fastd-query':
+      ensure => file,
+      mode => '0755',
+      require => [
+        Package['jq'],
+        Package['socat'],
+      ],
+      source => 'puppet:///modules/ffnord/usr/local/bin/fastd-query';
+  }
 }
 
 class ffnord::resources::fastd::auto_fetch_keys {
