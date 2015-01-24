@@ -19,7 +19,7 @@ function 'is_self_<%= @mesh_code %>' () {
 protocol pipe 'pipe_mesh_<%=@mesh_code%>' {
   table mesh;
   peer table 'mesh_<%= @mesh_code %>';
-  import where ! 'is_self_<%=@mesh_code %>'();
+  import all; # where ! 'is_self_<%=@mesh_code %>'();
   export where source = RTS_BGP || source = RTS_STATIC;
 };
 
