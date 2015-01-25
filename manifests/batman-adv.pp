@@ -17,6 +17,21 @@ define ffnord::batman-adv( $mesh_code
      line => "alias batctl-${mesh_code}='batctl -m bat-${mesh_code}'"
   }
 
+  ffnord::monitor::zabbix::check_script {
+    "${mesh_code}_gwmode":
+      mesh_code => $mesh_code,
+      scriptname => "batman-visible-gateway-count",
+      sudo => true;
+    "${mesh_code}_maxmetric":
+      mesh_code => $mesh_code,
+      scriptname => "batman-maximum-gateway-metric",
+      sudo => true;
+    "${mesh_code}_gwcount":
+      mesh_code => $mesh_code,
+      scriptname => "batman-visible-gateway-count",
+      sudo => true;
+  }
+
   ffnord::firewall::device { "bat-${mesh_code}":
     chain => "bat"
   } 
