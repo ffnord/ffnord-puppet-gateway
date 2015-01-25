@@ -141,6 +141,11 @@ class {
     allowed_hosts => '10.35.31.1'
 }
 
+class {
+  'ffnord::monitor::zabbix':
+    zabbixserver => "10.35.31.1";
+}
+
 class { 'ffnord::alfred': master => true }
 
 class { 'ffnord::etckeeper': }
