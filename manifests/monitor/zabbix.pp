@@ -63,7 +63,7 @@ HostnameItem=${::hostname}
 }
 
 define ffnord::monitor::zabbix::check_script (
-  $mesh_code,
+  $mesh_code = 'all',
   $scriptname,
   $sudo = false,
 ) {
