@@ -27,6 +27,12 @@ define ffnord::dhcpd (
       require => [File['/etc/dhcp/dhcpd.conf']],
       notify => [Service['isc-dhcp-server']];
     }
+    
+    ffnord::monitor::zabbix::check_script {
+      "${mesh_code}_dhcppool":
+        mesh_code => $mesh_code,
+        scriptname => "dhcp-pool-usage-percent";
+    }
   }
 }
 
