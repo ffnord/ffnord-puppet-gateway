@@ -54,7 +54,7 @@ class ffnord::uplink::ip (
        owner => 'root',
        group => 'root',
        mode => '0644',
-       content => inline_template("ip4tables -t nat -A POSTROUTING -o uplink-+ ! -s <%=@tunnel_network%> -j SNAT --to <%=@nat_ip%>"),
+       content => inline_template("ip4tables -t nat -A POSTROUTING -o uplink-+ ! -d <%=@tunnel_network%> -j SNAT --to <%=@nat_ip%>"),
        require => [File['/etc/iptables.d/']];
      '/etc/iptables.d/910-Clamp-mss':
        ensure => file,
