@@ -16,6 +16,8 @@ class ffnord::resources::fastd {
       ],
       source => 'puppet:///modules/ffnord/usr/local/bin/fastd-query';
   }
+
+  package { ['jq','socat']: ensure => installed; }
 }
 
 class ffnord::resources::fastd::auto_fetch_keys {
