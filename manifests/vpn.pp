@@ -49,13 +49,58 @@ class ffnord::vpn::provider () {
      group => 'root',
      mode => '0644',
      content => 'ip4tables -t nat -A POSTROUTING -o tun-anonvpn -j MASQUERADE',
-     require => [File['/etc/iptables.d/']],
+     require => [File['/etc/iptables.d/']];
+    '/etc/openvpn/anonvpn-up.sh':
+      ensure => file,
+      owner => "root",
+      group => "root",
+      mode => "0755",
+      source => "puppet:///modules/ffnord/etc/openvpn/anonvpn-up.sh",
+      require => [Package['openvpn']];
   }
 }
 
-class ffnord::vpn::provider::mullvad () {
-  # TODO
+#
+# generic openvpn profile
+#
+# Setup an openvpn provfile based on a given directory. The directory
+# should provide all needed certificates and configuration. The configuration
+# file need to be named "${name}.conf", should be compatible with being
+# places in "/etc/openvpn/${name}/" and create an tun device tun-anonvpn.
+#
+# To be conform with the overall setup the configuration file should also 
+# include following lines:
+#
+# script-security 2
+# route-noexec
+# up anonvpn-up.sh
+#
+class ffnord::vpn::provider::generic (
+  $name,   # name of the vpn service
+  $config, # src directory with configuration, keys etc.
+) {
   include ffnord::vpn::provider
+
+  file{
+    "/etc/openvpn/${name}/":
+      ensure => directory,
+      owner => "root",
+      group => "root",
+      mode => "0644",
+      source => $config,
+      recurse => true,
+      require => [Package['openvpn']];
+    '/etc/openvpn/anonvpn.conf': 
+      ensure => link,
+      owner => "root",
+      group => "root",
+      mode => "0644",
+      target => "/etc/openvpn/${name}/${name}.conf",
+      require => [File["/etc/openvpn/$name"],
+                  Package['openvpn'],
+                 ],
+      notify => [Service['openvpn']];
+  }
 }
 
 class ffnord::vpn::provider::hideio (
@@ -106,13 +151,6 @@ class ffnord::vpn::provider::hideio (
       group => "root",
       mode => "0644",
       source => "puppet:///modules/ffnord/etc/openvpn/hideio.root.pem",
-      require => [File['/etc/openvpn/hideio']];
-    '/etc/openvpn/anonvpn-up.sh':
-      ensure => file,
-      owner => "root",
-      group => "root",
-      mode => "0755",
-      source => "puppet:///modules/ffnord/etc/openvpn/anonvpn-up.sh",
       require => [File['/etc/openvpn/hideio']];
   }
 }
