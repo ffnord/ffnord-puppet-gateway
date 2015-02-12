@@ -9,7 +9,11 @@ class ffnord::tinc (
 ) {
   package {
     'tinc':
-      ensure => installed;
+      ensure => installed,
+      require => [
+        File['/etc/apt/preferences.d/tinc'],
+        Apt::Source['debian-backports']
+      ];
   }
 
   service {
@@ -53,6 +57,12 @@ class ffnord::tinc (
       source => "/etc/tinc/icvpn/scripts/post-merge",
       require => Vcsrepo['/etc/tinc/icvpn/'],
       mode => '0755';
+   '/etc/apt/preferences.d/tinc':
+     ensure => file,
+     mode => "0644",
+     owner => root,
+     group => root,
+     source => "puppet:///modules/ffnord/etc/apt/preferences.d/tinc";
   }
 
   file_line {
