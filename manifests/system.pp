@@ -10,13 +10,13 @@ class ffnord::system::conntrack (
       ensure => file,
       mode => '0644',
       owner => 'root',
-      group => 'root', 
+      group => 'root',
       content => inline_template("net.netfilter.nf_conntrack_max=<%=conntrack_max%>/n");
-    "/etc/modules/nf_conntrack":
-      ensure => file,
-      mode => '0644',
-      owner => 'root',
-      group => 'root', 
-      content => inline_template("options nf_conntrack hashsize=<%=conntrack_max%>/n");
+  }
+
+  ffnord::firewall::set_value {
+    "conntrack_max":
+      path  => "/sys/module/nf_conntrack/parameters/hashsize",
+      value => $conntrack_max;
   }
 }
