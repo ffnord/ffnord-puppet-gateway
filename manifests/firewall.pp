@@ -202,3 +202,20 @@ ip46tables -A mesh-forward -o <%=@name%> -j ACCEPT
    require => [File['/etc/iptables.d/']];
  }
 }
+
+define ffnord::firewall::set_value(
+  $path,
+  $value,
+) {
+
+ file { "/etc/iptables.d/000-file-value-${name}": 
+   ensure => file,
+   owner => "root",
+   group => "root",
+   mode => "0644",
+   content => inline_template("
+set_value ${path} ${value}
+"),
+   require => [File['/etc/iptables.d/']];
+ }
+}
