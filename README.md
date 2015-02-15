@@ -145,6 +145,11 @@ class {
 class { 'ffnord::alfred': master => true }
 
 class { 'ffnord::etckeeper': }
+
+class { 'ffnord::system::conntrack':
+  # Be aware how many memory this will consume.
+  conntrack_max => 1048576;
+}
 ```
 
 #### Mesh Type
