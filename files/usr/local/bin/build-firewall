@@ -80,6 +80,16 @@ function rate_limit6() {
   ip6tables -m recent --name "$service" --set $*
 }
 
+## Utility function to execute
+# # echo $value > $path
+# like commands.
+function set_value() {
+  local path="$1"
+  local value="$2"
+  echo -e "\t Set ${path$} to '${value}'"
+  echo $value > "$path"
+}
+
 for rules in /etc/iptables.d/*; do
    echo "File: $rules"
    . $rules
