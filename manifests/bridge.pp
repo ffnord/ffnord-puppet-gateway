@@ -14,7 +14,6 @@ define ffnord::bridge( $mesh_code
 
                     ) {
   include ffnord::resources::network
-  include ffnord::resources::sysctl
 
   ffnord::monitor::vnstat::device { "br-${mesh_code}": }
 
@@ -30,7 +29,7 @@ define ffnord::bridge( $mesh_code
       unless  => "/bin/ip link show dev br-${mesh_code} 2> /dev/null",
       before  => Ffnord::Monitor::Vnstat::Device["br-${mesh_code}"],
       require => [ File_Line["/etc/iproute2/rt_tables"]
-                 , Class[ffnord::resources::sysctl] 
+                 , Class[ffnord::system::conntrack] 
                  ];
   } ->
   ffnord::firewall::device { "br-${mesh_code}":

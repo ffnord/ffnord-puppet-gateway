@@ -19,7 +19,6 @@ class ffnord::uplink::ip (
 
   include ffnord::firewall
   include ffnord::resources::network
-  include ffnord::resources::sysctl
   include ffnord::bird4
 
   $nat_ip = ip_address($nat_network)
@@ -41,7 +40,7 @@ class ffnord::uplink::ip (
       command => "/sbin/ifup dummy0",
       unless  => "/bin/ip link show dev dummy0 | grep 'DOWN|dummy0' 2> /dev/null",
       require => [ File_Line["/etc/iproute2/rt_tables"]
-                 , Class[ffnord::resources::sysctl]
+                 , Class[ffnord::system::conntrack]
                  ];
   }
 
@@ -93,7 +92,6 @@ define ffnord::uplink::tunnel (
 ) {
 
   include ffnord::resources::network
-  include ffnord::resources::sysctl
   include ffnord::firewall
   include ffnord::bird4
 
@@ -112,7 +110,7 @@ define ffnord::uplink::tunnel (
       command => "/sbin/ifup uplink-${endpoint_name}",
       unless  => "/bin/ip link show dev uplink-${endpoint_name}' 2> /dev/null",
       require => [ File_Line["/etc/iproute2/rt_tables"]
-                 , Class[ffnord::resources::sysctl]
+                 , Class[ffnord::system::conntrack]
                  ];
   }
 
