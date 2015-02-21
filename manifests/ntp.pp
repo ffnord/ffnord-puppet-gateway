@@ -61,7 +61,7 @@ define ffnord::ntp::allow(
   file_line {
     "ntp_restrict_v6_${name}":
     path => '/etc/ntp.conf',
-    line => "restrict -6 ${ipv6_prefix} mask ${ipv6_netmask} nomodify notrap nopeer",
+    line => "restrict ${ipv6_prefix} mask ${ipv6_netmask} nomodify notrap nopeer",
     require => File['/etc/ntp.conf'];
   }
 
