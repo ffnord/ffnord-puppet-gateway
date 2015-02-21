@@ -98,6 +98,13 @@ grep -e "^\. /etc/conf\.d/firewall-values.*$" /etc/rc.local  \
 for rules in /etc/iptables.d/*; do
    echo "File: $rules"
    . $rules
+for rules in $(find /etc/iptables.d/ -type f); do
+   if [ -f "$rules" ] ; then
+     (
+       echo "File: $rules"
+       . "$rules"
+     )
+   fi
 done
 
 . /etc/conf.d/firewall-values
