@@ -8,7 +8,7 @@ define ffnord::fastd( $mesh_name
 
                      , $fastd_peers_git
                      , $peer_limit
-                     ; $use_blacklist
+                     , $use_blacklist
                      ) {
   #validate_re($mesh_mac, '^de:ad:be:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}$')
 
@@ -31,7 +31,8 @@ define ffnord::fastd( $mesh_name
     "/etc/fastd/${mesh_code}-mesh-vpn/fastd-blacklist.sh":
       ensure => file,
              notify => Service[ffnord::resources::fastd],
-             content => template('ffnord/etc/fastd/fastd-blacklist.sh.erb');
+             content => template('ffnord/etc/fastd/fastd-blacklist.sh.erb'),
+             mode => '0766';
    "/etc/fastd/${mesh_code}-mesh-vpn/fastd-blacklist.json":
       ensure => file,
              notify => Service[ffnord::resources::fastd],

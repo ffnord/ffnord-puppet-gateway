@@ -12,6 +12,8 @@ define ffnord::mesh(
   $fastd_peers_git,  # fastd peers
   $fastd_secret,     # fastd secret
   $fastd_port,       # fastd port
+  $peer_limit,       # optionally set peer limit
+  $use_blacklist,    # optionally use a blacklist approache
 
   $dhcp_ranges = [], # dhcp pool
   $dns_servers = [], # other dns servers in your network
@@ -68,6 +70,8 @@ define ffnord::mesh(
     mesh_mtu  => $mesh_mtu,
     fastd_secret => $fastd_secret,
     fastd_port   => $fastd_port,
+    peer_limit => $peer_limit,
+    use_blacklist => $use_blacklist,
     fastd_peers_git => $fastd_peers_git;
   } ->
   ffnord::radvd { "br-${mesh_code}":
