@@ -12,7 +12,20 @@ hide mac addresses yes;
 include "secret.conf";
 mtu <%= @mesh_mtu %>; # 1492 - IPv{4,6} Header - fastd Header...
 status socket "/var/run/fastd-status.<%= @mesh_code %>.sock";
-include peers from "peers";
+peer group "nodes" {
+  include peers from "peers";
+<% if @peer_limit %>
+   peer limit <%= @peer_limit %>;
+<% end %>
+}
+peer group "backbone" {
+  include peers from "backbone";
+}
+<% if @use_blacklist %>
+on verify "
+  /etc/fastd/<%= @mesh_code %>-mesh-vpn/fastd-blacklist.sh $PEER_KEY
+";
+<% end %>
 on up "
  modprobe batman-adv
  ip link set address <%= @mesh_mac %> dev $INTERFACE
