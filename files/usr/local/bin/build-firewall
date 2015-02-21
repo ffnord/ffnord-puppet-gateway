@@ -87,17 +87,12 @@ function set_value() {
   local path="$1"
   local value="$2"
   echo -e "\t Set ${path$} to '${value}'"
-  echo "echo '${value}' > '${path}'" >> /etc/conf.d/firewall-values
+  echo "echo '${value}' > '${path}'" >> /etc/rclocal.d/firewall-values
 }
 
-rm /etc/conf.d/firewall-values
-touch /etc/conf.d/firewall-values
-grep -e "^\. /etc/conf\.d/firewall-values.*$" /etc/rc.local  \
-  || echo ". /etc/conf.d/firewall-values" >> /etc/rc.local
+rm /etc/rclocal.d/firewall-values 
+touch /etc/rclocal.d/firewall-values
 
-for rules in /etc/iptables.d/*; do
-   echo "File: $rules"
-   . $rules
 for rules in $(find /etc/iptables.d/ -type f); do
    if [ -f "$rules" ] ; then
      (
@@ -107,4 +102,4 @@ for rules in $(find /etc/iptables.d/ -type f); do
    fi
 done
 
-. /etc/conf.d/firewall-values
+. /etc/rclocal.d/firewall-values

@@ -30,6 +30,8 @@ class ffnord::firewall (
   $wan_devices = $ffnord::params::wan_devices
 ) inherits ffnord::params {
 
+  include ffnord::resources::rclocal
+
   package { 
     'iptables-persistent':
       ensure => installed;
