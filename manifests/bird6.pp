@@ -25,12 +25,17 @@ class ffnord::bird6 (
       mode => "0755",
       owner => root,
       group => root,
-      require => File['/etc/bird/bird6.conf'];
+      require => File['/etc/bird/'];
     '/etc/bird/bird6.conf':
       ensure => file,
       mode => "0644",
       content => template("ffnord/etc/bird/bird6.conf.erb"),
-      require => [Package['bird6'],File['/etc/bird/']];
+      require => [
+        Package['bird6'],
+        File['/etc/bird/'],
+        File['/etc/bird/bird6.conf.d'],
+      ],
+      before => Class['ffnord::resources::meta'];
     '/etc/bird6.conf':
       ensure => link,
       target => '/etc/bird/bird6.conf',
