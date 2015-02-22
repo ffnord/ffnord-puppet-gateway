@@ -47,6 +47,7 @@ class ffnord::resources::meta {
     'update-meta':
       command => '/usr/local/bin/update-meta reload',
       require => [
+        Vcsrepo['/opt/icvpn-scripts/'],
         Vcsrepo['/var/lib/icvpn-meta/'],
         File['/usr/local/bin/update-meta'],
       ];
