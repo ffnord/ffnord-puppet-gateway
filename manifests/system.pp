@@ -28,7 +28,7 @@ class ffnord::system::conntrack (
       mode => '0644',
       owner => 'root',
       group => 'root',
-      content => template("/etc/sysctl.d/routing.conf");
+      content => template("ffnord/etc/sysctl.d/routing.conf");
   }
 
   exec {
