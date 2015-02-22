@@ -215,9 +215,7 @@ define ffnord::firewall::set_value(
    owner => "root",
    group => "root",
    mode => "0644",
-   content => inline_template("
-set_value ${path} ${value}
-"),
+   content => inline_template("set_value ${path} ${value}\n"),
    require => [File['/etc/iptables.d/']];
  }
 }
