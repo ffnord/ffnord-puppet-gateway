@@ -1,5 +1,5 @@
 #!/bin/bash
-PEER_KEY=$1
+# PEER_KEY should be set, see http://fastd.readthedocs.org/en/v15/manual/config.html
 
 if /bin/grep -Fq $PEER_KEY /etc/fastd/<%= @mesh_code %>-mesh-vpn/fastd-blacklist.json; then
         exit 1
