@@ -3,10 +3,10 @@
 # For details have a look at
 # https://github.com/jeffmurphy/NetPass/blob/master/doc/netfilter_conntrack_perf.txt
 class ffnord::system::conntrack (
-  $conntrack_max = 1048576,
-  $conntrack_tcp_timeout = 1200,
-  $conntrack_udp_timeout = 30
-) {
+  $conntrack_max = $ffnord::params::conntrack_max,
+  $conntrack_tcp_timeout = $ffnord::params::conntrack_tcp_timeout,
+  $conntrack_udp_timeout = $ffnord::params::conntrack_udp_timeout
+) inherits ffnord::params {
   file {
     "/etc/sysctl.d/conntrack.conf":
       ensure => file,
