@@ -4,6 +4,7 @@ class ffnord::uplink (
 ) {
 
   include ffnord::resources::ffnord
+  include ffnord::system::conntrack
 
   class {
     'ffnord::resources::checkgw':

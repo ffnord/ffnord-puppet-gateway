@@ -14,6 +14,7 @@ define ffnord::bridge( $mesh_code
 
                     ) {
   include ffnord::resources::network
+  include ffnord::system::conntrack
 
   ffnord::monitor::vnstat::device { "br-${mesh_code}": }
 
