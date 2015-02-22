@@ -24,6 +24,9 @@ define ffnord::fastd( $mesh_name
     "/etc/fastd/${mesh_code}-mesh-vpn/":
       ensure =>directory,
              require => Package[ffnord::resources::fastd];
+    "/etc/fastd/${mesh_code}-mesh-vpn/backbone":
+      ensure =>directory,
+             require => Package[ffnord::resources::fastd];
     "/etc/fastd/${mesh_code}-mesh-vpn/fastd.conf":
       ensure => file,
              notify => Service[ffnord::resources::fastd],
