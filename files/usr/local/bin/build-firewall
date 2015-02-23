@@ -90,7 +90,7 @@ function set_value() {
   echo "echo '${value}' > '${path}'" >> /etc/rclocal.d/firewall-values
 }
 
-rm /etc/rclocal.d/firewall-values 2&>1 > /dev/null
+rm /etc/rclocal.d/firewall-values 2>&1 > /dev/null
 touch /etc/rclocal.d/firewall-values
 
 for rules in $(find /etc/iptables.d/ -type f | sort); do
