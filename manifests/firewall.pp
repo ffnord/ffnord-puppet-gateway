@@ -130,6 +130,13 @@ class ffnord::firewall (
       require => File['/etc/iptables.d/'];
   }
 
+  ffnord::monitor::zabbix::check_script {
+    "conntrack_count":
+      scriptname => "conntrack_count";
+    "conntrack_max":
+      scriptname => "conntrack_max";
+  }
+
   ffnord::firewall::device { $wan_devices:
     chain => 'wan';
   }
