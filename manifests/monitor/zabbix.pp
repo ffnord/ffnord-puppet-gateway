@@ -58,6 +58,7 @@ HostnameItem=${::hostname}
 
   ffnord::firewall::service { 'zabbix':
     ports => ['10050'],
+    source => $zabbixserver,
     chains => ['wan'];
   }
 }
