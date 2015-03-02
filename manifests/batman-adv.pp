@@ -20,7 +20,7 @@ define ffnord::batman-adv( $mesh_code
   ffnord::monitor::zabbix::check_script {
     "${mesh_code}_gwmode":
       mesh_code => $mesh_code,
-      scriptname => "batman-visible-gateway-count",
+      scriptname => "batman-gateway-mode-enabled",
       sudo => true;
     "${mesh_code}_maxmetric":
       mesh_code => $mesh_code,

@@ -131,10 +131,10 @@ class ffnord::firewall (
   }
 
   ffnord::monitor::zabbix::check_script {
-    "conntrack_count":
-      scriptname => "conntrack_count";
-    "conntrack_max":
-      scriptname => "conntrack_max";
+    "ip_conntrack_count":
+      scriptname => "ip_conntrack_count";
+    "ip_conntrack_max":
+      scriptname => "ip_conntrack_max";
   }
 
   ffnord::firewall::device { $wan_devices:
@@ -143,9 +143,10 @@ class ffnord::firewall (
 }
 
 define ffnord::firewall::service (
- $protos = ["tcp"],  # Possible values "tcp,udp"
+ $protos = ["tcp"],  # Possible values "tcp,udp,gre"
  $chains = ["mesh"], # Possible values "mesh,wan"
  $ports = [],
+ $source = undef,
  $rate_limit = false, # rate limit
  $rate_limit_seconds  = 60, # rate limit Seconds
  $rate_limit_hitcount = 10 # rate limit hitcount
@@ -159,11 +160,15 @@ define ffnord::firewall::service (
    content => inline_template("# Allow Service <%=@name%>
 <% @chains.each do |chain| -%>
 <% @protos.each do |proto| -%>
+<% if @ports.length > 0 -%>
 <% @ports.each do |port| -%>
 <% if @rate_limit -%>
-rate_limit46 \"<%=@name%>\" <%=@rate_limit_seconds%> <%=@rate_limit_hitcount%> -A <%=chain%>-input -p <%=proto%> -m <%=proto%> --dport <%=port%> 
+rate_limit46 \"<%=@name%>\" <%=@rate_limit_seconds%> <%=@rate_limit_hitcount%> -A <%=chain%>-input -p <%=proto%> -m <%=proto%> --dport <%=port%><% if @source -%> -s <%=source%><% end -%>
 <% end -%>
-ip46tables -A <%=chain%>-input -p <%=proto%> -m <%=proto%> --dport <%=port%> -j ACCEPT -m comment --comment '<%=@name%>'
+ip46tables -A <%=chain%>-input -p <%=proto%> -m <%=proto%> --dport <%=port%><% if @source -%> -s <%=source%><% end -%> -j ACCEPT -m comment --comment '<%=@name%>'
+<% end -%>
+<% else %>
+ip46tables -A <%=chain%>-input -p <%=proto%><% if @source -%> -s <%=source%><% end -%> -j ACCEPT -m comment --comment '<%=@name%>'
 <% end -%>
 <% end -%>
 <% end -%>

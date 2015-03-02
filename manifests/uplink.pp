@@ -136,4 +136,10 @@ define ffnord::uplink::tunnel (
   ffnord::firewall::forward { "uplink-${name}":
     chain => 'mesh'
   }
+
+  ffnord::firewall::service { "gre-${name}":
+    protos => ['gre'],
+    source => $remote_public_ip,
+    chains => ['wan']
+  }
 }

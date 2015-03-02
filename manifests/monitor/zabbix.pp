@@ -58,6 +58,7 @@ HostnameItem=${::hostname}
 
   ffnord::firewall::service { 'zabbix':
     ports => ['10050'],
+    source => $zabbixserver,
     chains => ['wan'];
   }
 }
@@ -77,7 +78,7 @@ define ffnord::monitor::zabbix::check_script (
         'mode' => '0440',
         'owner' => 'root',
         'group' => 'root',
-        'content' => inline_template("zabbix ALL= NOPASSWD: /opt/bin/zabbix/${scriptname}.sh"),
+        'content' => inline_template("zabbix ALL= NOPASSWD: /opt/bin/zabbix/${scriptname}.sh\n"),
       })
 
     } else {
