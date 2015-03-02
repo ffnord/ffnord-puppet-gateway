@@ -131,10 +131,10 @@ class ffnord::firewall (
   }
 
   ffnord::monitor::zabbix::check_script {
-    "conntrack_count":
-      scriptname => "conntrack_count";
-    "conntrack_max":
-      scriptname => "conntrack_max";
+    "ip_conntrack_count":
+      scriptname => "ip_conntrack_count";
+    "ip_conntrack_max":
+      scriptname => "ip_conntrack_max";
   }
 
   ffnord::firewall::device { $wan_devices:
