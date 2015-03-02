@@ -7,6 +7,11 @@ class ffnord::named () {
       command => '/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C named';
   }
 
+  ffnord::monitor::zabbix::check_script {
+    "check-dns":
+      scriptname => "check-dns";
+  }
+
   package {
     'bind9':
       ensure => installed;
