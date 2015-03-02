@@ -41,7 +41,7 @@ class ffnord::alfred (
   service { 'alfred':
     ensure => running,
     hasrestart => true,
-    enable => true,
+    enable => false,
     require => [Exec['alfred'],File['/etc/init.d/alfred']];
    }
 
