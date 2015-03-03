@@ -150,6 +150,14 @@ class {
 class { 'ffnord::alfred': master => true }
 
 class { 'ffnord::etckeeper': }
+
+class { 'ffnord::system::conntrack':
+  # Be aware how many memory this will consume.
+  conntrack_max         => 1048576,
+  # Your communities timeout values
+  conntrack_tcp_timeout => 3600,
+  conntrack_udp_timeout => 1200;
+}
 ```
 
 #### Mesh Type
