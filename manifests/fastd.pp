@@ -19,6 +19,13 @@ define ffnord::fastd( $mesh_name
       command => "/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C fastd -a \"${mesh_code}-mesh-vpn\"";
   }
 
+  ffnord::monitor::zabbix::check_script {
+    "${mesh_code}_fastdcons":
+      mesh_code => $mesh_code,
+      scriptname => "fastd_connections",
+      sudo => true;
+  }
+
   file {
     "/etc/fastd/${mesh_code}-mesh-vpn/":
       ensure =>directory,
