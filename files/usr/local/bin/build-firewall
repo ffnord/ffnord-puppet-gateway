@@ -84,3 +84,5 @@ for rules in /etc/iptables.d/*; do
    echo "File: $rules"
    . $rules
 done
+
+/usr/sbin/service iptables-persistent save
