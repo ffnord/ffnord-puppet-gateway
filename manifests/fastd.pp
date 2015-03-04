@@ -24,6 +24,10 @@ define ffnord::fastd( $mesh_name
       mesh_code => $mesh_code,
       scriptname => "fastd_connections",
       sudo => true;
+    "${mesh_code}_fastdcons6":
+      mesh_code => $mesh_code,
+      scriptname => "fastd_connections6",
+      sudo => true;
   }
 
   file {
