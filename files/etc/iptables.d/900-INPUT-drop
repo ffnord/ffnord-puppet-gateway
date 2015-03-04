@@ -1,4 +1,5 @@
 # Drop all packages not ACCEPTed to this point
+ip46tables -A INPUT -j DROP
 ip46tables -A input -j DROP
 ip46tables -A bat-input -j DROP
 ip46tables -A mesh-input -j DROP
