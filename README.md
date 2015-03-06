@@ -42,6 +42,7 @@ puppet module install puppetlabs-apt
 puppet module install puppetlabs-vcsrepo
 puppet module install saz-sudo
 puppet module install torrancew-account
+puppet module install camptocamp-kmod
 ```
 
 Then add this module (which is not in the puppet forge, so it has to be
@@ -222,7 +223,7 @@ ffnord :: icvpn::setup {
 }
 ```
 
-#### IPv4 Uplink via GRE Tunnel
+#### IPv4 Uplink via GRE Tunnel and BGP
 This is a module for an IPv4 Uplink via GRE tunnel and BGP.
 This module and the VPN module are mutually exclusive.
 Define the ffnord::uplink::ip class once and ffnord::uplink::tunnel
@@ -242,6 +243,18 @@ ffnord::uplink::tunnel {
       local_ipv4,       # tunnel IPv4 on our side
       remote_ip,        # tunnel IPv4 on the remote side
       remote_as,        # ASN of the BGP server announcing a default route for you
+}
+```
+
+#### IPv6 Uplink via BGP
+This is a module for an IPv6 uplink via BGP (directly connected). Define ffnord::uplink6::bgp for each directly connected BGP peer that announces a default route to you. This doesn't setup any tunnels just yet but relies on a separate interface where the remote can be reached.
+```
+ffnord::uplink6::bgp {
+  '<name>':
+    local_ipv6,      # IPv6 of this gateway
+    remote_ipv6,     # remote IPv6
+    remote_as,       # ASN of the remote BGP server announcing a default route
+    uplink_interface # interface on which the remote BGP server is reachable
 }
 ```
 
