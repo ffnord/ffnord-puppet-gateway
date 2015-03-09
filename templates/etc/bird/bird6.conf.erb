@@ -34,8 +34,9 @@ function is_ula() {
 # Filter function to check if an IPv6 Route is from
 # a Freifunk range.
 function is_freifunk() {
-  return net ~ [ 2001:0bf7::/32+,   # Foerderverein freie Netzwerke e.V.
-                 2a03:2260::/29+ ]; # Freifunk Rheinland e.V.
+  return net ~ [ 2001:0bf7::/32+,      # Foerderverein freie Netzwerke e.V.
+                 2a03:2260::/29+,      # Freifunk Rheinland e.V.
+                 2001:67c:2d50::/48 ]; # FFHL, Chaotikum e.V.
 }
 
 # don't use kernel's routes for bird, but export bird's 
