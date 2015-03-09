@@ -6,6 +6,11 @@ class ffnord::system::conntrack (
   $conntrack_max = $ffnord::params::conntrack_max,
   $conntrack_tcp_timeout = $ffnord::params::conntrack_tcp_timeout,
   $conntrack_udp_timeout = $ffnord::params::conntrack_udp_timeout
+  $wmem_default = $ffnord::params::wmem_default
+  $wmem_max = $ffnord::params::wmem_max
+  $rmem_default = $ffnord::params::rmem_default
+  $rmem_max = $ffnord::params::rmem_max
+  $max_backlog = $ffnord::params::max_backlog
 ) inherits ffnord::params {
   file {
     "/etc/sysctl.d/conntrack.conf":
