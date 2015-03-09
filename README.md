@@ -75,6 +75,13 @@ class { 'ffnord::params':
                             # of the mesh device of the providing community
   icvpn_as => "65035",      # The as of the providing community
   wan_devices => ['eth0']   # A array of devices which should be in the wan zone
+
+  wmem_default = 87380,     # Define the default socket send buffer
+  wmem_max     = 12582912,  # Define the maximum socket send buffer
+  rmem_default = 87380,     # Define the default socket recv buffer
+  rmem_max     = 12582912,  # Define the maximum socket recv buffer
+
+  max_backlog  = 5000,      # Define the maximum packages in buffer
 }
 
 # You can repeat this mesh block for every community you support
@@ -145,14 +152,6 @@ class {
 class { 'ffnord::alfred': master => true }
 
 class { 'ffnord::etckeeper': }
-
-class { 'ffnord::system::conntrack':
-  # Be aware how many memory this will consume.
-  conntrack_max         => 1048576,
-  # Your communities timeout values
-  conntrack_tcp_timeout => 3600,
-  conntrack_udp_timeout => 1200;
-}
 ```
 
 #### Mesh Type
