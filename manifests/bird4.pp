@@ -25,12 +25,17 @@ class ffnord::bird4 (
       mode => "0755",
       owner => root,
       group => root,
-      require => File['/etc/bird/bird.conf'];
+      require => File['/etc/bird/'];
     '/etc/bird/bird.conf':
       ensure => file,
       mode => "0644",
       content => template("ffnord/etc/bird/bird.conf.erb"),
-      require => [Package['bird'],File['/etc/bird/']];
+      require => [
+        Package['bird'],
+        File['/etc/bird/'],
+        File['/etc/bird/bird.conf.d/']
+      ],
+      before => Class['ffnord::resources::meta'];
     '/etc/bird.conf':
       ensure => link,
       target => '/etc/bird/bird.conf',

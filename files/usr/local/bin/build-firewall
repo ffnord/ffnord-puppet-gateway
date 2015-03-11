@@ -80,9 +80,28 @@ function rate_limit6() {
   ip6tables -m recent --name "$service" --set $*
 }
 
-for rules in /etc/iptables.d/*; do
-   echo "File: $rules"
-   . $rules
+## Utility function to execute
+# # echo $value > $path
+# like commands.
+function set_value() {
+  local path="$1"
+  local value="$2"
+  echo -e "\t Set ${path} to '${value}'"
+  echo "echo '${value}' > '${path}'" >> /etc/rclocal.d/firewall-values
+}
+
+rm /etc/rclocal.d/firewall-values 2>&1 > /dev/null
+touch /etc/rclocal.d/firewall-values
+
+for rules in $(find /etc/iptables.d/ -type f | sort); do
+   if [ -f "$rules" ] ; then
+     (
+       echo "File: $rules"
+       . "$rules"
+     )
+   fi
 done
+
+. /etc/rclocal.d/firewall-values
 
 /usr/sbin/service iptables-persistent save
