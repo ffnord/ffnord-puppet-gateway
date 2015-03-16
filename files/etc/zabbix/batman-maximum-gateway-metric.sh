@@ -11,7 +11,7 @@ do
 		exit
 	fi
 
-	THISMETRIC=$(wc -l <<< $TRACEROUTE)
+	THISMETRIC=$(wc -l <<< "$TRACEROUTE")
 
 	if [ "$THISMETRIC" -gt "$METRIC" ]; then
 		METRIC=$THISMETRIC
