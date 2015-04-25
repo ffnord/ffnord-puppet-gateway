@@ -29,11 +29,11 @@ start() {
   local BATIF="$2"
   start-stop-daemon --start --quiet --oknodo --background \
     --pidfile "/var/run/alfred.${MASTER}.pid" --make-pidfile \
-    --exec "$DAEMON" -- ${ALFRED_OPTS}  -i "$MASTER" -b "$BATIF" --  || STATUS=1 
+    --exec "$DAEMON" -- ${ALFRED_OPTS}  -i "$MASTER" -b "$BATIF" -u /var/run/alfred."$BATIF".sock --  || STATUS=1 
 
   start-stop-daemon --start --quiet --oknodo --background \
     --pidfile "/var/run/batadv-vis.${MASTER}.pid" --make-pidfile \
-    --exec "$DAEMON_VIS" -- -s -i "$BATIF" -- || STATUS=1 
+    --exec "$DAEMON_VIS" -- -s -i "$BATIF" -u /var/run/alfred."$BATIF".sock -- || STATUS=1 
 }
 
 stop_pid() {

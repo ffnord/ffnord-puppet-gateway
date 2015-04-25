@@ -4,5 +4,5 @@
 for MESH in /sys/class/net/*/mesh; do
   BATIF=$(echo $MESH | sed -r 's/\/sys\/class\/net\/(.*)\/mesh/\1/')
   MASTER=$(echo $BATIF | sed -r 's/bat/br/')
-  /opt/alfred-announce/announce.sh -b ${BATIF} -i ${MASTER}
+  /opt/alfred-announce/announce.sh -b ${BATIF} -i ${MASTER} -u /var/run/alfred.${BATIF}.sock
 done
