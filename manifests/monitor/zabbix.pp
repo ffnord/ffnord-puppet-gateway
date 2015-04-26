@@ -67,6 +67,7 @@ define ffnord::monitor::zabbix::check_script (
   $mesh_code = 'all',
   $scriptname,
   $sudo = false,
+  $extra = '',
 ) {
   if defined(Class['ffnord::monitor::zabbix']) {
 
@@ -91,7 +92,7 @@ define ffnord::monitor::zabbix::check_script (
         mode => '0644',
         owner => 'root',
         group => 'root',
-        content => inline_template("UserParameter=${scriptname}_${mesh_code},${sudo_cmd}/opt/bin/zabbix/${scriptname}.sh ${mesh_code}"),
+        content => inline_template("UserParameter=${scriptname}_${mesh_code},${sudo_cmd}/opt/bin/zabbix/${scriptname}.sh ${mesh_code} ${extra}"),
         require => Package['zabbix-agent'],
         notify => Service['zabbix-agent'];
     }
