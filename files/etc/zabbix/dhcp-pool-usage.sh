@@ -37,6 +37,8 @@ use strict;
 my $CONFFILE = exists $ENV{'conffile'} ? $ENV{'conffile'} : exists $ARGV[0]?"/etc/dhcp/interface-br-$ARGV[0].conf":"/etc/dhcp/dhcpd.conf";
 my $LEASEFILE = exists $ENV{'leasefile'} ? $ENV{'leasefile'} : "/var/lib/dhcp/dhcpd.leases";
 
+$ARGV = shift;
+
 if ( defined $ARGV[0] and $ARGV[0] eq "autoconf" ) {
 
 }
