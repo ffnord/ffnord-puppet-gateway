@@ -29,9 +29,14 @@ define ffnord::dhcpd (
     }
     
     ffnord::monitor::zabbix::check_script {
-      "${mesh_code}_dhcppool":
+      "${mesh_code}_free_dhcppool":
         mesh_code => $mesh_code,
-        scriptname => "dhcp-pool-usage-percent";
+        scriptname => "dhcp-pool-usage",
+        extra => "free";
+      "${mesh_code}_used_dhcppool":
+        mesh_code => $mesh_code,
+        scriptname => "dhcp-pool-usage",
+        extra => "used";
     }
   }
 }
