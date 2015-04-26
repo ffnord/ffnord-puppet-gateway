@@ -26,6 +26,7 @@ reload() {
       echo
       echo bird6: regenerating icvpn peers
       /opt/icvpn-scripts/mkbgp -6 -s /var/lib/icvpn-meta -d icvpn $excluded_peers > /etc/bird/bird6.conf.d/icvpn-peers.conf
+      /opt/icvpn-scripts/mkroa -6 -s /var/lib/icvpn-meta -m 64 $excluded_peers > /etc/bird/bird6.conf.d/icvpn-roa-table.conf
       echo bird6: reload
       # We only want errors
       /usr/sbin/birdc6 configure 1>/dev/null
@@ -34,6 +35,7 @@ reload() {
       echo
       echo bird: regenerating icvpn peers
       /opt/icvpn-scripts/mkbgp -4 -s /var/lib/icvpn-meta -d icvpn $excluded_peers > /etc/bird/bird.conf.d/icvpn-peers.conf
+      /opt/icvpn-scripts/mkroa -4 -s /var/lib/icvpn-meta -m 24 $excluded_peers > /etc/bird/bird.conf.d/icvpn-roa-table.conf
       echo bird: reload
       # We only want errors
       /usr/sbin/birdc configure 1>/dev/null

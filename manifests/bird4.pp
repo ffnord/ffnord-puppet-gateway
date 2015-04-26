@@ -105,6 +105,13 @@ define ffnord::bird4::icvpn (
 
   $icvpn_name = $name
 
+  file_line {
+    "icvpn-include-roa":
+      path => '/etc/bird/bird.conf',
+      line => 'include "/etc/bird/bird.conf.d/icvpn-roa.conf";',
+      require => File['/etc/bird/bird.conf'],
+      notify  => Service['bird'];
+  }->
   file_line { 
     "icvpn-template":
       path => '/etc/bird/bird.conf',
@@ -124,18 +131,30 @@ define ffnord::bird4::icvpn (
   } 
 
   # Process meta data from tinc directory
-  file { "/etc/bird/bird.conf.d/icvpn-template.conf":
-    mode => "0644",
-    content => template("ffnord/etc/bird/bird.icvpn-template.conf.erb"),
-    require => [ 
-      File['/etc/bird/bird.conf.d/'],
-      Package['bird'],
-      Class['ffnord::tinc'],
-    ],
-    notify  => [
-      Service['bird'],
-      File_line['icvpn-include'],
-      File_line['icvpn-template']
-    ];
-  } 
+  file {
+    "/etc/bird/bird.conf.d/icvpn-template.conf":
+      mode => "0644",
+      content => template("ffnord/etc/bird/bird.icvpn-template.conf.erb"),
+      require => [ 
+        File['/etc/bird/bird.conf.d/'],
+        Package['bird'],
+        Class['ffnord::tinc'],
+      ],
+      notify  => [
+        Service['bird'],
+        File_line['icvpn-include'],
+        File_line['icvpn-template']
+      ];
+  }
+
+  file_line {
+    "icvpn-roa":
+      path => '/etc/bird/bird.conf.d/icvpn-roa.conf',
+      line => 'roa table icvpn_roa { include "icvpn-roa-table.con?" }',
+      require => [
+        File['/etc/bird/bird.conf.d/'],
+        File_line['icvpn-include-roa']
+      ],
+      notify  => Service['bird'];
+  }
 }
