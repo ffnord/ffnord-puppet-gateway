@@ -1,7 +1,6 @@
 # managed by puppet -- editing is futile
 
-log to syslog level error;
-log to syslog as "fastd-debug" level debug;
+log to syslog as "fastd-<%= @mesh_code %>" level error;
 interface "<%= @mesh_code %>-mesh-vpn";
 method "salsa2012+umac";    # since fastd v15
 method "salsa2012+gmac";
