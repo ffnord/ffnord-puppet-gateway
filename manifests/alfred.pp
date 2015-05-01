@@ -4,6 +4,7 @@ class ffnord::alfred (
   vcsrepo { '/opt/alfred':
     ensure => present,
     provider => git,
+    revision => "dfb1ea4289387bc38d7fc7c51cfa9b0f3439e66f",
     source => "http://git.open-mesh.org/alfred.git";
   }
 
@@ -49,6 +50,7 @@ class ffnord::alfred (
     ensure => present,
     provider => git,
     source => "https://github.com/ffnord/ffnord-gateway-alfred.git",
+    revision => "816a6fa659f83da3d60e4ce9c88a1f3d4c1499dd",
     require => [Package['python3'],Package['ethtool']];
   }
 
