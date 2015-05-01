@@ -11,6 +11,7 @@ class ffnord::resources::meta {
        ensure => present,
        provider => git,
        source => "https://github.com/freifunk/icvpn-scripts.git",
+       revision => "e5bb5a6948a136453ae1cbe2b27a705f86526579",
        require => [
          Vcsrepo['/var/lib/icvpn-meta/'],
          Package['python-yaml']
