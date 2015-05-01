@@ -53,8 +53,8 @@ class ffnord::tinc (
       require => Vcsrepo['/etc/tinc/icvpn/'],
       mode => '0755';
     '/etc/tinc/icvpn/.git/hooks/post-merge':
-      ensure => file,
-      source => "/etc/tinc/icvpn/scripts/post-merge",
+      ensure => link,
+      target => "/etc/tinc/icvpn/scripts/post-merge",
       require => Vcsrepo['/etc/tinc/icvpn/'],
       mode => '0755';
    '/etc/apt/preferences.d/tinc':
