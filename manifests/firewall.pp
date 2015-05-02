@@ -165,7 +165,8 @@ define ffnord::firewall::service (
 <% if @ports.length > 0 -%>
 <% @ports.each do |port| -%>
 <% if @rate_limit -%>
-rate_limit46 \"<%=@name%>\" <%=@rate_limit_seconds%> <%=@rate_limit_hitcount%> -A <%=chain%>-input -p <%=proto%> -m <%=proto%> --dport <%=port%><% if @source -%> -s <%=source%><% end -%>
+rate_limit46 \"<%=@name%>\" <%=@rate_limit_seconds%> <%=@rate_limit_hitcount%> -A <%=chain%>-input -p <%=proto%> -m <%=proto%> --dport <%=port%><% if @source -%> -s <%=source%>
+<% end %>
 <% end -%>
 ip46tables -A <%=chain%>-input -p <%=proto%> -m <%=proto%> --dport <%=port%><% if @source -%> -s <%=source%><% end -%> -j ACCEPT -m comment --comment '<%=@name%>'
 <% end -%>
