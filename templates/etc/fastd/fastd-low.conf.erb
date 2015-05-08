@@ -1,0 +1,23 @@
+# managed by puppet -- editing is futile
+
+log to syslog as "fastd-low-<%= @mesh_code %>" level error;
+interface "<%= @mesh_code %>-mesh-low-vpn";
+method "salsa2012+umac";    # since fastd v15
+method "salsa2012+gmac";
+method "xsalsa20-poly1305"; # deprecated
+bind any:<%= @fastd_low_port %>;
+hide ip addresses yes;
+hide mac addresses yes;
+include "secret.conf";
+mtu <%= @mesh_mtu_low %>;
+status socket "/var/run/fastd-status.<%= @mesh_code %>.sock";
+include peers from "peers";
+on up "
+ modprobe batman-adv
+ ip link set address <%= @vpn_mac %> dev $INTERFACE
+ /usr/sbin/batctl -m bat-<%= @mesh_code %> if add $INTERFACE
+ ip link set address <%= @mesh_mac %> dev bat-<%= @mesh_code %>
+ ifup bat-<%= @mesh_code %>
+ ip link set up dev $INTERFACE
+ #service alfred start bat-<%= @mesh_code %>
+";

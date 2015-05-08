@@ -1,21 +1,23 @@
 define ffnord::mesh(
-  $mesh_name,        # Name of your community, e.g.: Freifunk Gotham City
-  $mesh_code,        # Code of your community, e.g.: ffgc
-  $mesh_as,          # AS of your community
-  $mesh_mac,         # mac address mesh device: 52:54:00:bd:e6:d4
-  $vpn_mac,          # mac address vpn device, ideally != mesh_mac and unique
-  $mesh_mtu = 1426,  # mtu used, default only suitable for fastd via ipv4
-  $range_ipv4,       # ipv4 range allocated to community in cidr notation, e.g. 10.35.0.1/16
-  $mesh_ipv4,        # ipv4 address in cidr notation, e.g. 10.35.0.1/19
-  $mesh_ipv6,        # ipv6 address in cidr notation, e.g. fd35:f308:a922::ff00/64
-  $mesh_peerings,    # path to the local peerings description yaml file
+  $mesh_name,              # Name of your community, e.g.: Freifunk Gotham City
+  $mesh_code,              # Code of your community, e.g.: ffgc
+  $mesh_as,                # AS of your community
+  $mesh_mac,               # mac address mesh device: 52:54:00:bd:e6:d4
+  $vpn_mac,                # mac address vpn device, ideally != mesh_mac and unique
+  $mesh_mtu = 1426,        # mtu used, default only suitable for fastd via ipv4
+  $mesh_mtu_low = 1280,    # mtu used for new fastd instance that is "Kabel Deutschland safe"
+  $range_ipv4,             # ipv4 range allocated to community in cidr notation, e.g. 10.35.0.1/16
+  $mesh_ipv4,              # ipv4 address in cidr notation, e.g. 10.35.0.1/19
+  $mesh_ipv6,              # ipv6 address in cidr notation, e.g. fd35:f308:a922::ff00/64
+  $mesh_peerings,          # path to the local peerings description yaml file
+                           
+  $fastd_peers_git,        # fastd peers
+  $fastd_secret,           # fastd secret
+  $fastd_port,             # fastd port
+  $fastd_low_port = 11280, # fastd port for second fastd instance with $mesh_mtu_low
 
-  $fastd_peers_git,  # fastd peers
-  $fastd_secret,     # fastd secret
-  $fastd_port,       # fastd port
-
-  $dhcp_ranges = [], # dhcp pool
-  $dns_servers = [], # other dns servers in your network
+  $dhcp_ranges = [],       # dhcp pool
+  $dns_servers = [],       # other dns servers in your network
 ) {
 
   # TODO We should handle parameters in a param class pattern.
@@ -68,8 +70,10 @@ define ffnord::mesh(
     mesh_mac  => $mesh_mac,
     vpn_mac   => $vpn_mac,
     mesh_mtu  => $mesh_mtu,
+    mesh_mtu_low  => $mesh_mtu_low,
     fastd_secret => $fastd_secret,
     fastd_port   => $fastd_port,
+    fastd_low_port   => $fastd_low_port,
     fastd_peers_git => $fastd_peers_git;
   } ->
   ffnord::radvd { "br-${mesh_code}":
