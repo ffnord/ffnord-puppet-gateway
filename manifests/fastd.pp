@@ -16,7 +16,7 @@ define ffnord::fastd( $mesh_name
 
   ffnord::monitor::nrpe::check_command {
     "fastd_${mesh_code}":
-      command => "/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C fastd -a \"${mesh_code}-mesh-vpn\"";
+      command => "/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C fastd --ereg-argument \"${mesh_code}-mesh-vpn\\b\"";
   }
 
   ffnord::monitor::zabbix::check_script {
