@@ -191,9 +191,83 @@ ffnord::vpn::provider::generic (class)
 
 ffnord::vpn::provider::hideio (class)
 -------------------------------------
+This class contains the authentification data for the vpn-tunnel, which is 
+used to tunnel the all of the networks traffic into the internet.
+
+.. code-block:: ruby
+
+  class {
+    'ffnord::vpn::provider::hideio':
+      openvpn_server => # a url or ip-address to an hideio-server
+      openvpn_port   => # Port of the hideio-server
+      openvpn_user   => # Username used to authentificate at the server
+      openvpn_password => # Password used to authentificate at the server
+  }
+
+Attributes
+``````````
+
+openvpn_server
+..............
+The server you want the openvpn connect to.
+* Example value: ``"nl-7.hide.io"``
+
+openvpn_port
+............
+The port the server you connect to uses for openvpn.
+* Example value: ``3478``
+
+openvpn_user
+............
+The username to authentificate at the openvpn-server.
+* Example value: ``"wayne"``
+
+openvpn_password
+................
+The password to authentificate at the openvpn-server.
+* Example value: ``"brucessecretpw"``
+
 
 ffnord::icvpn::setup (type)
 ---------------------------
+This type contains all information, which is used to connect to the icvpn
+and establish BGP-peerings with other communitys.
+
+.. code-block:: ruby
+
+  ffnord :: icvpn::setup {
+    icvpn_as               => # AS of the community peering
+    icvpn_ipv4_address     => # transfer network IPv4 address
+    icvpn_ipv6_address     => # transfer network IPv6 address
+    icvpn_exclude_peerings => # Lists of icvpn names
+  
+    tinc_keyfile => # Private Key for tinc
+  }
+
+Attributes
+``````````
+
+icvpn_as
+........
+The ASN of your Community, must be the same as ``mesh_as`` in ``ffnord::mesh``.
+* Example value: ``65035``
+
+icvpn_ipv4_address
+..................
+* Example value: ``"10.112.0.1"``
+
+icvpn_ipv6_address
+..................
+* Example value: ``"fec0::a:cf:0:35",``
+
+icvpn_exclude_peerings
+......................
+* Example value: ``[gotham]``
+
+tinc_keyfile
+............
+* Example value: ``"/root/tinc_rsa_key.priv"``
+
 
 ffnord::monitor::munin (class)
 ------------------------------
