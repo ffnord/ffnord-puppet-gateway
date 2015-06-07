@@ -132,8 +132,11 @@ define ffnord::uplink::tunnel (
     ]
   }
 
-  ffnord::firewall::forward { "uplink-${name}":
-    chain => 'mesh'
+  ffnord::firewall::device { "uplink-${name}":
+    zone => 'uplink',
+    zone_forward_ipv4 => ['mesh'],
+    zone_forward_ipv6 => [''],
+    forward_conntrack => True;
   }
 
   ffnord::firewall::service { "gre-${name}":

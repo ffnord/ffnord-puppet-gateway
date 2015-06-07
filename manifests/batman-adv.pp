@@ -31,8 +31,4 @@ define ffnord::batman-adv( $mesh_code
       scriptname => "batman-visible-gateway-count",
       sudo => true;
   }
-
-  ffnord::firewall::device { "bat-${mesh_code}":
-    chain => "bat"
-  } 
 }

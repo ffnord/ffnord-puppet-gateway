@@ -37,8 +37,10 @@ class ffnord::vpn::provider () {
 
   ffnord::monitor::vnstat::device { 'tun-anonvpn': }
 
-  ffnord::firewall::forward { 'tun-anonvpn':
-    chain => 'mesh'
+  ffnord::firewall::device { "tun-anonvpn":
+    zone => uplink,
+    zone_forward_ipv4 => ['mesh'],
+    forward_conntrack => True,
   }
 
   # Define Firewall rule for masquerade

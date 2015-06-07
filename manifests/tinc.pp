@@ -100,11 +100,10 @@ class ffnord::tinc (
   }
 
   ffnord::firewall::device { "icvpn":
-    chain => 'mesh'
-  }
-
-  ffnord::firewall::forward { "icvpn":
-    chain => 'mesh'
+    zone => 'icvpn',
+    zone_forward_ipv4 => ['mesh'],
+    zone_forward_ipv6 => ['mesh'],
+    forward_conntrack => False,
   }
 
   ffnord::firewall::service { "tincd":
