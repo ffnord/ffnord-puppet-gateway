@@ -1,7 +1,7 @@
 # managed by puppet -- editing is futile
 
-log to syslog as "fastd-<%= @mesh_code %>" level error;
-interface "<%= @mesh_code %>-mesh-vpn";
+log to syslog as "fastd-<%= @mesh_interface %>" level error;
+interface "<%= @mesh_interface %>-mvpn";
 method "salsa2012+umac";    # since fastd v15
 method "salsa2012+gmac";
 method "xsalsa20-poly1305"; # deprecated
@@ -9,8 +9,8 @@ bind any:<%= @fastd_port %>;
 hide ip addresses yes;
 hide mac addresses yes;
 include "secret.conf";
-mtu <%= @mesh_mtu %>; # 1492 - IPv{4,6} Header - fastd Header...
-status socket "/var/run/fastd-status.<%= @mesh_code %>.sock";
+mtu <%= @mesh_mtu %>;
+status socket "/var/run/fastd-status.<%= @mesh_interface %>.sock";
 include peers from "peers";
 on up "
  modprobe batman-adv
@@ -19,5 +19,5 @@ on up "
  ip link set address <%= @mesh_mac %> dev bat-<%= @mesh_code %>
  ifup bat-<%= @mesh_code %>
  ip link set up dev $INTERFACE
- service alfred start bat-<%= @mesh_code %>
+ service alfred start bat-<%= @mesh_code %> # maybe this only at first instance?
 ";
