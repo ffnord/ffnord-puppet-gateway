@@ -136,7 +136,7 @@ ffnord::fastd { "ffgc_old":
     mesh_interface  => "ffgc-old",
     mesh_mac        => "de:ad:be:ee:de:ad",
     vpn_mac         => "de:ad:be:fe:de:ad",
-    mesh_mtu        => 1460,
+    mesh_mtu        => 1426,
     fastd_secret    => "/root/fastd_secret.conf",
     fastd_port      => 10000,
     fastd_peers_git => '/vagrant/fastd/gc/'

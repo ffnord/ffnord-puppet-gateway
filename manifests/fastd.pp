@@ -3,7 +3,7 @@ define ffnord::fastd( $mesh_name
                      , $mesh_interface # may not be more than 10 characters
                      , $mesh_mac
                      , $vpn_mac
-                     , $mesh_mtu = 1426
+                     , $mesh_mtu = 1280
 
                      , $fastd_secret
                      , $fastd_port
