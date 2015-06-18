@@ -4,7 +4,7 @@ define ffnord::mesh(
   $mesh_as,          # AS of your community
   $mesh_mac,         # mac address mesh device: 52:54:00:bd:e6:d4
   $vpn_mac,          # mac address vpn device, ideally != mesh_mac and unique
-  $mesh_mtu = 1426,  # mtu used, default only suitable for fastd via ipv4
+  $mesh_mtu = 1280,  # mtu used, default only suitable for fastd via ipv4
   $range_ipv4,       # ipv4 range allocated to community in cidr notation, e.g. 10.35.0.1/16
   $mesh_ipv4,        # ipv4 address in cidr notation, e.g. 10.35.0.1/19
   $mesh_ipv6,        # ipv6 address in cidr notation, e.g. fd35:f308:a922::ff00/64
@@ -65,6 +65,7 @@ define ffnord::mesh(
   ffnord::fastd { "fastd_${mesh_code}":
     mesh_name => $mesh_name,
     mesh_code => $mesh_code,
+    mesh_interface => "${mesh_code}",
     mesh_mac  => $mesh_mac,
     vpn_mac   => $vpn_mac,
     mesh_mtu  => $mesh_mtu,

@@ -93,12 +93,12 @@ ffnord::mesh { 'mesh_ffgc':
       vpn_mac      => "de:ad:be:ff:de:ad",
       mesh_ipv6    => "fd35:f308:a922::ff00/64,
       mesh_ipv4    => "10.35.0.1/19",
-      mesh_mtu     => "1426",
+      mesh_mtu     => "1280",
       range_ipv4   => "10.35.0.0/16",
       mesh_peerings => "/root/mesh_peerings.yaml",
 
       fastd_secret => "/root/fastd_secret.key",
-      fastd_port   => 10035,
+      fastd_port   => 11235,
       fastd_peers_git => 'git://somehost/peers.git',
 
       dhcp_ranges => [ '10.35.0.2 10.35.0.254'
@@ -128,6 +128,18 @@ class {
     openvpn_port   => 3478,
     openvpn_user   => "wayne",
     openvpn_password => "brucessecretpw",
+}
+
+ffnord::fastd { "ffgc_old":
+    mesh_name       => "mesh_ffgc",
+    mesh_code       => "ffgc",
+    mesh_interface  => "ffgc-old",
+    mesh_mac        => "de:ad:be:ee:de:ad",
+    vpn_mac         => "de:ad:be:fe:de:ad",
+    mesh_mtu        => 1460,
+    fastd_secret    => "/root/fastd_secret.conf",
+    fastd_port      => 10000,
+    fastd_peers_git => '/vagrant/fastd/gc/'
 }
 
 ffnord::icvpn::setup {
