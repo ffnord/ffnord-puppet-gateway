@@ -70,49 +70,51 @@ Example puppet code (save e.g. as `/root/gateway.pp`):
 
 ```
 # Global parameters for this host
-class { 'ffnord::params':
-  router_id => "10.35.0.1", # The id of this router, probably the ipv4 address
-                            # of the mesh device of the providing community
-  icvpn_as => "65035",      # The as of the providing community
-  wan_devices => ['eth0']   # A array of devices which should be in the wan zone
-
-  wmem_default = 87380,     # Define the default socket send buffer
-  wmem_max     = 12582912,  # Define the maximum socket send buffer
-  rmem_default = 87380,     # Define the default socket recv buffer
-  rmem_max     = 12582912,  # Define the maximum socket recv buffer
-
-  max_backlog  = 5000,      # Define the maximum packages in buffer
+class { 
+  'ffnord::params':
+    router_id => "10.35.0.1", # The id of this router, probably the ipv4 address
+                              # of the mesh device of the providing community
+    icvpn_as => "65035",      # The as of the providing community
+    wan_devices => ['eth0']   # A array of devices which should be in the wan zone
+    
+    wmem_default = 87380,     # Define the default socket send buffer
+    wmem_max     = 12582912,  # Define the maximum socket send buffer
+    rmem_default = 87380,     # Define the default socket recv buffer
+    rmem_max     = 12582912,  # Define the maximum socket recv buffer
+    
+    max_backlog  = 5000,      # Define the maximum packages in buffer
 }
 
 # You can repeat this mesh block for every community you support
-ffnord::mesh { 'mesh_ffgc':
-      mesh_name    => "Freifunk Gotham City",
-      mesh_code    => "ffgc",
-      mesh_as      => 65035,
-      mesh_mac     => "de:ad:be:ef:de:ad",
-      vpn_mac      => "de:ad:be:ff:de:ad",
-      mesh_ipv6    => "fd35:f308:a922::ff00/64,
-      mesh_ipv4    => "10.35.0.1/19",
-      mesh_mtu     => "1280",
-      range_ipv4   => "10.35.0.0/16",
-      mesh_peerings => "/root/mesh_peerings.yaml",
-
-      fastd_secret => "/root/fastd_secret.key",
-      fastd_port   => 11235,
-      fastd_peers_git => 'git://somehost/peers.git',
-
-      dhcp_ranges => [ '10.35.0.2 10.35.0.254'
-                     , '10.35.1.1 10.35.1.254'
-                     , '10.35.2.2 10.35.2.254'
-                     , '10.35.3.2 10.35.3.254'
-                     , '10.35.4.2 10.35.4.254'
-                     ],
-      dns_servers => [ '10.35.5.1'
-                     , '10.35.10.1'
-                     , '10.35.15.1'
-                     , '10.35.20.1'
-                     ]
-      }
+ffnord::mesh { 
+  'mesh_ffgc':
+    mesh_name    => "Freifunk Gotham City",
+    mesh_code    => "ffgc",
+    mesh_as      => 65035,
+    mesh_mac     => "de:ad:be:ef:de:ad",
+    vpn_mac      => "de:ad:be:ff:de:ad",
+    mesh_ipv6    => "fd35:f308:a922::ff00/64,
+    mesh_ipv4    => "10.35.0.1/19",
+    mesh_mtu     => "1280",
+    range_ipv4   => "10.35.0.0/16",
+    mesh_peerings => "/root/mesh_peerings.yaml",
+    
+    fastd_secret => "/root/fastd_secret.key",
+    fastd_port   => 11235,
+    fastd_peers_git => 'git://somehost/peers.git',
+    
+    dhcp_ranges => [ '10.35.0.2 10.35.0.254'
+                   , '10.35.1.1 10.35.1.254'
+                   , '10.35.2.2 10.35.2.254'
+                   , '10.35.3.2 10.35.3.254'
+                   , '10.35.4.2 10.35.4.254'
+                   ],
+    dns_servers => [ '10.35.5.1'
+                   , '10.35.10.1'
+                   , '10.35.15.1'
+                   , '10.35.20.1'
+                   ]
+}
 
 ffnord::named::zone {
   'ffgc': zone_git => 'git://somehost/ffgc-zone.git';
@@ -130,7 +132,8 @@ class {
     openvpn_password => "brucessecretpw",
 }
 
-ffnord::fastd { "ffgc_old":
+ffnord::fastd { 
+  'ffgc_old':
     mesh_name       => "mesh_ffgc",
     mesh_code       => "ffgc",
     mesh_interface  => "ffgc-old",
@@ -173,25 +176,26 @@ class { 'ffnord::etckeeper': }
 
 #### Mesh Type
 ```
-ffnord :: mesh { '<mesh_code>':
-  mesh_name,        # Name of your community, e.g.: Freifunk Gotham City
-  mesh_code,        # Code of your community, e.g.: ffgc
-  mesh_as,          # AS of your community
-  mesh_mac,         # mac address mesh device: 52:54:00:bd:e6:d4
-  vpn_mac,          # mac address vpn device, ideally != mesh_mac and unique
-  mesh_ipv6,        # ipv6 address of mesh device in cidr notation, e.g. 10.35.0.1/19
-  mesh_mtu,         # mtu used, default only suitable for fastd via ipv4
-  range_ipv4,       # ipv4 range allocated to community, this might be different to
-                    # the one used in the mesh in cidr notation, e.g. 10.35.0.1/19
-  mesh_ipv4,        # ipv4 address of mesh device in cidr notation, e.g. fd35:f308:a922::ff00/64
-  mesh_peerings,    # path to the local peerings description yaml file
-
-  fastd_secret,     # fastd secret
-  fastd_port,       # fastd port
-  fastd_peers_git,  # fastd peers repository
-
-  dhcp_ranges = [], # dhcp pool
-  dns_servers = [], # other dns servers in your network
+ffnord :: mesh { 
+  '<mesh_code>':
+    mesh_name,        # Name of your community, e.g.: Freifunk Gotham City
+    mesh_code,        # Code of your community, e.g.: ffgc
+    mesh_as,          # AS of your community
+    mesh_mac,         # mac address mesh device: 52:54:00:bd:e6:d4
+    vpn_mac,          # mac address vpn device, ideally != mesh_mac and unique
+    mesh_ipv6,        # ipv6 address of mesh device in cidr notation, e.g. 10.35.0.1/19
+    mesh_mtu,         # mtu used, default only suitable for fastd via ipv4
+    range_ipv4,       # ipv4 range allocated to community, this might be different to
+                      # the one used in the mesh in cidr notation, e.g. 10.35.0.1/19
+    mesh_ipv4,        # ipv4 address of mesh device in cidr notation, e.g. fd35:f308:a922::ff00/64
+    mesh_peerings,    # path to the local peerings description yaml file
+    
+    fastd_secret,     # fastd secret
+    fastd_port,       # fastd port
+    fastd_peers_git,  # fastd peers repository
+    
+    dhcp_ranges = [], # dhcp pool
+    dns_servers = [], # other dns servers in your network
 }
 ```
 
@@ -207,7 +211,7 @@ the absolute path prefixed with '/etc/bind/zones/${name}/'.
 ```
 ffnord::named::zone {
   '<name>':
-     zone_git; # zone file repo
+    zone_git; # zone file repo
 }
 ```
 
@@ -225,7 +229,7 @@ There has to be a file named static.conf in the repo.
 ```
 ffnord::dhcpd::static {
   '<name>':
-     static_git; # dhcp static file repo
+    static_git; # dhcp static file repo
 }
 ```
 
@@ -255,12 +259,12 @@ class {
     tunnel_network,     # network of tunnel IPs to exclude from NAT
 }
 ffnord::uplink::tunnel {
-    '<name>':
-      local_public_ip,  # local public IPv4 of this gateway
-      remote_public_ip, # remote public IPv4 of the tunnel endpoint
-      local_ipv4,       # tunnel IPv4 on our side
-      remote_ip,        # tunnel IPv4 on the remote side
-      remote_as,        # ASN of the BGP server announcing a default route for you
+   '<name>':
+     local_public_ip,  # local public IPv4 of this gateway
+     remote_public_ip, # remote public IPv4 of the tunnel endpoint
+     local_ipv4,       # tunnel IPv4 on our side
+     remote_ip,        # tunnel IPv4 on the remote side
+     remote_as,        # ASN of the BGP server announcing a default route for you
 }
 ```
 
@@ -322,12 +326,11 @@ maintenance off
 ## FASTD Query
 
 For debugging purposes we utilize the status socket of fastd using a little
-helper script called `fastd-query`, which itself is a wrapper around ``socat``
-and ``jq``. An alias ``fastd-query-${mesh_code}`` is created for every
+helper script called `fastd-query`, which itself is a wrapper around `socat`
+and `jq`. An alias `fastd-query-${mesh_code}` is created for every
 mesh network. For example you can retrieve the status for some node, where
 the node name is equivalent to the peers filename:
 
 ```
 # fastd-query-ffgc peers name gc-gw0 
 ```
-
