@@ -63,7 +63,6 @@ define ffnord::mesh(
     dns_servers  => $dns_servers;
   } ->
   ffnord::fastd { "fastd_${mesh_code}":
-    mesh_name => $mesh_name,
     mesh_code => $mesh_code,
     mesh_interface => "${mesh_code}",
     mesh_mac  => $mesh_mac,

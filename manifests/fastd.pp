@@ -1,5 +1,4 @@
-define ffnord::fastd( $mesh_name
-                     , $mesh_code
+define ffnord::fastd( $mesh_code
                      , $mesh_interface # may not be more than 10 characters
                      , $mesh_mac
                      , $vpn_mac

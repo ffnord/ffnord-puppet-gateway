@@ -88,7 +88,6 @@ class {
 # You can repeat this mesh block for every community you support
 ffnord::mesh { 
   'mesh_ffgc':
-    mesh_name    => "Freifunk Gotham City",
     mesh_code    => "ffgc",
     mesh_as      => 65035,
     mesh_mac     => "de:ad:be:ef:de:ad",
@@ -134,7 +133,6 @@ class {
 
 ffnord::fastd { 
   'ffgc_old':
-    mesh_name       => "mesh_ffgc",
     mesh_code       => "ffgc",
     mesh_interface  => "ffgc-old",
     mesh_mac        => "de:ad:be:ee:de:ad",
