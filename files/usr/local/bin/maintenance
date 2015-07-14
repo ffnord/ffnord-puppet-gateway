@@ -4,6 +4,10 @@
 ##/etc/ffnord file. This timestamp is read out when ask for status. So we know
 ##when the maintenance mode was activated.
 
+R="\033[31m" #red
+G="\033[32m" #green
+W="\033[39m" #white
+
 . /etc/ffnord
 
 case $1 in
@@ -13,6 +17,7 @@ case $1 in
     /etc/init.d/isc-dhcp-server stop
     update-rc.d radvd remove
     update-rc.d isc-dhcp-server remove
+    echo -e $R"maintenance is now ON"$W
     ;;
   off)
     sed -i -e 's/^MAINTENANCE=.*$/MAINTENANCE=0/' /etc/ffnord
@@ -20,14 +25,30 @@ case $1 in
     /etc/init.d/isc-dhcp-server start
     update-rc.d radvd defaults
     update-rc.d isc-dhcp-server defaults
+    echo -e $G"maintenance is now OFF"$W
     ;;
   status)
     MAINTENANCE=${MAINTENANCE:-0}
     if test $MAINTENANCE -eq 0; then
-      echo "Maintenance is off"
+      echo -e $G"Maintenance is OFF"$W
     else
-      echo "Maintenance is on since $(date --date=date -d @${MAINTENANCE})"
+      echo -e $R"Maintenance is ON"$W" since $(date --date=date -d @${MAINTENANCE})"
     fi
+    # check for services if running
+    #service --status-all 2>&1 | egrep '(openvpn|fastd|bat|bind|dhcp)'
+    for s in isc-dhcp-server openvpn rpcbind fastd bind9 bat; do
+        echo "==>" $s "status"
+        service $s status
+    done
+
+    for s in bird6 bird alfred batadv-vis; do
+      echo "==>" $s "status"
+      if pgrep $s\\b > /dev/null; then 
+        echo -e "[ "$G"ok"$W" ] $s is running"
+      else
+        echo -e "["$R"FAIL"$W"] $s is not running ... "$R'failed!'$W
+      fi
+    done
     ;;
   *)
     echo "Usage $0 [on|off|status]"
