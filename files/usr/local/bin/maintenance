@@ -11,7 +11,11 @@ W="\033[39m" #white
 . /etc/ffnord
 
 case $1 in
-  on)
+  "kick-all")
+    service fastd stop
+    ip link set bat-ffki down
+    ;&
+  "on")
     sed -i -e 's/^MAINTENANCE=.*$/MAINTENANCE='$(date +%s)'/' /etc/ffnord
     /etc/init.d/radvd stop
     /etc/init.d/isc-dhcp-server stop
@@ -19,15 +23,17 @@ case $1 in
     update-rc.d isc-dhcp-server remove
     echo -e $R"maintenance is now ON"$W
     ;;
-  off)
+  "off")
     sed -i -e 's/^MAINTENANCE=.*$/MAINTENANCE=0/' /etc/ffnord
+    service fastd start
+    ip link set bat-ffki up
     /etc/init.d/radvd start
     /etc/init.d/isc-dhcp-server start
     update-rc.d radvd defaults
     update-rc.d isc-dhcp-server defaults
     echo -e $G"maintenance is now OFF"$W
     ;;
-  status)
+  "status")
     MAINTENANCE=${MAINTENANCE:-0}
     if test $MAINTENANCE -eq 0; then
       echo -e $G"Maintenance is OFF"$W
@@ -36,7 +42,7 @@ case $1 in
     fi
     # check for services if running
     #service --status-all 2>&1 | egrep '(openvpn|fastd|bat|bind|dhcp)'
-    for s in isc-dhcp-server openvpn rpcbind fastd bind9 bat; do
+    for s in isc-dhcp-server openvpn rpcbind fastd bind9 radvd; do
         echo "==>" $s "status"
         service $s status
     done
@@ -51,6 +57,6 @@ case $1 in
     done
     ;;
   *)
-    echo "Usage $0 [on|off|status]"
+    echo "Usage $0 [on|off|status|kick-all]"
     ;;
 esac
