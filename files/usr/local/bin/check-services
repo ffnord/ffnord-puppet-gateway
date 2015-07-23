@@ -1,0 +1,33 @@
+#!/bin/bash
+
+. /etc/ffnord
+
+R="\033[31m" #red
+G="\033[32m" #green
+W="\033[39m" #white
+
+MAINTENANCE=${MAINTENANCE:-0}
+if test $MAINTENANCE -eq 0; then
+  echo -e $G"Maintenance is OFF"$W
+else
+  echo -e $R"Maintenance is ON"$W" since $(date --date=date -d @${MAINTENANCE})"
+fi
+
+echo -n "Gateway mode is "
+cat /sys/class/net/*/mesh/gw_mode
+
+# check for services if running
+#service --status-all 2>&1 | egrep '(openvpn|fastd|bat|bind|dhcp)'
+for s in isc-dhcp-server openvpn rpcbind fastd bind9 radvd; do
+    echo "==>" $s "status"
+    service $s status
+done
+
+for s in bird6 bird alfred batadv-vis; do
+  echo "==>" $s "status"
+  if pgrep $s\\b > /dev/null; then 
+    echo -e "[ "$G"ok"$W" ] $s is running"
+  else
+    echo -e "["$R"FAIL"$W"] $s is not running ... "$R'failed!'$W
+  fi
+done
