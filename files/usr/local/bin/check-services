@@ -1,4 +1,7 @@
 #!/bin/bash
+# this script checks Maintenance mode and Gateway mide
+# and checks if those services are running:
+# isc-dhcp-server radvd ntp openvpn rpcbind fastd bind9 bird6 bird alfred batadv-vis named tincd
 
 . /etc/ffnord
 
@@ -11,7 +14,7 @@ GWM=$(cat /sys/class/net/*/mesh/gw_mode)
 MAINTENANCE=${MAINTENANCE:-0}
 if test $MAINTENANCE -eq 0; then
   echo -e $G"Maintenance is OFF"$W
-  if [ "$GWM" == "on" ]; then
+  if [ "$GWM" == "server" ]; then
     echo -e $G"Gateway mode is $GWM"$W
   else
     echo -e $R"Gateway mode is $GWM"$W
@@ -47,12 +50,12 @@ for s in isc-dhcp-server radvd; do
   fi
 done
 # check for services if running
-for s in openvpn rpcbind fastd bind9; do
+for s in ntp openvpn rpcbind fastd bind9; do
     echo "==>" $s "status"
     service $s status
 done
 
-for s in bird6 bird alfred batadv-vis; do
+for s in bird6 bird alfred batadv-vis named tincd; do
   echo "==>" $s "status"
   if pgrep \\b$s\\b > /dev/null; then 
     echo -e "[ "$G"ok"$W" ] $s is running"
