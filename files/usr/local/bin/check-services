@@ -54,7 +54,7 @@ done
 
 for s in bird6 bird alfred batadv-vis; do
   echo "==>" $s "status"
-  if pgrep $s\\b > /dev/null; then 
+  if pgrep \\b$s\\b > /dev/null; then 
     echo -e "[ "$G"ok"$W" ] $s is running"
   else
     echo -e "["$R"FAIL"$W"] $s is not running ... "$R'failed!'$W
