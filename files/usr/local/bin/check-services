@@ -6,19 +6,48 @@ R="\033[31m" #red
 G="\033[32m" #green
 W="\033[39m" #white
 
+
+GWM=$(cat /sys/class/net/*/mesh/gw_mode)
 MAINTENANCE=${MAINTENANCE:-0}
 if test $MAINTENANCE -eq 0; then
   echo -e $G"Maintenance is OFF"$W
+  if [ "$GWM" == "on" ]; then
+    echo -e $G"Gateway mode is $GWM"$W
+  else
+    echo -e $R"Gateway mode is $GWM"$W
+  fi
 else
   echo -e $R"Maintenance is ON"$W" since $(date --date=date -d @${MAINTENANCE})"
+  if [ "$GWM" == "off" ]; then
+    echo -e $G"Gateway mode is $GWM"$W
+  else
+    echo -e $R"Gateway mode is $GWM"$W
+  fi
 fi
 
-echo -n "Gateway mode is "
-cat /sys/class/net/*/mesh/gw_mode
 
-# check for services if running
 #service --status-all 2>&1 | egrep '(openvpn|fastd|bat|bind|dhcp)'
-for s in isc-dhcp-server openvpn rpcbind fastd bind9 radvd; do
+# check for services if running by status
+for s in isc-dhcp-server radvd; do
+  echo "==>" $s "status"
+  service $s status >/dev/null
+  if [ $? -eq 0 ]; then 
+    if test $MAINTENANCE -eq 0; then
+      echo -e "[ "$G"ok"$W" ] $s is running"
+    else 
+      echo -e "["$R"FAIL"$W"] $s is running although MAINTENANCE is ON ... "$R'failed!'$W
+    fi
+  else
+    echo -e -n "["$R"FAIL"$W"] $s is not running ... "
+    if test $MAINTENANCE -eq 0; then
+      echo -e $R'failed!'$W
+    else
+      echo -e $G"ok"$W
+    fi
+  fi
+done
+# check for services if running
+for s in openvpn rpcbind fastd bind9; do
     echo "==>" $s "status"
     service $s status
 done
