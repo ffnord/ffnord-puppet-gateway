@@ -8,24 +8,30 @@
 R="\033[31m" #red
 G="\033[32m" #green
 W="\033[39m" #white
-
-
-GWM=$(cat /sys/class/net/*/mesh/gw_mode)
+  
 MAINTENANCE=${MAINTENANCE:-0}
 if test $MAINTENANCE -eq 0; then
   echo -e $G"Maintenance is OFF"$W
-  if [ "$GWM" == "server" ]; then
-    echo -e $G"Gateway mode is $GWM"$W
-  else
-    echo -e $R"Gateway mode is $GWM"$W
-  fi
+  for g in /sys/class/net/*/mesh/gw_mode; do
+    GWM=$(cat $g)
+    echo -n "Gateway mode on "$(echo $g|cut -d"/" -f5)" is "
+    if [ "$GWM" == "server" ]; then
+      echo -e $G"$GWM"$W
+    else
+      echo -e $R"$GWM"$W
+    fi
+  done
 else
   echo -e $R"Maintenance is ON"$W" since $(date --date=date -d @${MAINTENANCE})"
-  if [ "$GWM" == "off" ]; then
-    echo -e $G"Gateway mode is $GWM"$W
-  else
-    echo -e $R"Gateway mode is $GWM"$W
-  fi
+  for g in /sys/class/net/*/mesh/gw_mode; do
+    GWM=$(cat $g)
+    echo -n "Gateway mode on "$(echo $g|cut -d"/" -f5)" is "
+    if [ "$GWM" == "off" ]; then
+      echo -e $G"$GWM"$W
+    else
+      echo -e $R"$GWM"$W
+    fi
+  done
 fi
 
 
