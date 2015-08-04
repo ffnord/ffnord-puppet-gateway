@@ -3,13 +3,19 @@
 # and checks if those services are running:
 # isc-dhcp-server radvd ntp openvpn rpcbind fastd bind9 bird6 bird alfred batadv-vis named tincd
 
-. /etc/ffnord
+if test -e /etc/ffnord ; then 
+  . /etc/ffnord
+  MAINTENANCE=${MAINTENANCE:-0}
+else
+  echo "no file in /etc/ffnord MAINTENANCE mode is supposed off" 
+  MAINTENANCE=0
+fi
 
 R="\033[31m" #red
 G="\033[32m" #green
 W="\033[39m" #white
   
-MAINTENANCE=${MAINTENANCE:-0}
+
 if test $MAINTENANCE -eq 0; then
   echo -e $G"Maintenance is OFF"$W
   for g in /sys/class/net/*/mesh/gw_mode; do
