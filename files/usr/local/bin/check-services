@@ -75,3 +75,10 @@ for s in bird6 bird alfred batadv-vis named tincd; do
     echo -e "["$R"FAIL"$W"] $s is not running ... "$R'failed!'$W
   fi
 done
+
+SOCK=/var/run/fastd-status.ffki.sock
+echo "Currently "$(FASTD_SOCKET=$SOCK fastd-query connections)" connections"
+echo ""$(FASTD_SOCKET=$SOCK fastd-query peers | grep 'established' | wc -l)" established peers"
+
+# fastd-query-ffki peers name gilda
+# fastd-query-ffki peers mac ba:76:1b:ba:62:cb
