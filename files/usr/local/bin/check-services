@@ -7,8 +7,13 @@ if test -e /etc/ffnord ; then
   . /etc/ffnord
   MAINTENANCE=${MAINTENANCE:-0}
 else
-  echo "no file in /etc/ffnord MAINTENANCE mode is supposed off" 
+  echo "no file /etc/ffnord present. MAINTENANCE mode is supposed off" 
   MAINTENANCE=0
+fi
+
+if [ "$MESH_CODE"=="" ] ; then 
+  echo "no MESH_CODE in /etc/ffnord present. ffki is used" 
+  MESH_CODE=ffki
 fi
 
 R="\033[31m" #red
@@ -76,9 +81,16 @@ for s in bird6 bird alfred batadv-vis named tincd; do
   fi
 done
 
-SOCK=/var/run/fastd-status.ffki.sock
+SOCK=/var/run/fastd-status.$MESH_CODE.sock
 echo "Currently "$(FASTD_SOCKET=$SOCK fastd-query connections)" connections"
 echo ""$(FASTD_SOCKET=$SOCK fastd-query peers | grep 'established' | wc -l)" established peers"
 
-# fastd-query-ffki peers name gilda
-# fastd-query-ffki peers mac ba:76:1b:ba:62:cb
+echo "Connections to other gateways:"
+
+cd /etc/fastd/
+cd $(ls|head -n 1)/peers/
+for i in $MESH_CODE-vpn*; do 
+  FASTD_SOCKET=$SOCK fastd-query peers name $i|egrep "(established|vpn)"
+done
+
+# fastd-query-$MESH_CODE peers mac ba:76:1b:ba:62:cb
