@@ -2,9 +2,9 @@
 
 log to syslog as "fastd-<%= @mesh_interface %>" level error;
 interface "<%= @mesh_interface %>-mvpn";
-method "salsa2012+umac";    # since fastd v15
-method "salsa2012+gmac";
-method "xsalsa20-poly1305"; # deprecated
+<% fastd_methods.each do |method| -%>
+method "<%= method %>";
+<% end -%>
 bind any:<%= @fastd_port %>;
 hide ip addresses yes;
 hide mac addresses yes;

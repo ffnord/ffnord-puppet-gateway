@@ -1,11 +1,12 @@
 define ffnord::fastd( $mesh_code
-                     , $mesh_interface # may not be more than 10 characters
+                     , $mesh_interface # may not be more than 15 characters
                      , $mesh_mac
                      , $vpn_mac
                      , $mesh_mtu = 1280
 
                      , $fastd_secret
                      , $fastd_port
+                     , $fastd_methods = ["salsa2012+umac", "salsa2012+umac", "xsalsa20-poly1305"]
 
                      , $fastd_peers_git
                      ) {
