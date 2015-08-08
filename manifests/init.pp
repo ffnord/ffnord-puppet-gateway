@@ -13,6 +13,7 @@ define ffnord::mesh(
   $fastd_peers_git,  # fastd peers
   $fastd_secret,     # fastd secret
   $fastd_port,       # fastd port
+  $mesh_interface = "", # fastd name of mesh vpn interface
 
   $dhcp_ranges = [], # dhcp pool
   $dns_servers = [], # other dns servers in your network
@@ -36,6 +37,11 @@ define ffnord::mesh(
   $mesh_ipv6_prefix    = ip_prefix($mesh_ipv6)
   $mesh_ipv6_prefixlen = ip_prefixlen($mesh_ipv6)
   $mesh_ipv6_address   = ip_address($mesh_ipv6)
+
+  # set default interface names
+  if $mesh_interface == "" {
+    $mesh_interface = "${mesh_code}-mesh-vpn"
+  }
 
   Class['ffnord::firewall'] ->
   ffnord::bridge { "bridge_${mesh_code}":
@@ -70,7 +76,7 @@ define ffnord::mesh(
   } ->
   ffnord::fastd { "fastd_${mesh_code}":
     mesh_code => $mesh_code,
-    mesh_interface => "${mesh_code}",
+    mesh_interface => $mesh_interface,
     mesh_mac  => $mesh_mac,
     vpn_mac   => $vpn_mac,
     mesh_mtu  => $mesh_mtu,

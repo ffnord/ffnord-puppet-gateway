@@ -1,7 +1,7 @@
 # managed by puppet -- editing is futile
 
 log to syslog as "fastd-<%= @mesh_interface %>" level error;
-interface "<%= @mesh_interface %>-mvpn";
+interface "<%= @mesh_interface %>";
 <% fastd_methods.each do |method| -%>
 method "<%= method %>";
 <% end -%>

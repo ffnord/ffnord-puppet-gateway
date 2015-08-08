@@ -17,29 +17,29 @@ define ffnord::fastd( $mesh_code
 
   ffnord::monitor::nrpe::check_command {
     "fastd_${mesh_interface}":
-      command => "/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C fastd -a \"${mesh_interface}-mvpn\"";
+      command => "/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C fastd -a \"${mesh_interface}\"";
   }
 
   ffnord::monitor::zabbix::check_script {
     "${mesh_interface}_fastdcons":
-      mesh_code => $mesh_code,
+      mesh_code => $mesh_interface, #FIXME not intended usage
       scriptname => "fastd_connections",
       sudo => true;
     "${mesh_interface}_fastdcons6":
-      mesh_code => $mesh_code,
+      mesh_code => $mesh_interface, #FIXME not intended usage
       scriptname => "fastd_connections6",
       sudo => true;
   }
 
   file {
-    "/etc/fastd/${mesh_interface}-mvpn/":
+    "/etc/fastd/${mesh_interface}/":
       ensure =>directory,
              require => Package[ffnord::resources::fastd];
-    "/etc/fastd/${mesh_interface}-mvpn/fastd.conf":
+    "/etc/fastd/${mesh_interface}/fastd.conf":
       ensure => file,
              notify => Service[ffnord::resources::fastd],
              content => template('ffnord/etc/fastd/fastd.conf.erb');
-    "/etc/fastd/${mesh_interface}-mvpn/secret.conf":
+    "/etc/fastd/${mesh_interface}/secret.conf":
       ensure => file,
       source => $fastd_secret,
       mode => '0600',
@@ -49,7 +49,7 @@ define ffnord::fastd( $mesh_code
         mesh_code => $mesh_code;
       }
   }
-  vcsrepo { "/etc/fastd/${mesh_interface}-mvpn/peers":
+  vcsrepo { "/etc/fastd/${mesh_interface}/peers":
     ensure   => present,
     provider => git,
     require  => Ffnord::Batman-adv["ffnord_batman_adv_${mesh_code}"],
@@ -63,13 +63,13 @@ define ffnord::fastd( $mesh_code
   }
 
   file {
-    "/etc/fastd/${mesh_interface}-mvpn/peers/.git/hooks/post-merge":
+    "/etc/fastd/${mesh_interface}/peers/.git/hooks/post-merge":
        ensure => file,
        owner => 'root',
        group => 'root',
        mode => '0755',
        content => "#!/bin/sh\n/usr/local/bin/update-fastd-keys reload",
-       require => Vcsrepo["/etc/fastd/${mesh_interface}-mvpn/peers"];
+       require => Vcsrepo["/etc/fastd/${mesh_interface}/peers"];
   }
 
   file_line {
@@ -78,6 +78,6 @@ define ffnord::fastd( $mesh_code
      line => "alias fastd-query-${mesh_interface}='FASTD_SOCKET=/var/run/fastd-status.${mesh_interface}.sock fastd-query'"
   }
 
-  ffnord::etckeeper::ignore { "/etc/fastd/${mesh_interface}-mvpn/peers/": }
+  ffnord::etckeeper::ignore { "/etc/fastd/${mesh_interface}/peers/": }
 
 }
