@@ -4,6 +4,7 @@ define ffnord::mesh(
   $mesh_as,          # AS of your community
   $mesh_mac,         # mac address mesh device: 52:54:00:bd:e6:d4
   $vpn_mac,          # mac address vpn device, ideally != mesh_mac and unique
+  $gw_mac,           # mac address vpn device used for inter-gw
   $mesh_mtu = 1280,  # mtu used, default only suitable for fastd via ipv4
   $range_ipv4,       # ipv4 range allocated to community in cidr notation, e.g. 10.35.0.1/16
   $mesh_ipv4,        # ipv4 address in cidr notation, e.g. 10.35.0.1/19
@@ -11,9 +12,12 @@ define ffnord::mesh(
   $mesh_peerings,    # path to the local peerings description yaml file
 
   $fastd_peers_git,  # fastd peers
+  $fastd_gw_git,     # fastd gateway/backbone peers
   $fastd_secret,     # fastd secret
   $fastd_port,       # fastd port
+  $fastd_gw_port,    # fastd gateway/backbone port
   $mesh_interface = "", # fastd name of mesh vpn interface
+  $gw_interface = "",   # fastd name of inter-gw vpn interface
 
   $dhcp_ranges = [], # dhcp pool
   $dns_servers = [], # other dns servers in your network
@@ -41,6 +45,9 @@ define ffnord::mesh(
   # set default interface names
   if $mesh_interface == "" {
     $mesh_interface = "${mesh_code}-mesh-vpn"
+  }
+  if $gw_interface == "" {
+    $gw_interface = "${mesh_code}-gw-vpn"
   }
 
   Class['ffnord::firewall'] ->
@@ -83,6 +90,17 @@ define ffnord::mesh(
     fastd_secret => $fastd_secret,
     fastd_port   => $fastd_port,
     fastd_peers_git => $fastd_peers_git;
+  } ->
+  ffnord::fastd { "fastd_gw_${mesh_code}":
+    mesh_code => $mesh_code,
+    mesh_interface => $gw_interface,
+    mesh_mac  => $mesh_mac,
+    vpn_mac   => $gw_mac,
+    mesh_mtu  => $mesh_mtu,
+    fastd_secret => $fastd_secret,
+    fastd_port   => $fastd_gw_port,
+    fastd_methods => ["aes128-ctr+umac"],
+    fastd_peers_git => $fastd_gw_git;
   } ->
   ffnord::radvd { "br-${mesh_code}":
     mesh_ipv6_address    => $mesh_ipv6_address,
