@@ -170,6 +170,13 @@ class {
 class { 'ffnord::alfred': master => true }
 
 class { 'ffnord::etckeeper': }
+
+# Useful packages
+package {
+  ['vim','tcpdump','dnsutils','realpath','screen','htop','tcpdump','mlocate','tig']:
+    ensure => installed;
+}
+
 ```
 
 #### Mesh Type
