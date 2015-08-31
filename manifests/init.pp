@@ -62,12 +62,6 @@ define ffnord::mesh(
     ranges       => $dhcp_ranges,
     dns_servers  => $dns_servers;
   } ->
-  tidy { "empty-fastd-folder":
-    path    => "/etc/fastd",
-    recurse => true,
-    matches => [ '*' ],
-    rmdirs  => true,
-  } ->
   ffnord::fastd { "fastd_${mesh_code}":
     mesh_code => $mesh_code,
     mesh_interface => "${mesh_code}",
