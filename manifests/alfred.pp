@@ -49,8 +49,8 @@ class ffnord::alfred (
   vcsrepo { '/opt/alfred-announce':
     ensure => present,
     provider => git,
-    source => "https://github.com/ffnord/ffnord-gateway-alfred.git",
-    revision => "816a6fa659f83da3d60e4ce9c88a1f3d4c1499dd",
+    source => "https://github.com/ffnord/ffnord-alfred-announce.git",
+    revision => "b31922fd53d2796b69ac4bd260ad837a200d0d5f",
     require => [Package['python3'],Package['ethtool']];
   }
 
