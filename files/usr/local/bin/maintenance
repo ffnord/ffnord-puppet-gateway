@@ -27,6 +27,8 @@ case $1 in
       echo "Maintenance is off"
     else
       echo "Maintenance is on since $(date --date=date -d @${MAINTENANCE})"
+      diff=$(($(date +"%s")-$(date --date=date -d @${MAINTENANCE} +"%s")))
+      echo "$(($diff / 60)) minutes and $(($diff % 60)) seconds elapsed."
     fi
     ;;
   *)
