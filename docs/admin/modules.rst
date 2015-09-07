@@ -1,8 +1,8 @@
 Puppet Classes and Types
 ========================
 
-The ffnord-puppet-gateway module provide several puppet resources, in here
-we will discuss all directly usable resources. The omitted one are discussed
+The ffnord-puppet-gateway module provides several puppet resources. Here
+we will discuss all resources that are directly usable. The omitted ones are discussed
 in the developer documentation.
 
 ffnord::params (class)
@@ -62,16 +62,16 @@ maintenance
 
 You can define a value greater than zero to this attribute to bring the host into maintenance
 mode after puppet run, the value is currently not checked by any manifests in this module.
-So all services will be started after a puppet run, but the maintenance mode critical
-will son after shutdown by the ``check-gateway`` script.
+So all services will be started right after a puppet run, but only for some seconds, the maintenance mode
+will shutdown them soon by the ``check-gateway`` script, which is run every minute by cron.
 
 ffnord::mesh (type)
 -------------------
 
-This type introduces a new community to the host, there should be at least one ``ffnord::mesh`` resource in your manifest. Furthermore there have to be one declaration which match the values of the ``ffnord::param`` class.
+This type introduces a new community to the host, there should be at least one ``ffnord::mesh`` resource in your manifest. Furthermore there have to be one declaration which match the values of the ``ffnord::params`` class.
 
-Currently this makes the host to be a gateway for the introduced community.
-Introducing ``ntpd``, ``dhcpd``, ``firewall``, ``bird``, ``bird6``, ``bind9`` and ``fastd`` services and configurating the network interfaces ``br-${mesh_code}``.
+Currently this makes the host to be a gateway for the introduced 
+Introducing ``ntpd``, ``dhcpd``, ``firewall``, ``bird``, ``bird6``, ``bind9`` and ``fastd`` services and configuring the network interfaces ``br-${mesh_code}``.
 
 .. code-block:: ruby
 
@@ -122,7 +122,7 @@ mesh_ipv4
 
 mesh_mtu
 ........
-* Default: ``1426``
+* Default: ``1280``
 
 The mtu used for the fastd instance of this communities mesh interface.
 
@@ -140,7 +140,7 @@ fastd_secret
 
 fastd_port
 ..........
-* Example value: ``10035``
+* Example value: ``11235``
 
 fastd_peers_git
 ...............
@@ -158,11 +158,11 @@ ffnord::named::zone (type)
 --------------------------
 When you have a zone that is managed by your community you can import the
 corresponding zone files from a git repository and include it into the local
-running name server. The repo and configuration file in it must forfill some
+running name server. The repo and configuration file in it must fulfill some
 requirements:
 
-* There must be an configuration file named ``${resource_name}.conf``
-* All files which are included in the configuratoin file should used a absoulte
+* There must exist a configuration file named ``${resource_name}.conf``
+* All files which are included in the configuration file should use an absoulte
   path beginning with ``/etc/bind/zones/${resource_name}/``.
 
 .. code-block:: ruby
@@ -198,9 +198,9 @@ used to tunnel the all of the networks traffic into the internet.
 
   class {
     'ffnord::vpn::provider::hideio':
-      openvpn_server => # a url or ip-address to an hideio-server
-      openvpn_port   => # Port of the hideio-server
-      openvpn_user   => # Username used to authentificate at the server
+      openvpn_server   => # a url or ip-address to a hideio-server
+      openvpn_port     => # Port of the hideio-server
+      openvpn_user     => # Username used to authentificate at the server
       openvpn_password => # Password used to authentificate at the server
   }
 
@@ -231,7 +231,7 @@ The password to authentificate at the openvpn-server.
 ffnord::icvpn::setup (type)
 ---------------------------
 This type contains all information, which is used to connect to the icvpn
-and establish BGP-peerings with other communitys.
+and establish BGP-peerings with other communities.
 
 .. code-block:: ruby
 
@@ -241,7 +241,7 @@ and establish BGP-peerings with other communitys.
     icvpn_ipv6_address     => # transfer network IPv6 address
     icvpn_exclude_peerings => # Lists of icvpn names
   
-    tinc_keyfile => # Private Key for tinc
+    tinc_keyfile           => # Private Key for tinc
   }
 
 Attributes

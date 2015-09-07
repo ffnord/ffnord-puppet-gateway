@@ -20,7 +20,7 @@ Admin Documentation
    admin/modules
    admin/mail
    scripts/index
-   configuration/index
+.. configuration/index
 
    
 Developer Documentation
