@@ -1,9 +1,9 @@
 # Common functions for pulling and updating data from git repositorys.
-# Cron jobs should call pull on script deriving from this, which
-# should, when changes are incoming, call reload in the post-update hook.
+# Cron jobs should call pull on script deriving from this, which should
+# call reload in the post-update hook when changes are incoming.
 # 
-# When calling by hand you could decide if you just reload and thus rebuild
-# ,restart or whatever or pull in new data and then do the upper stuff.
+# When calling by hand you could decide if you just reload and thus rebuild,
+# restart or whatever or pull in new data and then do the upper stuff.
 # 
 
 source /etc/ffnord
@@ -28,7 +28,7 @@ case $2 in
     fi
     ;;
   *)
-    echo "Usage: $(basename "$1") [pull|reload|help]"
+    echo "Usage: $(basename "$0") [pull|reload|help]"
     ;;
 esac  
 
