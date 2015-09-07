@@ -99,7 +99,7 @@ ffnord::mesh {
     mesh_peerings => "/root/mesh_peerings.yaml",
     
     fastd_secret => "/root/fastd_secret.key",
-    fastd_port   => 11235,
+    fastd_port   => 11280,
     fastd_peers_git => 'git://somehost/peers.git',
     
     dhcp_ranges => [ '10.35.0.2 10.35.0.254'
@@ -298,7 +298,7 @@ automatically! You have to call `build-firewall` to apply them.
 
 ### Run Puppet
 
-To apply the puppet manifest (e.g. saved as `gateway.pp`) run:
+To apply the puppet manifest (e.g. saved as `/root/gateway.pp`) run:
 
 ```
 puppet apply --verbose /root/gateway.pp
@@ -309,6 +309,14 @@ The verbose flag is optional and shows all changes.
 To be even more catious you can also add the `--noop` flag to only show changes
 but not apply them.
 
+### Re-run Puppet
+
+To run puppet again, you have to ensure that old fastd-configurations are deleted before you start:
+```
+rm -Rf /etc/fastd/
+puppet apply --verbose /root/gateway.pp
+```
+
 ## Maintenance Mode
 
 To allow administrative operations on a gateway without harming user connections
@@ -318,14 +326,20 @@ you should bring the gateway into maintenance mode:
 maintenance on
 ```
 
-This will deactivate the gateway feature of batman in the next run of check-gateway.
-And after DHCP-Lease-Time there should be no user device with a default route to
+This will deactivate the gateway feature of batman in the next run of check-gateway (cronjob every minute).
+And after DHCP-Lease-Time (usually one hour) there should be no user device left with a default route to
 the gateway. 
 
 To deactivate maintenance mode and reactivate the batman-adv gateway feature:
 
 ```
 maintenance off
+```
+
+check with 
+
+```
+maintenance status
 ```
 
 ## FASTD Query
