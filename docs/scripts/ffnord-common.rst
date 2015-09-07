@@ -1,15 +1,15 @@
 Common Repository Handling
 ==========================
 
-The ``ffnord-puppet-gateway`` module applicate some git repoistories
+The ``ffnord-puppet-gateway`` module applicates some git repositories
 to retrieve metadata, peering pubkeys et cetera. Handling those repositories
 boil down to pulling changes and regenerate configuration or reload services
-on the change case. We have abstracted those mechanics to a template script
-which is possitioned in ``/usr/local/include/ffnord-update.common``. 
+in case something changed. We have abstracted those mechanics into a template 
+script placed in ``/usr/local/include/ffnord-update.common``. 
 
 ::
 
-  Usage: script-name [pull|reload|help]
+  Usage: /usr/local/include/ffnord-update.common [pull|reload|help]
 
 
 
