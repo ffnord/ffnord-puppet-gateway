@@ -12,6 +12,7 @@ The ffnord-puppet-gateway module has some depencies to the host:
 * OS: Debian 7.7 (Wheezy)
 * Packages: puppet git
 * Preinstalled puppet modules
+
  * puppetlabs-stdlib
  * puppetlabs-apt
  * puppetlabs-vcsrepo
@@ -73,12 +74,12 @@ example manifest and its dependencies.
         mesh_mac     => "de:ad:be:ef:de:ad",
         mesh_ipv6    => "fd35:f308:a922::ff00/64,
         mesh_ipv4    => "10.35.0.1/19",
-        mesh_mtu     => "1426",
+        mesh_mtu     => "1280",
         range_ipv4   => "10.35.0.0/16",
         mesh_peerings => "/root/mesh_peerings.yaml",
 
         fastd_secret => "/root/fastd_secret.key",
-        fastd_port   => 10035,
+        fastd_port   => 11235,
         fastd_peers_git => 'git://somehost/peers.git',
 
         dhcp_ranges => [ '10.35.0.2 10.35.0.254'
