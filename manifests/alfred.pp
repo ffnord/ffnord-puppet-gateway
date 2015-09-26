@@ -4,7 +4,7 @@ class ffnord::alfred (
   vcsrepo { '/opt/alfred':
     ensure => present,
     provider => git,
-    revision => "244b3ffe5f0bb23fd4750de1c7ddd18b712351ae",
+    revision => "6ffa009183cf5a223bf2198f7711b143b1e80109",
     source => "http://git.open-mesh.org/alfred.git";
   }
 
