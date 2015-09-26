@@ -4,7 +4,7 @@ class ffnord::alfred (
   vcsrepo { '/opt/alfred':
     ensure => present,
     provider => git,
-    revision => "dfb1ea4289387bc38d7fc7c51cfa9b0f3439e66f",
+    revision => "6ffa009183cf5a223bf2198f7711b143b1e80109",
     source => "http://git.open-mesh.org/alfred.git";
   }
 
@@ -34,7 +34,7 @@ class ffnord::alfred (
   }
 
   exec { 'alfred':
-    command => "/usr/bin/make",
+    command => "/usr/bin/make CONFIG_ALFRED_CAPABILITIES=n",
     cwd => "/opt/alfred/",
     require => [Vcsrepo['/opt/alfred'],Package['build-essential'],Package['pkg-config'],Package['libgps-dev']];
   }
