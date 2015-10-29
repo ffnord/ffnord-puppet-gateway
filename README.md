@@ -75,7 +75,7 @@ class {
     router_id => "10.35.0.1", # The id of this router, probably the ipv4 address
                               # of the mesh device of the providing community
     icvpn_as => "65035",      # The as of the providing community
-    wan_devices => ['eth0']   # A array of devices which should be in the wan zone
+    wan_devices => ['eth0'],   # A array of devices which should be in the wan zone
     
     wmem_default = 87380,     # Define the default socket send buffer
     wmem_max     = 12582912,  # Define the maximum socket send buffer
