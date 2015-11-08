@@ -1,6 +1,5 @@
 # Freifunk Gateway Module
 
-* Martin Schütte <info@mschuette.name>
 * Daniel Ehlers <danielehlers@mindeye.net>
 
 This module tries to automate the configuration of a FFNord Freifunk Gateway.
@@ -77,12 +76,12 @@ class {
     icvpn_as => "65035",      # The as of the providing community
     wan_devices => ['eth0'],   # A array of devices which should be in the wan zone
     
-    wmem_default = 87380,     # Define the default socket send buffer
-    wmem_max     = 12582912,  # Define the maximum socket send buffer
-    rmem_default = 87380,     # Define the default socket recv buffer
-    rmem_max     = 12582912,  # Define the maximum socket recv buffer
+    wmem_default => 87380,     # Define the default socket send buffer
+    wmem_max     => 12582912,  # Define the maximum socket send buffer
+    rmem_default => 87380,     # Define the default socket recv buffer
+    rmem_max     => 12582912,  # Define the maximum socket recv buffer
     
-    max_backlog  = 5000,      # Define the maximum packages in buffer
+    max_backlog  => 5000,      # Define the maximum packages in buffer
 }
 
 # You can repeat this mesh block for every community you support
