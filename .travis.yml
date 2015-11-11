@@ -19,4 +19,4 @@ before_install:
   - cd /home/travis/build/MTRNord/ffnord-puppet-gateway
 
 script:
-    - bash tests/validate.sh
+    - bash tests/validate.sh tests/testGW.pp
