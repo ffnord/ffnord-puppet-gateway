@@ -7,6 +7,7 @@ before_install:
   - wget http://apt.puppetlabs.com/puppetlabs-release-precise.deb
   - sudo dpkg -i puppetlabs-release-precise.deb
   - sudo apt-get update -qq
+  - sudo apt-get install rubygems-integration
   - sudo gem install puppet-lint
   - sudo apt-get install --no-install-recommends puppet git
   - sudo puppet module install puppetlabs-stdlib
