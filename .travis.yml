@@ -1,6 +1,7 @@
 language: bash
 
 before_install:
+  - pwd 
   - sudo apt-get update -qq
   - sudo apt-get install -y python-software-properties
   - cd /tmp
