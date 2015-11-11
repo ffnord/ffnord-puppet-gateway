@@ -16,6 +16,7 @@ before_install:
   - sudo puppet module install torrancew-account
   - cd /etc/puppet/modules
   - sudo git clone https://github.com/ffnord/ffnord-puppet-gateway ffnord
+  - cd ~/MTRNord/ffnord-puppet-gateway
 
 script:
     - bash tests/validate.sh
