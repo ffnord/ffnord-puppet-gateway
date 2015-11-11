@@ -1,8 +1,16 @@
 language: bash
 
-before_script:
-    //TODO install Requirements
-    - 
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y puppet-lint
+  - sudo apt-get install --no-install-recommends puppet git
+  - sudo puppet module install puppetlabs-stdlib
+  - sudo puppet module install puppetlabs-apt --version 1.5.1
+  - sudo puppet module install puppetlabs-vcsrepo
+  - sudo puppet module install saz-sudo
+  - sudo puppet module install torrancew-account
+  - cd /etc/puppet/modules
+  - git clone https://github.com/ffnord/ffnord-puppet-gateway ffnord
 
 script:
     - bash test/validate.sh
