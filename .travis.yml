@@ -1,0 +1,8 @@
+language: bash
+
+before_script:
+    //TODO install Requirements
+    - 
+
+script:
+    - bash test/validate.sh
