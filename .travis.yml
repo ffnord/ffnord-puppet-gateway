@@ -1,6 +1,7 @@
 language: bash
 
 before_install:
+  - source $HOME/.rvm/scripts/rvm 
   - sudo apt-get update -qq
   - sudo apt-get install -y python-software-properties
   - cd /tmp
