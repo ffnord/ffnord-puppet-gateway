@@ -1,7 +1,6 @@
 language: bash
 
 before_install:
-  - source $HOME/.rvm/scripts/rvm 
   - sudo apt-get update -qq
   - sudo apt-get install -y python-software-properties
   - cd /tmp
@@ -9,7 +8,7 @@ before_install:
   - sudo dpkg -i puppetlabs-release-precise.deb
   - sudo apt-get update -qq
   - sudo apt-get install rubygems
-  - sudo gem install puppet-lint
+  - gem install puppet-lint
   - sudo apt-get install --no-install-recommends puppet git
   - sudo puppet module install puppetlabs-stdlib
   - sudo puppet module install puppetlabs-apt --version 1.5.1
