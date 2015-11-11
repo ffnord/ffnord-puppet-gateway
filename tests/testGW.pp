@@ -22,7 +22,7 @@ ffnord::mesh {
     mesh_as      => 65035,
     mesh_mac     => "de:ad:be:ef:de:ad",
     vpn_mac      => "de:ad:be:ff:de:ad",
-    mesh_ipv6    => "fd35:f308:a922::ff00/64,
+    mesh_ipv6    => "fd35:f308:a922::ff00/64",
     mesh_ipv4    => "10.35.0.1/19",
     mesh_mtu     => "1280",
     range_ipv4   => "10.35.0.0/16",
