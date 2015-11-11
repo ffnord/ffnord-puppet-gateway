@@ -10,7 +10,7 @@ before_install:
   - sudo puppet module install saz-sudo
   - sudo puppet module install torrancew-account
   - cd /etc/puppet/modules
-  - git clone https://github.com/ffnord/ffnord-puppet-gateway ffnord
+  - sudo git clone https://github.com/ffnord/ffnord-puppet-gateway ffnord
 
 script:
     - bash test/validate.sh
