@@ -20,4 +20,5 @@ before_install:
   - cd /home/travis/build/ffnord/ffnord-puppet-gateway
 
 script:
-    - bash tests/validate.sh tests/testGW.pp
+    - bash tests/validate.sh manifests/
+    - bash puppet parser validate tests/testGW.pp
