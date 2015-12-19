@@ -1,19 +1,16 @@
 #!/bin/bash
-# this script checks Maintenance mode and Gateway mide
+# this script checks maintenance mode and gateway mode
 # and checks if those services are running:
 # isc-dhcp-server radvd ntp openvpn rpcbind fastd bind9 bird6 bird alfred batadv-vis named tincd
 
-if test -e /etc/ffnord ; then 
-  . /etc/ffnord
+MESH_CODE=$(ls /sys/class/net/bat-* -d|sed 's/.*\/bat-//g')
+
+if test -e /etc/$MESH_CODE ; then 
+  . /etc/$MESH_CODE
   MAINTENANCE=${MAINTENANCE:-0}
 else
-  echo "no file /etc/ffnord present. MAINTENANCE mode is supposed off" 
+  echo "no file /etc/$MESH_CODE present. MAINTENANCE mode is supposed off" 
   MAINTENANCE=0
-fi
-
-if [ "$MESH_CODE"=="" ] ; then 
-  echo "no MESH_CODE in /etc/ffnord present. ffki is used" 
-  MESH_CODE=ffki
 fi
 
 R="\033[31m" #red
