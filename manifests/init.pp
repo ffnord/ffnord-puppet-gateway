@@ -119,10 +119,6 @@ define ffnord::mesh(
       icvpn_as => $mesh_as;
     }
   }
-  
-  ffnord::resources::ffnord::field {
-    "MESH_CODE": value => "${mesh_code}";
-  }
   # ffnord::opkg::mirror
   # ffnord::firmware mirror
 }
