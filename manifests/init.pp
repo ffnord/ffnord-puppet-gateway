@@ -119,6 +119,7 @@ define ffnord::mesh(
       icvpn_as => $mesh_as;
     }
   }
+  
   # ffnord::opkg::mirror
   # ffnord::firmware mirror
 }
