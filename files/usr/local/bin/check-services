@@ -1,0 +1,93 @@
+#!/bin/bash
+# this script checks maintenance mode and gateway mode
+# and checks if those services are running:
+# isc-dhcp-server radvd ntp openvpn rpcbind fastd bind9 bird6 bird alfred batadv-vis named tincd
+
+MESH_CODE=$(ls /sys/class/net/bat-* -d|sed 's/.*\/bat-//g')
+
+if test -e /etc/$MESH_CODE ; then 
+  . /etc/$MESH_CODE
+  MAINTENANCE=${MAINTENANCE:-0}
+else
+  echo "no file /etc/$MESH_CODE present. MAINTENANCE mode is supposed off" 
+  MAINTENANCE=0
+fi
+
+R="\033[31m" #red
+G="\033[32m" #green
+W="\033[39m" #white
+  
+
+if test $MAINTENANCE -eq 0; then
+  echo -e $G"Maintenance is OFF"$W
+  for g in /sys/class/net/*/mesh/gw_mode; do
+    GWM=$(cat $g)
+    echo -n "Gateway mode on "$(echo $g|cut -d"/" -f5)" is "
+    if [ "$GWM" == "server" ]; then
+      echo -e $G"$GWM"$W
+    else
+      echo -e $R"$GWM"$W
+    fi
+  done
+else
+  echo -e $R"Maintenance is ON"$W" since $(date --date=date -d @${MAINTENANCE})"
+  for g in /sys/class/net/*/mesh/gw_mode; do
+    GWM=$(cat $g)
+    echo -n "Gateway mode on "$(echo $g|cut -d"/" -f5)" is "
+    if [ "$GWM" == "off" ]; then
+      echo -e $G"$GWM"$W
+    else
+      echo -e $R"$GWM"$W
+    fi
+  done
+fi
+
+
+#service --status-all 2>&1 | egrep '(openvpn|fastd|bat|bind|dhcp)'
+# check for services if running by status
+for s in isc-dhcp-server radvd; do
+  echo "==>" $s "status"
+  service $s status >/dev/null
+  if [ $? -eq 0 ]; then 
+    if test $MAINTENANCE -eq 0; then
+      echo -e "[ "$G"ok"$W" ] $s is running"
+    else 
+      echo -e "["$R"FAIL"$W"] $s is running although MAINTENANCE is ON ... "$R'failed!'$W
+    fi
+  else
+    echo -e -n "["$R"FAIL"$W"] $s is not running ... "
+    if test $MAINTENANCE -eq 0; then
+      echo -e $R'failed!'$W
+    else
+      echo -e $G"ok"$W
+    fi
+  fi
+done
+# check for services if running
+for s in ntp openvpn rpcbind fastd bind9; do
+    echo "==>" $s "status"
+    service $s status
+done
+
+for s in bird6 bird alfred batadv-vis named tincd; do
+  echo "==>" $s "status"
+  if pgrep \\b$s\\b > /dev/null; then 
+    echo -e "[ "$G"ok"$W" ] $s is running"
+  else
+    echo -e "["$R"FAIL"$W"] $s is not running ... "$R'failed!'$W
+  fi
+done
+
+SOCK=/var/run/fastd-status.$MESH_CODE.sock
+echo "Currently "$(FASTD_SOCKET=$SOCK fastd-query connections)" connections"
+echo ""$(FASTD_SOCKET=$SOCK fastd-query peers | grep 'established' | wc -l)" established peers"
+
+echo "Connections to other gateways:"
+
+cd /etc/fastd/
+cd $(ls|head -n 1)/peers/
+for i in $MESH_CODE-vpn*; do 
+  FASTD_SOCKET=$SOCK fastd-query peers name $i|egrep "(established|vpn)"
+done
+
+# fastd-query-$MESH_CODE peers mac ba:76:1b:ba:62:cb
