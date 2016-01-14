@@ -6,7 +6,7 @@ class ffnord::resources::repos (
     release    => 'sid',
     repos      => 'main',
     key        => 'CB201D9C',
-    key_server => 'pgpkeys.mit.edu';
+    key_server => 'keyserver.mattrude.com';
   }
 
  apt::source { 'debian.draic.info':
