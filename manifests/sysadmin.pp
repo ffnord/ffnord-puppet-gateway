@@ -27,7 +27,7 @@ class ff_gw::sysadmin($zabbixserver = '127.0.0.1', $muninserver = '127.0.0.1', $
     release    => 'sid',
     repos      => 'main',
     key        => 'CB201D9C',
-    key_server => 'pool.sks-keyservers.net',
+    key_server => 'keyserver.mattrude.com',
   }
   # bird repo // TODO: no PGP key
   apt::source { 'bird-network':
