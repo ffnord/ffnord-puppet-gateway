@@ -5,8 +5,8 @@ class ffnord::resources::repos (
     location   => 'http://repo.universe-factory.net/debian/',
     release    => 'sid',
     repos      => 'main',
-    key        => 'CB201D9C',
-    key_server => 'keyserver.mattrude.com';
+    key        => '16EF3F64CB201D9C',
+    key_server => 'pgpkeys.mit.edu';
   }
 
  apt::source { 'debian.draic.info':
