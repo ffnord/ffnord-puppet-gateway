@@ -26,7 +26,7 @@ class ff_gw::sysadmin($zabbixserver = '127.0.0.1', $muninserver = '127.0.0.1', $
     location   => 'http://repo.universe-factory.net/debian/',
     release    => 'sid',
     repos      => 'main',
-    key        => '16EF3F64CB201D9C',
+    key        => 'CB201D9C',
     key_server => 'pool.sks-keyservers.net',
   }
   # bird repo // TODO: no PGP key
