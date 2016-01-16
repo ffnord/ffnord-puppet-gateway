@@ -12,6 +12,9 @@ include "secret.conf";
 mtu <%= @mesh_mtu %>;
 status socket "/var/run/fastd-status.<%= @mesh_interface %>.sock";
 include peers from "peers";
+<% if @fastd_verify.length > 0 %>
+on verify "<%= @fastd_verify %>";
+<% end %>
 on up "
  modprobe batman-adv
  ip link set address <%= @vpn_mac %> dev $INTERFACE
