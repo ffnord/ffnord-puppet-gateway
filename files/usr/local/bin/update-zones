@@ -10,5 +10,5 @@ pull() {
 }
 
 reload() {
-  rndc reload
+  /usr/sbin/rndc reload
 }
