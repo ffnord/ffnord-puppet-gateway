@@ -21,4 +21,3 @@ before_install:
 
 script:
     - bash tests/validate.sh manifests/
-    - bash puppet parser validate tests/testGW.pp
