@@ -63,7 +63,7 @@ class ffnord::firewall (
       owner => 'root',
       group => 'root',
       mode => '0755',
-      source => "puppet:///modules/ffnord/usr/local/bin/build-firewall",
+      source => "puppet:///modules/ffnord/usr/local/bin/build-firewall";
     '/etc/iptables.d/000-RESET': 
       ensure => file,
       owner => 'root',
