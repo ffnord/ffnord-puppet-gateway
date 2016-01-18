@@ -23,6 +23,17 @@ function ip46tables() {
   ip6tables $*
 }
 
+## Wrapper function for iptables-save or netfilter-save
+# selects correct service-name, depending on dist codename
+function save_rules(){
+  local service='iptables-persistent'
+  case  "$(lsb_release -c -s)" in
+        jessie) service='netfilter-persistent' ;;
+             *) service='iptables-persistent'  ;;
+  esac
+  /usr/sbin/service $service save
+}
+
 ## Create a filter rule which blocks the given ip-range
 # IPv4 Verion
 # #1: iptables chain
@@ -104,4 +115,4 @@ done
 
 . /etc/rclocal.d/firewall-values
 
-/usr/sbin/service iptables-persistent save
+save_rules

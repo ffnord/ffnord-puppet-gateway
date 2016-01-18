@@ -39,8 +39,13 @@ class ffnord::firewall (
       ensure => installed;
   }
 
+  $iptablespersistentservice=$lsbdistcodename ? {
+	'jessie' => 'netfilter-persistent',
+	default  => 'iptables-persistent',
+ }
+
   service {
-    'iptables-persistent':
+    $iptablespersistentservice:
        ensure => running,
        hasrestart => true,
        enable => true,
