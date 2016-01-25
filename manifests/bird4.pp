@@ -10,15 +10,21 @@ class ffnord::bird4 (
       command => '/usr/lib/nagios/plugins/check_procs -w 1:1 -c 1:1 -C bird';
   }
 
-  package { 
-    'bird':
-      ensure => installed,
-      require => [
-        File['/etc/apt/preferences.d/bird'],
-        Apt::Source['debian-backports']
-      ];
+  if($lsbdistcodename=="wheezy"){
+    package { 
+      'bird':
+        ensure => installed,
+        require => [
+          File['/etc/apt/preferences.d/bird'],
+          Apt::Source['debian-backports']
+        ];
+    }
+  } else {
+    package { 
+      'bird':
+        ensure => installed;
+    }
   }
- 
   file {
     '/etc/bird/bird.conf.d/':
       ensure => directory,

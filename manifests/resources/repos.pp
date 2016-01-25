@@ -11,7 +11,7 @@ class ffnord::resources::repos (
 
  apt::source { 'debian.draic.info':
     location    => 'http://debian.draic.info/',
-    release     => 'wheezy',
+    release     => "${lsbdistcodename}",
     repos       => 'main',
     include_src => false,
     key_server  => 'pgpkeys.mit.edu';
@@ -20,8 +20,8 @@ class ffnord::resources::repos (
   apt::source { 'debian-backports':
      location          => $debian_mirror,
      required_packages => 'debian-keyring debian-archive-keyring',
-     release           => 'wheezy-backports',
+     release           => "${lsbdistcodename}-backports",
      repos             => 'main contrib',
-     include_src       => false,
+     include_src       => false;
   }
 }

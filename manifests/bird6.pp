@@ -10,15 +10,21 @@ class ffnord::bird6 (
       command => '/usr/lib/nagios/plugins/check_procs -w 1:1 -c 1:1 -C bird6';
   }
 
-  package { 
-    'bird6':
-      ensure => installed,
-      require => [
-        File['/etc/apt/preferences.d/bird'],
-        Apt::Source['debian-backports']
-      ];
+  if($lsbdistcodename=="wheezy"){
+    package { 
+      'bird6':
+        ensure => installed,
+        require => [
+          File['/etc/apt/preferences.d/bird'],
+          Apt::Source['debian-backports']
+        ];
+    }
+  } else {
+    package { 
+      'bird6':
+        ensure => installed;
+    }
   }
- 
   file {
     '/etc/bird/bird6.conf.d/':
       ensure => directory,
