@@ -298,6 +298,10 @@ automatically! You have to call `build-firewall` to apply them.
 
 ### Run Puppet
 
+On Debian jessie you have to load the iptables module manally before applying the puppet manifest:
+
+    modprobe ip_tables
+
 To apply the puppet manifest (e.g. saved as `/root/gateway.pp`) run:
 
 ```
@@ -315,6 +319,7 @@ To run puppet again, you have to ensure that old fastd-configurations are delete
 ```
 rm -Rf /etc/fastd/
 puppet apply --verbose /root/gateway.pp
+build-firewall
 ```
 
 ## Maintenance Mode
