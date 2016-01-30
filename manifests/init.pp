@@ -67,6 +67,7 @@ define ffnord::mesh(
     mesh_code       => $mesh_code,
     mesh_interface  => "${mesh_code}",
     mesh_mac        => $mesh_mac,
+    mesh_hop_penalty=> $mesh_hop_penalty,
     vpn_mac         => $vpn_mac,
     mesh_mtu        => $mesh_mtu,
     fastd_secret    => $fastd_secret,
