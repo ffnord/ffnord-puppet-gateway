@@ -1,4 +1,5 @@
 define ffnord::batman-adv( $mesh_code
+                         , $mesh_hop_penalty
                          , $batman_it = 5000
                          ) {
   include ffnord::resources::batman-adv

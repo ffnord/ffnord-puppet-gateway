@@ -1,6 +1,7 @@
 define ffnord::fastd( $mesh_code
                      , $mesh_interface # may not be more than 10 characters
                      , $mesh_mac
+                     , $mesh_hop_penalty = 60 # hop penalty for batman advanced
                      , $vpn_mac
                      , $mesh_mtu = 1280
 
@@ -46,7 +47,8 @@ define ffnord::fastd( $mesh_code
   }
   if ! defined(Ffnord::Batman-Adv["ffnord_batman_adv_${mesh_code}"]) {
       ffnord::batman-adv { "ffnord_batman_adv_${mesh_code}":
-        mesh_code => $mesh_code;
+        mesh_code        => $mesh_code,
+        mesh_hop_penalty => $mesh_hop_penalty;
       }
   }
   vcsrepo { "/etc/fastd/${mesh_interface}-mvpn/peers":
