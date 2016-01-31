@@ -15,7 +15,7 @@ class ffnord::resources::repos (
 
   apt::source { 'debian.draic.info':
     location    => 'http://debian.draic.info/',
-    release     => "${lsbdistcodename}",
+    release     => "wheezy",
     repos       => 'main',
     include_src => false,
     key_server  => 'pgpkeys.mit.edu';
