@@ -1,6 +1,10 @@
 class ffnord::resources::repos (
   $debian_mirror = $ffnord::params::debian_mirror
 ) inherits ffnord::params {
+  package { 
+    'apt-transport-https':
+      ensure => installed;
+  } ->
   apt::source { 'repo.universe-factory':
     location   => 'https://repo.universe-factory.net/debian/',
     release    => 'sid',
@@ -9,7 +13,7 @@ class ffnord::resources::repos (
     key_server => 'pgpkeys.mit.edu';
   }
 
- apt::source { 'debian.draic.info':
+  apt::source { 'debian.draic.info':
     location    => 'http://debian.draic.info/',
     release     => 'wheezy',
     repos       => 'main',
