@@ -69,3 +69,6 @@ if [ "$NEW_STATE" == "off" ]; then
 fi
 
 # vim: noai:ts=4:sw=4:ff=unix:ft=text:fdm=marker
+echo "conntrack sollte auf 1048576 gesetzt sein:"
+sysctl -a|grep conntrack_max --color=auto
+
