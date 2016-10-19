@@ -38,7 +38,7 @@ Install Puppet and some required modules with:
 apt-get install --no-install-recommends puppet git
 puppet module install puppetlabs-stdlib
 puppet module install puppetlabs-apt --version 1.5.1
-puppet module install puppetlabs-vcsrepo
+puppet module install puppetlabs-vcsrepo --version 1.3.2
 puppet module install saz-sudo
 puppet module install torrancew-account
 ```
