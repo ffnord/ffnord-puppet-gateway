@@ -15,11 +15,11 @@ There are types for setting up monitoring, icvpn, anonymous vpn and alfred annou
 ## Open Problems
 
 * As usual, you should have configure the fully qualified domain name (fqdn) before running
-  this module, you can check this with 'hostname -f'.
-* The configured dns server only provide support for the root zone.
+  this module, you can check this with `hostname -f`.
+* The configured dns server only provides support for the root zone.
   Custom tlds are currently not supported.  
 * Bird6 must be reconfigured after a puppet run, otherwise the icvpn protocols are not available
-* When touching the network devices on a rerun named should be restarted.
+* When touching the network devices on a rerun `named` should be restarted.
 
 ## TODO
 
@@ -35,7 +35,7 @@ Install as a puppet module, then include with node-specific parameters.
 Install Puppet and some required modules with:
 
 ```
-apt-get install --no-install-recommends puppet git
+apt-get install --no-install-recommends puppet git apt-transport-https
 puppet module install puppetlabs-stdlib
 puppet module install puppetlabs-apt --version 1.5.1
 puppet module install puppetlabs-vcsrepo --version 1.3.2
@@ -60,7 +60,7 @@ anonymous vpn uplink.
 
 Please make sure that the content of your fastd key-file looks like this:
 ```
-secret "<********>";
+secret "**************************";
 ```
 The stars are replaced by your privat fastd key
 
@@ -305,9 +305,9 @@ puppet apply --verbose /root/gateway.pp
 build-firewall
 ```
 
-The verbose flag is optional and shows all changes.
-To be even more catious you can also add the `--noop` flag to only show changes
-but not apply them.
+The verbose flag is optional and shows all changes. To be even more catious you can
+also add the `--noop` flag to only show changes but not apply them.  
+**This should be run best inside a `screen` session!**
 
 ### Re-run Puppet
 
