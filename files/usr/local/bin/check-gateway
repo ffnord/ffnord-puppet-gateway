@@ -43,29 +43,36 @@ OLD_STATE="$(cat $MESH/gw_mode)"
     if [ "$NEW_STATE" == "off" ]; then
         # Shutdown DHCP server to prevent renewal of leases
         /usr/sbin/service isc-dhcp-server stop
+        # Shutdown RAdv server to prevent announcement of IPv6 routing prefixes
+        /usr/sbin/service radvd stop
     fi
 
     # Check whether gateway modus has been activated
     if [ "$NEW_STATE" == "server" ]; then
         # Restart DHCP server
         /usr/sbin/service isc-dhcp-server start
+        /usr/sbin/service radvd start
     fi
     exit 0
 done
 
 if [ "$NEW_STATE" == "server" ]; then
-    /usr/sbin/service isc-dhcp-server status 2>&1> /dev/null
-    if [[ $? -ne 0 ]]
-    then
-        /usr/sbin/service isc-dhcp-server restart
-    fi
+    for service in isc-dhcp-server radvd; do
+      /usr/sbin/service $service status 2>&1> /dev/null
+      if [[ $? -ne 0 ]]
+      then
+          /usr/sbin/service $service restart
+      fi
+    done
 fi
 if [ "$NEW_STATE" == "off" ]; then
-    /usr/sbin/service isc-dhcp-server status 2>&1> /dev/null
-    if [[ $? -eq 0 ]]
-    then
-        /usr/sbin/service isc-dhcp-server stop
-    fi
+    for service in isc-dhcp-server radvd; do
+      /usr/sbin/service $service status 2>&1> /dev/null
+      if [[ $? -eq 0 ]]
+      then
+          /usr/sbin/service $service stop
+      fi
+    done
 fi
 
 # vim: noai:ts=4:sw=4:ff=unix:ft=text:fdm=marker
