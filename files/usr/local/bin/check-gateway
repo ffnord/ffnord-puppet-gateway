@@ -21,14 +21,14 @@ if test $MAINTENANCE -eq 0; then
         /sbin/ip rule add from all fwmark 0x1 unreachable preference 32001
     fi
 
-    log "Trying to get a reply from $GW_CONTROL_IP..."
+    logger "Trying to get a reply from $GW_CONTROL_IP..."
     ping -q -m 1 $GW_CONTROL_IP -c 4 -i 1 -W 5 >/dev/null 2>&1
 
     if test $? -eq 0; then
-        log "Got a reply from $GW_CONTROL_IP, so everything seems to be in order."
+        logger "Got a reply from $GW_CONTROL_IP, so everything seems to be in order."
         NEW_STATE=server
     else
-        log "Did not get a reply from $GW_CONTROL_IP, so there seems to be a problem."
+        logger "Did not get a reply from $GW_CONTROL_IP, so there seems to be a problem."
         NEW_STATE=off
     fi
 
@@ -63,7 +63,7 @@ done
 if test $MAINTENANCE -eq 0; then
     if [ "$OLD_STATE" != "$NEW_STATE" ] && [ "$NEW_STATE" == "off" ]; then
       /usr/sbin/service openvpn restart
-      log "Restart VPN to regain VPN connectivity!"
+      logger "Restart VPN to regain VPN connectivity!"
     fi
 fi
 
