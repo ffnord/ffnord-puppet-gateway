@@ -21,14 +21,14 @@ if test $MAINTENANCE -eq 0; then
         /sbin/ip rule add from all fwmark 0x1 unreachable preference 32001
     fi
 
-    logger -p daemon.info "Trying to get a reply from $GW_CONTROL_IP..."
+    logger -t check-gateway -p daemon.info "Trying to get a reply from $GW_CONTROL_IP..."
     ping -q -m 1 $GW_CONTROL_IP -c 4 -i 1 -W 5 >/dev/null 2>&1
 
     if test $? -eq 0; then
-        logger -p daemon.info "Got a reply from $GW_CONTROL_IP, so everything seems to be in order."
+        logger -t check-gateway -p daemon.info "Got a reply from $GW_CONTROL_IP, so everything seems to be in order."
         NEW_STATE=server
     else
-        logger -p daemon.err -s "Did not get a reply from $GW_CONTROL_IP, so there seems to be a problem."
+        logger -t check-gateway -p daemon.err -s "Did not get a reply from $GW_CONTROL_IP, so there seems to be a problem."
         NEW_STATE=off
     fi
 
@@ -40,11 +40,11 @@ for MESH in /sys/class/net/*/mesh; do
 OLD_STATE="$(cat $MESH/gw_mode)"
 [ "$OLD_STATE" == "$NEW_STATE" ] && continue
     echo $NEW_STATE > $MESH/gw_mode
-    logger -p daemon.notice -s "batman gateway mode changed to $NEW_STATE"
+    logger -t check-gateway -p daemon.notice -s "batman gateway mode changed to $NEW_STATE"
 
     # Check whether gateway modus has been deactivated
     if [ "$NEW_STATE" == "off" ]; then
-        logger -p daemon.notice -s "stopping isc-dhcp-server and radvd"
+        logger -t check-gateway -p daemon.notice -s "stopping isc-dhcp-server and radvd"
         # Shutdown DHCP server to prevent renewal of leases
         /usr/sbin/service isc-dhcp-server stop
         # Shutdown RAdv server to prevent announcement of IPv6 routing prefixes
@@ -53,7 +53,7 @@ OLD_STATE="$(cat $MESH/gw_mode)"
 
     # Check whether gateway modus has been activated
     if [ "$NEW_STATE" == "server" ]; then
-        logger -p daemon.notice -s "starting isc-dhcp-server and radvd"
+        logger -t check-gateway -p daemon.notice -s "starting isc-dhcp-server and radvd"
         # Restart DHCP server
         /usr/sbin/service isc-dhcp-server start
         /usr/sbin/service radvd start
@@ -65,7 +65,7 @@ done
 if test $MAINTENANCE -eq 0; then
     if [ "$OLD_STATE" != "$NEW_STATE" ] && [ "$NEW_STATE" == "off" ]; then
       /usr/sbin/service openvpn restart
-      logger -p daemon.notice -s "Restart VPN to regain VPN connectivity!"
+      logger -t check-gateway -p daemon.notice -s "Restart VPN to regain VPN connectivity!"
     fi
 fi
 
@@ -74,7 +74,7 @@ if [ "$NEW_STATE" == "server" ]; then
       /usr/sbin/service $service status 2>&1> /dev/null
       if [[ $? -ne 0 ]]
       then
-          logger -p daemon.notice -s "restarting $service"
+          logger -t check-gateway -p daemon.notice -s "restarting $service"
           /usr/sbin/service $service restart
       fi
     done
@@ -84,7 +84,7 @@ if [ "$NEW_STATE" == "off" ]; then
       /usr/sbin/service $service status 2>&1> /dev/null
       if [[ $? -eq 0 ]]
       then
-          logger -p daemon.notice -s "stopping $service"
+          logger -t check-gateway -p daemon.notice -s "stopping $service"
           /usr/sbin/service $service stop
       fi
     done
