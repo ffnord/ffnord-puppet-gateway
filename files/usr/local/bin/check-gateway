@@ -59,6 +59,14 @@ OLD_STATE="$(cat $MESH/gw_mode)"
     exit 0
 done
 
+#Fiddle with the vpn
+if test $MAINTENANCE -eq 0; then
+    if [ "$OLD_STATE" != "$NEW_STATE" ] && [ "$NEW_STATE" == "off" ]; then
+      /usr/sbin/service openvpn restart
+      log "Restart VPN to regain VPN connectivity!"
+    fi
+fi
+
 if [ "$NEW_STATE" == "server" ]; then
     for service in isc-dhcp-server radvd; do
       /usr/sbin/service $service status 2>&1> /dev/null
