@@ -28,7 +28,7 @@ if test $MAINTENANCE -eq 0; then
         logger -t check-gateway -p daemon.info "Got a reply from $GW_CONTROL_IP, so everything seems to be in order."
         NEW_STATE=server
     else
-        logger -t check-gateway -p daemon.err -s "Did not get a reply from $GW_CONTROL_IP, so there seems to be a problem."
+        logger -t check-gateway -p daemon.err "Did not get a reply from $GW_CONTROL_IP, so there seems to be a problem."
         NEW_STATE=off
     fi
 
