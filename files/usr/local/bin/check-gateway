@@ -9,7 +9,7 @@ MAINTENANCE=${MAINTENANCE:-0}
 ping_test(){
     count=20
     for x in $(seq 1 "$count"); do
-      ping -q -m 1 $GW_CONTROL_IP -c 1 -i 1 -W 2 # >/dev/null 2>&1
+      ping -q -m 1 $GW_CONTROL_IP -c 1 -i 1 -W 2 >/dev/null 2>&1
       if test $?; then
         count=$(expr "$count" - 1)
       fi
