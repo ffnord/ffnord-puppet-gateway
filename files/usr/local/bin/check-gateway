@@ -6,6 +6,17 @@ shopt -s nullglob
 
 MAINTENANCE=${MAINTENANCE:-0}
 
+ping_test(){
+    count=20
+    for x in $(seq 1 "$count"); do
+      ping -q -m 1 $GW_CONTROL_IP -c 1 -i 1 -W 2 >/dev/null 2>&1
+      if test $?; then
+        count=$(expr "$count" - 1)
+      fi
+    done
+    return "$count"
+}
+ 
 if test $MAINTENANCE -eq 0; then
 
     # ensure that we have the appropriate rules
@@ -21,11 +32,14 @@ if test $MAINTENANCE -eq 0; then
         /sbin/ip rule add from all fwmark 0x1 unreachable preference 32001
     fi
 
-    ping -q -m 1 $GW_CONTROL_IP -c 4 -i 1 -W 5 >/dev/null 2>&1
+    logger -t check-gateway -p daemon.info "Trying to get a reply from $GW_CONTROL_IP..."
+    ping_test
 
-    if test $? -eq 0; then
+    if test $? -lt 2; then
+        logger -t check-gateway -p daemon.info "Got a reply from $GW_CONTROL_IP, so everything seems to be in order."
         NEW_STATE=server
     else
+        logger -t check-gateway -p daemon.err "Did not get a reply from $GW_CONTROL_IP, so there seems to be a problem."
         NEW_STATE=off
     fi
 
@@ -37,35 +51,46 @@ for MESH in /sys/class/net/*/mesh; do
 OLD_STATE="$(cat $MESH/gw_mode)"
 [ "$OLD_STATE" == "$NEW_STATE" ] && continue
     echo $NEW_STATE > $MESH/gw_mode
-    logger "batman gateway mode changed to $NEW_STATE"
+    logger -t check-gateway -p daemon.notice -s "batman gateway mode changed to $NEW_STATE"
 
     # Check whether gateway modus has been deactivated
     if [ "$NEW_STATE" == "off" ]; then
+        logger -t check-gateway -p daemon.notice -s "stopping isc-dhcp-server and radvd"
         # Shutdown DHCP server to prevent renewal of leases
         /usr/sbin/service isc-dhcp-server stop
+        # Shutdown RAdv server to prevent announcement of IPv6 routing prefixes
+        /usr/sbin/service radvd stop
     fi
 
     # Check whether gateway modus has been activated
     if [ "$NEW_STATE" == "server" ]; then
+        logger -t check-gateway -p daemon.notice -s "starting isc-dhcp-server and radvd"
         # Restart DHCP server
         /usr/sbin/service isc-dhcp-server start
+        /usr/sbin/service radvd start
     fi
     exit 0
 done
 
 if [ "$NEW_STATE" == "server" ]; then
-    /usr/sbin/service isc-dhcp-server status 2>&1> /dev/null
-    if [[ $? -ne 0 ]]
-    then
-        /usr/sbin/service isc-dhcp-server restart
-    fi
+    for service in isc-dhcp-server radvd; do
+      /usr/sbin/service $service status 2>&1> /dev/null
+      if [[ $? -ne 0 ]]
+      then
+          logger -t check-gateway -p daemon.notice -s "restarting $service"
+          /usr/sbin/service $service restart
+      fi
+    done
 fi
 if [ "$NEW_STATE" == "off" ]; then
-    /usr/sbin/service isc-dhcp-server status 2>&1> /dev/null
-    if [[ $? -eq 0 ]]
-    then
-        /usr/sbin/service isc-dhcp-server stop
-    fi
+    for service in isc-dhcp-server radvd; do
+      /usr/sbin/service $service status 2>&1> /dev/null
+      if [[ $? -eq 0 ]]
+      then
+          logger -t check-gateway -p daemon.notice -s "stopping $service"
+          /usr/sbin/service $service stop
+      fi
+    done
 fi
 
 # vim: noai:ts=4:sw=4:ff=unix:ft=text:fdm=marker
