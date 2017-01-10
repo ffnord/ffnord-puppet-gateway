@@ -34,9 +34,9 @@ define ffnord::bridge( $mesh_code
                  ];
   } ->
   ffnord::firewall::device { "br-${mesh_code}":
-    chain => "mesh"
-  } ->
-  ffnord::firewall::forward { "br-${mesh_code}":
-    chain => "mesh"
-  }
+    zone => "mesh",
+    zone_forward_ipv4 => ['mesh','icvpn'],
+    zone_forward_ipv6 => ['mesh','icvpn'],
+    forward_conntrack => false
+  } 
 }

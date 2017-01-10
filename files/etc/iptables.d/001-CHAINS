@@ -5,14 +5,22 @@
 ip46tables -N input
 ip46tables -N bat-input
 ip46tables -N mesh-input
+ip46tables -N uplink-input
+ip46tables -N icvpn-input
+ip46tables -N peering-input
 ip46tables -N wan-input
 
 # Default Forward Chains
 
-ip46tables -N forward
-ip46tables -N bat-forward
-ip46tables -N mesh-forward
-ip46tables -N wan-forward
+ip46tables -N fwd-in
+ip46tables -N mesh-fwd-in
+ip46tables -N mesh-fwd-out
+ip46tables -N uplink-fwd-in
+ip46tables -N uplink-fwd-out
+ip46tables -N icvpn-fwd-in
+ip46tables -N icvpn-fwd-out
+ip46tables -N peering-fwd-in
+ip46tables -N peering-fwd-out
 
 # Helper Chains
 

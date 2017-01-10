@@ -1,6 +1,11 @@
 # Drop all packages which are not ACCEPTed to this point
 ip46tables -A FORWARD -j DROP
-ip46tables -A forward -j DROP
-ip46tables -A bat-forward  -j DROP
-ip46tables -A mesh-forward -j DROP
-ip46tables -A wan-forward  -j DROP
+ip46tables -A fwd-in -j DROP
+ip46tables -A mesh-fwd-in -j DROP
+ip46tables -A mesh-fwd-out -j DROP
+ip46tables -A uplink-fwd-in -j DROP
+ip46tables -A uplink-fwd-out -j DROP
+ip46tables -A icvpn-fwd-in -j DROP
+ip46tables -A icvpn-fwd-out -j DROP
+ip46tables -A peering-fwd-in -j DROP
+ip46tables -A peering-fwd-out -j DROP
