@@ -105,6 +105,13 @@ define ffnord::bird6::icvpn (
 
   include ffnord::icvpn
 
+  file_line {
+    "icvpn-include-roa6":
+      path => '/etc/bird/bird6.conf',
+      line => 'include "/etc/bird/bird6.conf.d/icvpn-roa.conf";',
+      require => File['/etc/bird/bird6.conf'],
+      notify  => Service['bird6'];
+  }->
   file_line { 
     "icvpn-template6":
       path => '/etc/bird/bird6.conf',
@@ -137,5 +144,16 @@ define ffnord::bird6::icvpn (
       File_line['icvpn-include6'],
       File_line['icvpn-template6']
     ];
-  } 
+  }
+
+  file_line {
+    "icvpn-roa6":
+      path => '/etc/bird/bird6.conf.d/icvpn-roa.conf',
+      line => 'roa table icvpn_roa { include "icvpn-roa-table.con?" }',
+      require => [
+        File['/etc/bird/bird6.conf.d/'],
+        File_line['icvpn-include-roa6']
+      ],
+      notify  => Service['bird'];
+  }
 }
