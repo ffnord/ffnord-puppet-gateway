@@ -15,25 +15,25 @@ PKT_LOSS_EXCEEDED_STATE="/tmp/chkgw-pktloss-exceeded"
 
 ping_test(){
     local CONTROL_IPs=( ${1:-"${GW_CONTROL_IP[@]}"} )
-    ping_loss=${#CONTROL_IPs[@]}
+    ping_loss="${#CONTROL_IPs[@]}"
     for CONTROL_IP in "${CONTROL_IPs[@]}"; do
-      ping -q -m 1 $CONTROL_IP -c 1 -i 1 -W 1 >/dev/null 2>&1
+      ping -q -m 1 "$CONTROL_IP" -c 1 -i 1 -W 1 >/dev/null 2>&1
       if [[ $? -eq 0 ]]; then
-        ping_loss=$(expr "$ping_loss" - 1)
+        ping_loss=$(( ping_loss - 1 ))
       fi
     done
 }
  
-if test $MAINTENANCE -eq 0; then
+if [[ $MAINTENANCE -eq 0 ]]; then
 
     # ensure that we have the appropriate rules
-    /sbin/ip rule | grep 32000 2>&1> /dev/null
+    /sbin/ip rule | grep 32000 > /dev/null 2>&1
     if [[ $? -ne 0 ]]
     then
         /sbin/ip rule add from all fwmark 0x1 table 42 preference 32000
     fi
 
-    /sbin/ip rule | grep 32001 2>&1> /dev/null
+    /sbin/ip rule | grep 32001 > /dev/null 2>&1
     if [[ $? -ne 0 ]]
     then
         /sbin/ip rule add from all fwmark 0x1 unreachable preference 32001
@@ -44,11 +44,11 @@ if test $MAINTENANCE -eq 0; then
     if [[ $? -gt 0 ]] 
     then
        INTERFACE_MISSING=$(cat "$INTERFACE_MISSING_STATE" 2>/dev/null || echo 0)
-       echo $(expr "$INTERFACE_MISSING" + 1) > "$INTERFACE_MISSING_STATE"
-       logger -t check-gatway -p daemon.info "Interface "${GW_INTERFACE}" does not exist, for ${INTERFACE_MISSING} minutes."
+       echo $(( INTERFACE_MISSING + 1)) > "$INTERFACE_MISSING_STATE"
+       logger -t check-gateway -p daemon.info "Interface $GW_INTERFACE does not exist, for $INTERFACE_MISSING minutes."
        if [[ "$INTERFACE_MISSING" -gt "$MAX_INTERFACE_MISSING" ]] 
        then 
-         logger -t check-gatway -p daemon.info -s "Interface "${GW_INTERFACE}" does not exist, for longer than ${MAX_INTERFACE_MISSING}. Going into maintenance."
+         logger -t check-gatway -p daemon.info -s "Interface $GW_INTERFACE does not exist, for longer than $MAX_INTERFACE_MISSING. Going into maintenance."
          /usr/local/bin/maintenance on
          exit 1
        fi
@@ -60,7 +60,7 @@ if test $MAINTENANCE -eq 0; then
     if [[ "$(/usr/bin/pgrep -fc openvpn > /dev/null)" -gt 0 ]]
     then
       logger -t check-gateway -p daemon.info -s "Can't find running openvpn service, enforce start"
-      service openvpn start
+      /usr/sbin/service openvpn start
     fi
 
     # ping check
@@ -68,7 +68,7 @@ if test $MAINTENANCE -eq 0; then
 
     ping_test
 
-    PKT_LOSS=$(expr 100 \* "$ping_loss" / "${#GW_CONTROL_IP}") 
+    PKT_LOSS=$(( 100 * ping_loss / ${#GW_CONTROL_IP} )) 
     if [[ "$PKT_LOSS" -lt "$MAX_PKT_LOSS" ]]
     then
         logger -t check-gateway -p daemon.info "Messured ${PKT_LOSS}% packet loss, so everything seems to be in order."
@@ -76,7 +76,7 @@ if test $MAINTENANCE -eq 0; then
         echo 0 > "$PKT_LOSS_EXCEEDED_STATE"
     else
         PKT_LOSS_EXCEEDED=$(cat "$PKT_LOSS_EXCEEDED_STATE" 2>/dev/null || echo 0)
-        echo $(expr "$PKT_LOSS_EXCEEDED" + 1) > "$PKT_LOSS_EXCEEDED_STATE"
+        echo $(( PKT_LOSS_EXCEEDED + 1 )) > "$PKT_LOSS_EXCEEDED_STATE"
         if [[ "$PKT_LOSS_EXCEEDED" -gt "$MAX_PKT_LOSS_EXCEED" ]] 
         then
           logger -t check-gateway -p daemon.err "Measured ${PKT_LOSS}% packet loss, so there seems to be a problem, deactivating gateway mode."
@@ -91,9 +91,10 @@ else
 fi
 
 for MESH in /sys/class/net/*/mesh; do
-OLD_STATE="$(cat $MESH/gw_mode)"
+OLD_STATE="$(cat "${MESH}/gw_mode")"
+NEW_STATE="${NEW_STATE:-"$OLD_STATE"}"
 [ "$OLD_STATE" == "$NEW_STATE" ] && continue
-    echo $NEW_STATE > $MESH/gw_mode
+    echo "$NEW_STATE" > "$MESH/gw_mode"
     logger -t check-gateway -p daemon.notice -s "batman gateway mode changed to $NEW_STATE"
 
     # Check whether gateway modus has been deactivated
@@ -117,7 +118,7 @@ done
 
 if [ "$NEW_STATE" == "server" ]; then
     for service in isc-dhcp-server radvd; do
-      /usr/sbin/service $service status 2>&1> /dev/null
+      /usr/sbin/service $service status > /dev/null 2>&1
       if [[ $? -ne 0 ]]
       then
           logger -t check-gateway -p daemon.notice -s "restarting $service"
@@ -127,7 +128,7 @@ if [ "$NEW_STATE" == "server" ]; then
 fi
 if [ "$NEW_STATE" == "off" ]; then
     for service in isc-dhcp-server radvd; do
-      /usr/sbin/service $service status 2>&1> /dev/null
+      /usr/sbin/service $service status > /dev/null 2>&1
       if [[ $? -eq 0 ]]
       then
           logger -t check-gateway -p daemon.notice -s "stopping $service"
