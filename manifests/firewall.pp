@@ -1,30 +1,29 @@
-/** Simple and stupid firewall handling.
- *  
- * We simple define the firewall rules by putting them into ordered files.
- * This way we can place new rules at any position into the chains.
- * The predefined ruleset first resets the Xtables rulesets and 
- * handles connection tracking, jumping the packages into seperated
- * chains or directly drop them. 
- * Packages accepted for further processing are then be sorted into
- * zone specific chaines. 
- * 
- * We have two zones in this setup: mesh and wan
- * Each with a forward and a input chain: mesh-forward, mesh-input, ...
- * 
- * The order of execution is matched to meaning by the following list:
- * 
- * 000 RESET all the rules
- * 050 Preprocessing
- * 100 Zone selection
- * 500+ Service/Port acceptance
- * 800 Forwarding acceptance
- * 900 Drop the rest
- * 900+ Mangle/Postrouting handling
- *
- * ATTENTION: The firewall rules will not triggered by this class.
- *            You have to invoke the build-firewall script yourself.
- * 
- */
+# Simple and stupid firewall handling.
+#  
+# We simple define the firewall rules by putting them into ordered files.
+# This way we can place new rules at any position into the chains.
+# The predefined ruleset first resets the Xtables rulesets and 
+# handles connection tracking, jumping the packages into seperated
+# chains or directly drop them. 
+# Packages accepted for further processing are then be sorted into
+# zone specific chaines. 
+# 
+# We have two zones in this setup: mesh and wan
+# Each with a forward and a input chain: mesh-forward, mesh-input, ...
+# 
+# The order of execution is matched to meaning by the following list:
+# 
+# 000 RESET all the rules
+# 050 Preprocessing
+# 100 Zone selection
+# 500+ Service/Port acceptance
+# 800 Forwarding acceptance
+# 900 Drop the rest
+# 900+ Mangle/Postrouting handling
+#
+# ATTENTION: The firewall rules will not triggered by this class.
+#            You have to invoke the build-firewall script yourself.
+
 
 class ffnord::firewall (
   $wan_devices = $ffnord::params::wan_devices
@@ -32,7 +31,7 @@ class ffnord::firewall (
 
   include ffnord::resources::rclocal
 
-  package { 
+  package {
     'iptables-persistent':
       ensure => installed;
     'iptables':
@@ -40,20 +39,20 @@ class ffnord::firewall (
   }
 
   $iptablespersistentservice=$lsbdistcodename ? {
-	'jessie' => 'netfilter-persistent',
-	default  => 'iptables-persistent',
- }
-
-  service {
-    $iptablespersistentservice:
-       ensure => running,
-       hasrestart => true,
-       enable => true,
-       require => Package['iptables-persistent'];
+        'jessie' => 'netfilter-persistent',
+        default  => 'iptables-persistent',
   }
 
-  file { 
-    '/etc/iptables.d/': 
+  service {
+  $iptablespersistentservice:
+    ensure => running,
+    hasrestart => true,
+    enable => true,
+    require => Package['iptables-persistent'];
+  }
+
+  file {
+    '/etc/iptables.d/':
       ensure => directory,
       owner => 'root',
       group => 'root',
@@ -63,34 +62,34 @@ class ffnord::firewall (
       owner => 'root',
       group => 'root',
       mode => '0755',
-      source => "puppet:///modules/ffnord/usr/local/bin/build-firewall";
-    '/etc/iptables.d/000-RESET': 
+      source => 'puppet:///modules/ffnord/usr/local/bin/build-firewall';
+    '/etc/iptables.d/000-RESET':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/000-RESET",
+      source => 'puppet:///modules/ffnord/etc/iptables.d/000-RESET',
       require => File['/etc/iptables.d/'];
     '/etc/iptables.d/001-CHAINS':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/001-CHAINS",
+      source => 'puppet:///modules/ffnord/etc/iptables.d/001-CHAINS',
       require => File['/etc/iptables.d/'];
-    '/etc/iptables.d/050-FORWARD-PreProcessing': 
+    '/etc/iptables.d/050-FORWARD-PreProcessing':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/050-FORWARD-PreProcessing",
+      source => 'puppet:///modules/ffnord/etc/iptables.d/050-FORWARD-PreProcessing',
       require => File['/etc/iptables.d/'];
-    '/etc/iptables.d/050-INPUT-PreProcessing': 
+    '/etc/iptables.d/050-INPUT-PreProcessing':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/050-INPUT-PreProcessing",
+      source => 'puppet:///modules/ffnord/etc/iptables.d/050-INPUT-PreProcessing',
       require => File['/etc/iptables.d/'];
     '/etc/iptables.d/200-block-ranges':
       ensure => file,
@@ -98,50 +97,50 @@ class ffnord::firewall (
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/200-block-ranges",
+      source => 'puppet:///modules/ffnord/etc/iptables.d/200-block-ranges',
       require => File['/etc/iptables.d/'];
     '/etc/iptables.d/200-block-bcp38':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/200-block-bcp38",
+      source => 'puppet:///modules/ffnord/etc/iptables.d/200-block-bcp38',
       require => File['/etc/iptables.d/'];
     '/etc/iptables.d/500-Allow-SSH':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/500-Allow-SSH",
+      source => 'puppet:///modules/ffnord/etc/iptables.d/500-Allow-SSH',
       require => File['/etc/iptables.d/'];
     '/etc/iptables.d/900-FORWARD-drop':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/900-FORWARD-drop",
+      source => 'puppet:///modules/ffnord/etc/iptables.d/900-FORWARD-drop',
       require => File['/etc/iptables.d/'];
     '/etc/iptables.d/900-INPUT-drop':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/900-INPUT-drop",
+      source => 'puppet:///modules/ffnord/etc/iptables.d/900-INPUT-drop',
       require => File['/etc/iptables.d/'];
     '/etc/iptables.d/900-LOG-drop':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => "puppet:///modules/ffnord/etc/iptables.d/900-LOG-drop",
+      source => 'puppet:///modules/ffnord/etc/iptables.d/900-LOG-drop',
       require => File['/etc/iptables.d/'];
   }
 
   ffnord::monitor::zabbix::check_script {
-    "ip_conntrack_count":
-      scriptname => "ip_conntrack_count";
-    "ip_conntrack_max":
-      scriptname => "ip_conntrack_max";
+  'ip_conntrack_count':
+    scriptname => 'ip_conntrack_count';
+  'ip_conntrack_max':
+    scriptname => 'ip_conntrack_max';
   }
 
   ffnord::firewall::device { $wan_devices:
@@ -150,21 +149,21 @@ class ffnord::firewall (
 }
 
 define ffnord::firewall::service (
- $protos = ["tcp"],  # Possible values "tcp,udp,gre"
- $chains = ["mesh"], # Possible values "mesh,wan"
- $ports = [],
- $source = undef,
- $rate_limit = false, # rate limit
- $rate_limit_seconds  = 60, # rate limit Seconds
- $rate_limit_hitcount = 10 # rate limit hitcount
+  $protos = ['tcp'],  # Possible values "tcp,udp,gre"
+  $chains = ['mesh'], # Possible values "mesh,wan"
+  $ports = [],
+  $source = undef,
+  $rate_limit = false, # rate limit
+  $rate_limit_seconds  = 60, # rate limit Seconds
+  $rate_limit_hitcount = 10 # rate limit hitcount
 ) {
 
- file { "/etc/iptables.d/500-Allow-${name}":
-   ensure => file,
-   owner => "root",
-   group => "root",
-   mode => "0644",
-   content => inline_template("# Allow Service <%=@name%>
+  file { "/etc/iptables.d/500-Allow-${name}":
+    ensure => file,
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    content => inline_template("# Allow Service <%=@name%>
 <% @chains.each do |chain| -%>
 <% @protos.each do |proto| -%>
 <% if @ports.length > 0 -%>
@@ -180,42 +179,39 @@ ip46tables -A <%=chain%>-input -p <%=proto%><% if @source -%> -s <%=source%><% e
 <% end -%>
 <% end -%>
 <% end -%>
-");
- }
+    ");
+  }
 }
 
 # Process packages from devices into the chains
 define ffnord::firewall::device (
-  $chain = "mesh" # Possible values are "mesh","wan"
+  $chain = 'mesh' # Possible values are "mesh","wan"
 ) {
-
- include ffnord::firewall
-
- file { "/etc/iptables.d/100-device-${name}": 
-   ensure => file,
-   owner => "root",
-   group => "root",
-   mode => "0644",
-   content => inline_template("# Process packages from device <%=@name%>
+  include ffnord::firewall
+  file { "/etc/iptables.d/100-device-${name}":
+    ensure => file,
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    content => inline_template("# Process packages from device <%=@name%>
 ip46tables -A input -i <%=@name%> -j <%=@chain%>-input
 ip46tables -A forward -i <%=@name%> -j <%=@chain%>-forward
-"),
-   require => [File['/etc/iptables.d/']];
- }
+    "),
+    require => [File['/etc/iptables.d/']];
+  }
 }
 
 # Allow device for mesh forwarding
 define ffnord::firewall::forward (
-  $chain = "mesh" # Possible values are "mesh","wan"
+  $chain = 'mesh' # Possible values are "mesh","wan"
 ) {
-
  include ffnord::firewall
 
- file { "/etc/iptables.d/800-${chain}-forward-ACCEPT-${name}": 
+ file { "/etc/iptables.d/800-${chain}-forward-ACCEPT-${name}":
    ensure => file,
-   owner => "root",
-   group => "root",
-   mode => "0644",
+   owner => 'root',
+   group => 'root',
+   mode => '0644',
    content => inline_template("# Process packages from device <%=@name%>
 ip46tables -A mesh-forward -o <%=@name%> -j ACCEPT
 "),
@@ -230,9 +226,9 @@ define ffnord::firewall::set_value(
 
  file { "/etc/iptables.d/000-file-value-${name}": 
    ensure => file,
-   owner => "root",
-   group => "root",
-   mode => "0644",
+   owner => 'root',
+   group => 'root',
+   mode => '0644',
    content => inline_template("set_value ${path} ${value}\n"),
    require => [File['/etc/iptables.d/']];
  }

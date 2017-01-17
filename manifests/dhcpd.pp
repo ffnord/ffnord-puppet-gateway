@@ -16,10 +16,10 @@ define ffnord::dhcpd (
 
     file { "/etc/dhcp/interface-${name}.conf":
       ensure => file,
-      content => template("ffnord/etc/dhcp/interface.erb"),
+      content => template('ffnord/etc/dhcp/interface.erb'),
       require => [Package['isc-dhcp-server']],
       notify => [Service['isc-dhcp-server']];
-    } 
+    }
 
     file_line { "ffnord::dhcpd::${name}-rule":
       path => '/etc/dhcp/dhcpd.conf',
@@ -27,16 +27,16 @@ define ffnord::dhcpd (
       require => [File['/etc/dhcp/dhcpd.conf']],
       notify => [Service['isc-dhcp-server']];
     }
-    
+
     ffnord::monitor::zabbix::check_script {
       "${mesh_code}_free_dhcppool":
         mesh_code => $mesh_code,
-        scriptname => "dhcp-pool-usage",
-        extra => "free";
+        scriptname => 'dhcp-pool-usage',
+        extra => 'free';
       "${mesh_code}_used_dhcppool":
         mesh_code => $mesh_code,
-        scriptname => "dhcp-pool-usage",
-        extra => "used";
+        scriptname => 'dhcp-pool-usage',
+        extra => 'used';
     }
   }
 }
@@ -44,17 +44,17 @@ define ffnord::dhcpd (
 class ffnord::dhcpd::base {
 
   ffnord::monitor::nrpe::check_command {
-    "dhcpd":
+    'dhcpd':
       command => '/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C dhcpd';
   }
 
-  package { 
-    'isc-dhcp-server': 
+  package {
+    'isc-dhcp-server':
       ensure => installed;
   }
 
   file {
-    "/etc/dhcp/dhcpd.conf":
+    '/etc/dhcp/dhcpd.conf':
       ensure => file,
       mode   => '0644',
       owner  => 'root',
@@ -63,7 +63,7 @@ class ffnord::dhcpd::base {
       require => [Package['isc-dhcp-server']],
       notify => [Service['isc-dhcp-server']];
   }
-  
+
   ffnord::firewall::service { 'dhcpd':
     chains => ['mesh'],
     ports  => ['67','68'],
@@ -72,8 +72,8 @@ class ffnord::dhcpd::base {
 }
 
 class ffnord::dhcpd::service {
-  service { 
-    'isc-dhcp-server': 
+  service {
+    'isc-dhcp-server':
       ensure => running,
       hasrestart => true,
       enable => true;
@@ -88,7 +88,7 @@ define ffnord::dhcpd::static (
   $static_name = $name
 
   file{
-    "/etc/dhcp/statics/":
+    '/etc/dhcp/statics/':
       ensure => directory,
       owner => 'root',
       group => 'root',
@@ -101,7 +101,7 @@ define ffnord::dhcpd::static (
     provider => git,
     source   => $static_git,
     require  => [
-      File["/etc/dhcp/statics/"],
+      File['/etc/dhcp/statics/'],
     ];
   }
 
@@ -126,13 +126,13 @@ define ffnord::dhcpd::static (
   }
 
   file {
-    '/usr/local/bin/update-statics':
-     ensure => file,
-     owner => 'root',
-     group => 'root',
-     mode => '0755',
-     source => 'puppet:///modules/ffnord/usr/local/bin/update-statics',
-     require =>  Vcsrepo["/etc/dhcp/statics/${static_name}/"];
+  '/usr/local/bin/update-statics':
+    ensure => file,
+    owner => 'root',
+    group => 'root',
+    mode => '0755',
+    source => 'puppet:///modules/ffnord/usr/local/bin/update-statics',
+    require =>  Vcsrepo["/etc/dhcp/statics/${static_name}/"];
   }
 
   cron {

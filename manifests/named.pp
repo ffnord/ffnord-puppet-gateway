@@ -3,13 +3,13 @@ class ffnord::named () {
   include ffnord::resources::meta
 
   ffnord::monitor::nrpe::check_command {
-    "named":
+    'named':
       command => '/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C named';
   }
 
   ffnord::monitor::zabbix::check_script {
-    "check-dns":
-      scriptname => "check-dns";
+    'check-dns':
+      scriptname => 'check-dns';
   }
 
   package {
@@ -34,19 +34,19 @@ class ffnord::named () {
   file {
     '/etc/bind/named.conf.options':
       ensure  => file,
-      source  => "puppet:///modules/ffnord/etc/bind/named.conf.options",
+      source  => 'puppet:///modules/ffnord/etc/bind/named.conf.options',
       require => [Package['bind9']],
       notify  => [Service['bind9']];
   }
 
   file_line {
-    'icvpn-meta':
-       path => '/etc/bind/named.conf',
-       line => 'include "/etc/bind/named.conf.icvpn-meta";',
-       before => Class['ffnord::resources::meta'],
-       require => [
-         Package['bind9']
-       ];
+  'icvpn-meta':
+    path => '/etc/bind/named.conf',
+    line => 'include "/etc/bind/named.conf.icvpn-meta";',
+    before => Class['ffnord::resources::meta'],
+    require => [
+      Package['bind9']
+    ];
   }
 
   ffnord::firewall::service { 'named':
@@ -70,7 +70,7 @@ define ffnord::named::zone (
   $zone_name = $name
 
   file{
-    "/etc/bind/zones/":
+    '/etc/bind/zones/':
       ensure => directory,
       owner => 'root',
       group => 'root',
@@ -83,7 +83,7 @@ define ffnord::named::zone (
     provider => git,
     source   => $zone_git,
     require  => [
-      File["/etc/bind/zones/"],
+      File['/etc/bind/zones/'],
     ];
   }
 
@@ -107,13 +107,13 @@ define ffnord::named::zone (
   }
 
   file {
-    '/usr/local/bin/update-zones':
-     ensure => file,
-     owner => 'root',
-     group => 'root',
-     mode => '0755',
-     source => 'puppet:///modules/ffnord/usr/local/bin/update-zones',
-     require =>  Vcsrepo["/etc/bind/zones/${zone_name}/"];
+  '/usr/local/bin/update-zones':
+    ensure => file,
+    owner => 'root',
+    group => 'root',
+    mode => '0755',
+    source => 'puppet:///modules/ffnord/usr/local/bin/update-zones',
+    require =>  Vcsrepo["/etc/bind/zones/${zone_name}/"];
   }
 
   cron {
@@ -125,8 +125,8 @@ define ffnord::named::zone (
   }
 
   if $exclude_meta != '' {
-    ffnord::resources::meta::dns_zone_exclude { 
-      "${exclude_meta}": 
+    ffnord::resources::meta::dns_zone_exclude {
+      $exclude_meta:
         before => Exec['update-meta'];
     }
   }
@@ -139,11 +139,11 @@ define ffnord::named::listen (
 
   include ffnord::named
 
-  ffnord::named::listen_v4 { "${name}":
+  ffnord::named::listen_v4 { $name:
     ipv4_address => $ipv4_address,
   }
 
-  ffnord::named::listen_v6 { "${name}":
+  ffnord::named::listen_v6 { $name:
     ipv6_address => $ipv6_address,
   }
 }

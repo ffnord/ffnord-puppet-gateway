@@ -51,7 +51,7 @@ define ffnord::mesh(
     mesh_ipv4_prefixlen  => $mesh_ipv4_prefixlen
   } ->
   Class['ffnord::ntp'] ->
-  ffnord::ntp::allow { "${mesh_code}":
+  ffnord::ntp::allow { $mesh_code:
     ipv4_net => $mesh_ipv4,
     ipv6_net => $mesh_ipv6
   } ->
@@ -65,7 +65,7 @@ define ffnord::mesh(
   } ->
   ffnord::fastd { "fastd_${mesh_code}":
     mesh_code       => $mesh_code,
-    mesh_interface  => "${mesh_code}",
+    mesh_interface  => $mesh_code,
     mesh_mac        => $mesh_mac,
     mesh_hop_penalty=> $mesh_hop_penalty,
     vpn_mac         => $vpn_mac,
@@ -80,7 +80,7 @@ define ffnord::mesh(
     mesh_ipv6_prefix     => $mesh_ipv6_prefix,
     mesh_ipv6_prefixlen  => $mesh_ipv6_prefixlen;
   } ->
-  ffnord::named::listen { "${mesh_code}":
+  ffnord::named::listen { $mesh_code:
     ipv4_address => $mesh_ipv4_address,
     ipv6_address => $mesh_ipv6_address,
   } ->
@@ -116,7 +116,7 @@ define ffnord::mesh(
       icvpn_as            => $mesh_as;
     }
   }
- 
-  # ffnord::opkg::mirror
-  # ffnord::firmware mirror
+
+# ffnord::opkg::mirror
+# ffnord::firmware mirror
 }

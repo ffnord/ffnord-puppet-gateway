@@ -18,11 +18,11 @@ define ffnord::icvpn::setup (
   include ffnord::resources::meta
 
   ffnord::resources::ffnord::field {
-    "ICVPN": value => '1';
-    "ICVPN_EXCLUDE": value => "${icvpn_exclude_peerings}";
+    'ICVPN': value => '1';
+    'ICVPN_EXCLUDE': value => $icvpn_exclude_peerings;
   }
 
-  class { 'ffnord::tinc': 
+  class { 'ffnord::tinc':
     tinc_name    => $name,
     tinc_keyfile => $tinc_keyfile,
 
@@ -33,7 +33,7 @@ define ffnord::icvpn::setup (
   }
 
   if $ffnord::params::include_bird4 == false and $ffnord::params::include_bird6 == false {
-    fail("At least bird4 or bird6 needs to be activated for ICVPN.")
+    fail('At least bird4 or bird6 needs to be activated for ICVPN.')
   }
 
   if $ffnord::params::include_bird4 {

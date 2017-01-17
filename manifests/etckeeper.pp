@@ -11,20 +11,20 @@ class ffnord::etckeeper {
 
   # Ensure that we do not track the ffnord module
   file_line {
-    'etckeeper_puppet':
-       path => '/etc/.gitignore',
-       line => 'puppet/modules/ffnord/';
-    'etckeeper_dotfiles':
-       path => '/etc/.gitignore',
-       line => '.*';
-    'etckepper_unignore_etckeeper':
-       path => '/etc/.gitignore',
-       line => '!.etckeeper';
+  'etckeeper_puppet':
+    path => '/etc/.gitignore',
+    line => 'puppet/modules/ffnord/';
+  'etckeeper_dotfiles':
+    path => '/etc/.gitignore',
+    line => '.*';
+  'etckepper_unignore_etckeeper':
+    path => '/etc/.gitignore',
+    line => '!.etckeeper';
   } ->
 
   package {
-    'etckeeper':
-       ensure => installed;
+  'etckeeper':
+    ensure => installed;
   }
 }
 
