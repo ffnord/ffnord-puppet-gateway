@@ -21,6 +21,9 @@ class ffnord::params (
   # Max Backlog 
   $max_backlog  = 5000,
 
+  # Gateway check addresses, whitespace seperated string
+  $gw_control_ips,
+
   # Default values for ffnord config
   $maintenance = 0, # Shall the maintenance mode be active after installation
 ) {

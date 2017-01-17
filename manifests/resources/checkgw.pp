@@ -1,7 +1,7 @@
 class ffnord::resources::checkgw (
-  $gw_control_ip     = '8.8.8.8',     # Control ip addr
+  $gw_control_ips    = $ffnord::params::gw_control_ips,
   $gw_bandwidth      = 54,            # How much bandwith we should have up/down per mesh interface
-) {
+) inherits ffnord::params {
 
   file {
     '/usr/local/bin/check-gateway':
@@ -11,7 +11,7 @@ class ffnord::resources::checkgw (
   }
 
   ffnord::resources::ffnord::field {
-    'GW_CONTROL_IP': value => $gw_control_ip;
+    'GW_CONTROL_IP': value => "( ${gw_control_ip} )";
   }
 
   cron {
