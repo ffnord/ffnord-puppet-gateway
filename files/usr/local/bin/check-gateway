@@ -6,10 +6,16 @@ shopt -s nullglob
 . /etc/ffnord
 
 MAINTENANCE=${MAINTENANCE:-0}
+# Interface to watch at
 GW_INTERFACE=${GW_INTERFACE:-"tun-anonvpn"}
+# Maximum minutes until interface missing has effect
 MAX_INTERFACE_MISSING=${MAX_INTERFACE_MISSING:-10}
+# Maximum packet loss tolerated 
 MAX_PKT_LOSS=${MAX_PKT_LOSS:-50}
+# Maximum minutes continued intolerable packet loss until effect  
 MAX_PKT_LOSS_EXCEED=${MAX_PKT_LOSS_EXCEED:-2}
+
+# State keeping files
 INTERFACE_MISSING_STATE="/tmp/chkgw-interface-missing"
 PKT_LOSS_EXCEEDED_STATE="/tmp/chkgw-pktloss-exceeded"
 
