@@ -1,7 +1,7 @@
 class ffnord::resources::repos (
   $debian_mirror = $ffnord::params::debian_mirror
 ) inherits ffnord::params {
-  package { 
+  package {
     'apt-transport-https':
       ensure => installed;
   } ->
@@ -22,10 +22,10 @@ class ffnord::resources::repos (
   }
 
   apt::source { 'debian-backports':
-     location          => $debian_mirror,
-     required_packages => 'debian-keyring debian-archive-keyring',
-     release           => 'wheezy-backports',
-     repos             => 'main contrib',
-     include_src       => false,
+    location          => $debian_mirror,
+    required_packages => 'debian-keyring debian-archive-keyring',
+    release           => 'wheezy-backports',
+    repos             => 'main contrib',
+    include_src       => false,
   }
 }
