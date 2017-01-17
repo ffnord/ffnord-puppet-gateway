@@ -2,19 +2,26 @@
 
 shopt -s nullglob
 
+
 . /etc/ffnord
 
 MAINTENANCE=${MAINTENANCE:-0}
+GW_INTERFACE=${GW_INTERFACE:-"tun-anonvpn"}
+MAX_INTERFACE_MISSING=${MAX_INTERFACE_MISSING:-10}
+MAX_PKT_LOSS=${MAX_PKT_LOSS:-50}
+MAX_PKT_LOSS_EXCEED=${MAX_PKT_LOSS_EXCEED:-2}
+INTERFACE_MISSING_STATE="/tmp/chkgw-interface-missing"
+PKT_LOSS_EXCEEDED_STATE="/tmp/chkgw-pktloss-exceeded"
 
 ping_test(){
-    count=20
-    for x in $(seq 1 "$count"); do
-      ping -q -m 1 $GW_CONTROL_IP -c 1 -i 1 -W 2 >/dev/null 2>&1
-      if test $?; then
-        count=$(expr "$count" - 1)
+    local CONTROL_IPs=( ${1:-"${GW_CONTROL_IP[@]}"} )
+    ping_loss=${#CONTROL_IPs[@]}
+    for CONTROL_IP in "${CONTROL_IPs[@]}"; do
+      ping -q -m 1 $CONTROL_IP -c 1 -i 1 -W 1 >/dev/null 2>&1
+      if [[ $? -eq 0 ]]; then
+        ping_loss=$(expr "$ping_loss" - 1)
       fi
     done
-    return "$count"
 }
  
 if test $MAINTENANCE -eq 0; then
@@ -32,15 +39,51 @@ if test $MAINTENANCE -eq 0; then
         /sbin/ip rule add from all fwmark 0x1 unreachable preference 32001
     fi
 
-    logger -t check-gateway -p daemon.info "Trying to get a reply from $GW_CONTROL_IP..."
+    # check for interface
+    /sbin/ip link show dev "${GW_INTERFACE}" > /dev/null 2>&1 
+    if [[ $? -gt 0 ]] 
+    then
+       INTERFACE_MISSING=$(cat "$INTERFACE_MISSING_STATE" 2>/dev/null || echo 0)
+       echo $(expr "$INTERFACE_MISSING" + 1) > "$INTERFACE_MISSING_STATE"
+       logger -t check-gatway -p daemon.info "Interface "${GW_INTERFACE}" does not exist, for ${INTERFACE_MISSING} minutes."
+       if [[ "$INTERFACE_MISSING" -gt "$MAX_INTERFACE_MISSING" ]] 
+       then 
+         logger -t check-gatway -p daemon.info -s "Interface "${GW_INTERFACE}" does not exist, for longer than ${MAX_INTERFACE_MISSING}. Going into maintenance."
+         /usr/local/bin/maintenance on
+         exit 1
+       fi
+    else 
+      echo 0 > "${INTERFACE_MISSING_STATE}"
+    fi
+
+    # check for service
+    if [[ "$(/usr/bin/pgrep -fc openvpn > /dev/null)" -gt 0 ]]
+    then
+      logger -t check-gateway -p daemon.info -s "Can't find running openvpn service, enforce start"
+      service openvpn start
+    fi
+
+    # ping check
+    logger -t check-gateway -p daemon.info "Trying to get a replies from ${GW_CONTROL_IP[@]} ..."
+
     ping_test
 
-    if test $? -lt 2; then
-        logger -t check-gateway -p daemon.info "Got a reply from $GW_CONTROL_IP, so everything seems to be in order."
+    PKT_LOSS=$(expr 100 \* "$ping_loss" / "${#GW_CONTROL_IP}") 
+    if [[ "$PKT_LOSS" -lt "$MAX_PKT_LOSS" ]]
+    then
+        logger -t check-gateway -p daemon.info "Messured ${PKT_LOSS}% packet loss, so everything seems to be in order."
         NEW_STATE=server
+        echo 0 > "$PKT_LOSS_EXCEEDED_STATE"
     else
-        logger -t check-gateway -p daemon.err "Did not get a reply from $GW_CONTROL_IP, so there seems to be a problem."
-        NEW_STATE=off
+        PKT_LOSS_EXCEEDED=$(cat "$PKT_LOSS_EXCEEDED_STATE" 2>/dev/null || echo 0)
+        echo $(expr "$PKT_LOSS_EXCEEDED" + 1) > "$PKT_LOSS_EXCEEDED_STATE"
+        if [[ "$PKT_LOSS_EXCEEDED" -gt "$MAX_PKT_LOSS_EXCEED" ]] 
+        then
+          logger -t check-gateway -p daemon.err "Measured ${PKT_LOSS}% packet loss, so there seems to be a problem, deactivating gateway mode."
+          NEW_STATE=off
+        else
+          logger -t check-gateway -p daemon.err "Measured ${PKT_LOSS}% packet loss, so there seems to be a problem, for $PKT_LOSS_EXCEEDED minutes."
+        fi
     fi
 
 else
