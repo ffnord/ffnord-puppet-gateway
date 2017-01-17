@@ -1,13 +1,13 @@
 class ffnord::monitor::vnstat () {
 
   ffnord::monitor::nrpe::check_command {
-    "vnstatd":
+    'vnstatd':
       command => '/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C vnstatd';
   }
 
-  package { 
-    'vnstat': 
-      ensure => installed; 
+  package {
+    'vnstat':
+      ensure => installed;
   }
 
   service {
@@ -21,7 +21,6 @@ class ffnord::monitor::vnstat () {
 
 define ffnord::monitor::vnstat::device() {
   include ffnord::monitor::vnstat
- 
   exec { "vnstat device ${name}":
     command => "/usr/bin/vnstat -u -i ${name}",
     require => [Package['vnstat']],

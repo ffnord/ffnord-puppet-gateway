@@ -4,13 +4,12 @@ class ffnord::bird6 (
 ) inherits ffnord::params {
 
   require ffnord::resources::repos
- 
   ffnord::monitor::nrpe::check_command {
-    "bird6":
+    'bird6':
       command => '/usr/lib/nagios/plugins/check_procs -w 1:1 -c 1:1 -C bird6';
   }
 
-  package { 
+  package {
     'bird6':
       ensure => installed,
       require => [
@@ -18,18 +17,17 @@ class ffnord::bird6 (
         Apt::Source['debian-backports']
       ];
   }
- 
   file {
     '/etc/bird/bird6.conf.d/':
       ensure => directory,
-      mode => "0755",
+      mode => '0755',
       owner => root,
       group => root,
       require => File['/etc/bird/'];
     '/etc/bird/bird6.conf':
       ensure => file,
-      mode => "0644",
-      content => template("ffnord/etc/bird/bird6.conf.erb"),
+      mode => '0644',
+      content => template('ffnord/etc/bird/bird6.conf.erb'),
       require => [
         Package['bird6'],
         File['/etc/bird/'],
@@ -41,14 +39,14 @@ class ffnord::bird6 (
       target => '/etc/bird/bird6.conf',
       require => File['/etc/bird/bird6.conf'],
       notify => Service['bird6'];
-  } 
+  }
 
   service {
     'bird6':
       ensure => running,
       enable => true,
       hasstatus => false,
-      restart => "/usr/sbin/birdc6 configure",
+      restart => '/usr/sbin/birdc6 configure',
       require => Package['bird6'],
       subscribe => File['/etc/bird/bird6.conf'];
   }
@@ -79,8 +77,8 @@ define ffnord::bird6::mesh (
   }
 
   file { "/etc/bird/bird6.conf.d/${mesh_code}.conf":
-    mode => "0644",
-    content => template("ffnord/etc/bird/bird6.interface.conf.erb"),
+    mode => '0644',
+    content => template('ffnord/etc/bird/bird6.interface.conf.erb'),
     require => [File['/etc/bird/bird6.conf.d/'],Package['bird6']],
     notify  => [
       File_line["bird6-${mesh_code}-include"],
@@ -105,15 +103,15 @@ define ffnord::bird6::icvpn (
 
   include ffnord::icvpn
 
-  file_line { 
-    "icvpn-template6":
+  file_line {
+    'icvpn-template6':
       path => '/etc/bird/bird6.conf',
       line => 'include "/etc/bird/bird6.conf.d/icvpn-template.conf";',
       require => File['/etc/bird/bird6.conf'],
       notify  => Service['bird6'];
   }->
   file_line {
-    "icvpn-include6":
+    'icvpn-include6':
       path => '/etc/bird/bird6.conf',
       line => 'include "/etc/bird/bird6.conf.d/icvpn-peers.conf";',
       require => [
@@ -121,13 +119,13 @@ define ffnord::bird6::icvpn (
         Class['ffnord::resources::meta']
       ],
       notify  => Service['bird6'];
-  } 
+  }
 
   # Process meta data from tinc directory
-  file { "/etc/bird/bird6.conf.d/icvpn-template.conf":
-    mode => "0644",
-    content => template("ffnord/etc/bird/bird6.icvpn-template.conf.erb"),
-    require => [ 
+  file { '/etc/bird/bird6.conf.d/icvpn-template.conf':
+    mode => '0644',
+    content => template('ffnord/etc/bird/bird6.icvpn-template.conf.erb'),
+    require => [
       File['/etc/bird/bird6.conf.d/'],
       Package['bird6'],
       Class['ffnord::tinc'],
@@ -137,5 +135,5 @@ define ffnord::bird6::icvpn (
       File_line['icvpn-include6'],
       File_line['icvpn-template6']
     ];
-  } 
+  }
 }

@@ -4,7 +4,7 @@ class ffnord::monitor::zabbix ( $zabbixserver
   apt::key {
     'zabbix-official-repo.key':
       key => '79EA5ED4',
-      key_source => "http://repo.zabbix.com/zabbix-official-repo.key";
+      key_source => 'http://repo.zabbix.com/zabbix-official-repo.key';
   }
 
   apt::source {
@@ -35,7 +35,7 @@ class ffnord::monitor::zabbix ( $zabbixserver
   file {
     '/etc/zabbix/zabbix_agentd.d/':
       ensure => directory,
-      mode => "0755",
+      mode => '0755',
       owner => root,
       group => root,
       require => File['/etc/zabbix/zabbix_agentd.d/gw_monitoring.conf'];

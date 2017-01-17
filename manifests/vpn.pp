@@ -1,6 +1,6 @@
-class ffnord::vpn ( 
-  $gw_vpn_interface  = "tun-anonvpn", # Interface name for the anonymous vpn
-  $gw_control_ip     = "8.8.8.8",     # Control ip addr 
+class ffnord::vpn (
+  $gw_vpn_interface  = 'tun-anonvpn', # Interface name for the anonymous vpn
+  $gw_control_ip     = '8.8.8.8',     # Control ip addr
   $gw_bandwidth      = 54,            # How much bandwith we should have up/down per mesh interface
 ) {
 
@@ -23,15 +23,13 @@ class ffnord::vpn::provider () {
     require => Package['openvpn'],
     notify => Class['ffnord::vpn'];
   }
- 
   package { 'openvpn':
     ensure => installed;
   }
 
   class { 'ffnord::vpn': }
- 
   ffnord::monitor::nrpe::check_command {
-    "openvpn_anonvpn":
+    'openvpn_anonvpn':
       command => '/usr/lib/nagios/plugins/check_procs -c 1:1 -w 1:1 -C openvpn -a "ovpn-anonvpn"';
   }
 
@@ -43,20 +41,20 @@ class ffnord::vpn::provider () {
 
   # Define Firewall rule for masquerade
   file {
-    '/etc/iptables.d/910-Masquerade-tun-anonvpn':
-     ensure => file,
-     owner => 'root',
-     group => 'root',
-     mode => '0644',
-     content => 'ip4tables -t nat -A POSTROUTING -o tun-anonvpn -j MASQUERADE',
-     require => [File['/etc/iptables.d/']];
-    '/etc/openvpn/anonvpn-up.sh':
-      ensure => file,
-      owner => "root",
-      group => "root",
-      mode => "0755",
-      source => "puppet:///modules/ffnord/etc/openvpn/anonvpn-up.sh",
-      require => [Package['openvpn']];
+  '/etc/iptables.d/910-Masquerade-tun-anonvpn':
+    ensure => file,
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    content => 'ip4tables -t nat -A POSTROUTING -o tun-anonvpn -j MASQUERADE',
+    require => [File['/etc/iptables.d/']];
+  '/etc/openvpn/anonvpn-up.sh':
+    ensure => file,
+    owner => 'root',
+    group => 'root',
+    mode => '0755',
+    source => 'puppet:///modules/ffnord/etc/openvpn/anonvpn-up.sh',
+    require => [Package['openvpn']];
   }
 }
 
@@ -84,21 +82,22 @@ class ffnord::vpn::provider::generic (
   file{
     "/etc/openvpn/${name}/":
       ensure => directory,
-      owner => "root",
-      group => "root",
-      mode => "0644",
+      owner => 'root',
+      group => 'root',
+      mode => '0644',
       source => $config,
       recurse => true,
       require => [Package['openvpn']];
-    '/etc/openvpn/anonvpn.conf': 
+    '/etc/openvpn/anonvpn.conf':
       ensure => link,
-      owner => "root",
-      group => "root",
-      mode => "0644",
+      owner => 'root',
+      group => 'root',
+      mode => '0644',
       target => "/etc/openvpn/${name}/${name}.conf",
-      require => [File["/etc/openvpn/$name"],
-                  Package['openvpn'],
-                 ],
+      require => [
+        File["/etc/openvpn/${name}"],
+        Package['openvpn'],
+      ],
       notify => [Service['openvpn']];
   }
 }
@@ -111,46 +110,47 @@ class ffnord::vpn::provider::hideio (
 ) {
   include ffnord::vpn::provider
 
-  file { 
-    '/etc/openvpn/anonvpn.conf': 
+  file {
+    '/etc/openvpn/anonvpn.conf':
       ensure => link,
-      owner => "root",
-      group => "root",
-      mode => "0644",
-      target => "/etc/openvpn/hideio/hideio.conf",
-      require => [File["/etc/openvpn/hideio/hideio.conf"],
-                  File["/etc/openvpn/hideio/password"],
-                  File["/etc/openvpn/hideio/TrustedRoot.pem"],
-                  File["/etc/openvpn/anonvpn-up.sh"],
-                  Package['openvpn'],
-                 ],
+      owner => 'root',
+      group => 'root',
+      mode => '0644',
+      target => '/etc/openvpn/hideio/hideio.conf',
+      require => [
+        File['/etc/openvpn/hideio/hideio.conf'],
+        File['/etc/openvpn/hideio/password'],
+        File['/etc/openvpn/hideio/TrustedRoot.pem'],
+        File['/etc/openvpn/anonvpn-up.sh'],
+        Package['openvpn'],
+      ],
       notify => [Service['openvpn']];
     '/etc/openvpn/hideio':
       ensure => directory,
-      owner => "root",
-      group => "root",
-      mode => "0755",
+      owner => 'root',
+      group => 'root',
+      mode => '0755',
       require => [Package['openvpn']];
-    '/etc/openvpn/hideio/hideio.conf': 
+    '/etc/openvpn/hideio/hideio.conf':
       ensure => file,
-      owner => "root",
-      group => "root",
-      mode => "0644",
-      content => template("ffnord/etc/openvpn/hideio.conf.erb"),
-      require => [File["/etc/openvpn/hideio"],Package['openvpn']];
+      owner => 'root',
+      group => 'root',
+      mode => '0644',
+      content => template('ffnord/etc/openvpn/hideio.conf.erb'),
+      require => [File['/etc/openvpn/hideio'],Package['openvpn']];
     '/etc/openvpn/hideio/password':
       ensure => file,
-      owner => "root",
-      group => "root",
-      mode => "0640",
-      content => template("ffnord/etc/openvpn/password.erb"),
+      owner => 'root',
+      group => 'root',
+      mode => '0640',
+      content => template('ffnord/etc/openvpn/password.erb'),
       require => [File['/etc/openvpn/hideio']];
     '/etc/openvpn/hideio/TrustedRoot.pem':
       ensure => file,
-      owner => "root",
-      group => "root",
-      mode => "0644",
-      source => "puppet:///modules/ffnord/etc/openvpn/hideio.root.pem",
+      owner => 'root',
+      group => 'root',
+      mode => '0644',
+      source => 'puppet:///modules/ffnord/etc/openvpn/hideio.root.pem',
       require => [File['/etc/openvpn/hideio']];
   }
 }

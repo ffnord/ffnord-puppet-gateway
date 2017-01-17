@@ -6,7 +6,7 @@ class ffnord::maintenance (
   Class['ffnord::resources::ffnord'] ->
 
   ffnord::resources::ffnord::field {
-    "MAINTENANCE": value => "${maintenance}";
+    'MAINTENANCE': value => $maintenance;
   }
 
   file {

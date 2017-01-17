@@ -8,18 +8,18 @@ class ffnord::ntp () {
   file {
     '/etc/ntp.conf':
       ensure => file,
-      mode => "0644",
-      owner => "root",
-      group => "root",
-      source => "puppet:///modules/ffnord/etc/ntp.conf",
+      mode => '0644',
+      owner => 'root',
+      group => 'root',
+      source => 'puppet:///modules/ffnord/etc/ntp.conf',
       require => Package['ntp'];
   }
 
   service {
     'ntp':
+      ensure => running,
       enable => true,
       hasrestart => true,
-      ensure => running,
       require => [
         Package['ntp'],
         File['/etc/ntp.conf']

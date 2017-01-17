@@ -3,8 +3,8 @@ class ffnord::resources::fastd {
   include ffnord::resources::repos
 
   Class[ffnord::resources::repos]
-  -> package { 'ffnord::resources::fastd': name => "fastd", ensure => installed;}
-  -> service { 'ffnord::resources::fastd': name => "fastd", hasrestart => true, ensure => running, enable => true; }
+  -> package { 'ffnord::resources::fastd': ensure => installed, name => 'fastd';}
+  -> service { 'ffnord::resources::fastd': ensure => running, name => 'fastd', hasrestart => true, enable => true; }
 
   file {
     '/usr/local/bin/fastd-query':
@@ -36,11 +36,11 @@ class ffnord::resources::fastd::auto_fetch_keys {
 
   file { '/usr/local/bin/autoupdate_fastd_keys': ensure => absent; }
 
-  package { 'ffnord::resources::cron': name => "cron", ensure => installed; }
+  package { 'ffnord::resources::cron': ensure => installed, name => 'cron'; }
   -> cron {
-   'autoupdate_fastd':
-     command => '/usr/local/bin/update-fastd-keys pull',
-     user    => root,
-     minute  => '*/5';
+  'autoupdate_fastd':
+    command => '/usr/local/bin/update-fastd-keys pull',
+    user    => root,
+    minute  => '*/5';
   }
 }
