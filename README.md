@@ -81,6 +81,8 @@ class {
     rmem_default => 87380,     # Define the default socket recv buffer
     rmem_max     => 12582912,  # Define the maximum socket recv buffer
     
+    gw_gateway_ips = "192.0.2.1 192.0.2.2 192.0.2.3" # Define target to ping against for function check
+
     max_backlog  => 5000,      # Define the maximum packages in buffer
 }
 
@@ -112,7 +114,7 @@ ffnord::mesh {
                    , '10.35.10.1'
                    , '10.35.15.1'
                    , '10.35.20.1'
-                   ]
+                   ],
 }
 
 ffnord::named::zone {
