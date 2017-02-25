@@ -71,17 +71,17 @@ Example puppet code (save e.g. as `/root/gateway.pp`):
 # Global parameters for this host
 class { 
   'ffnord::params':
-    router_id => "10.35.0.1", # The id of this router, probably the ipv4 address
-                              # of the mesh device of the providing community
-    icvpn_as => "65035",      # The as of the providing community
-    wan_devices => ['eth0'],   # A array of devices which should be in the wan zone
+    router_id => "10.35.0.1",  # The id of this router, probably the ipv4 address
+                               # of the mesh device of the providing community
+    icvpn_as => "65035",       # The AS of the providing community
+    wan_devices => ['eth0'],   # An array of devices which should be in the wan zone
     
     wmem_default => 87380,     # Define the default socket send buffer
     wmem_max     => 12582912,  # Define the maximum socket send buffer
     rmem_default => 87380,     # Define the default socket recv buffer
     rmem_max     => 12582912,  # Define the maximum socket recv buffer
     
-    gw_gateway_ips = "192.0.2.1 192.0.2.2 192.0.2.3" # Define target to ping against for function check
+    gw_control_ips => "192.0.2.1 192.0.2.2 192.0.2.3", # Define target to ping against for function check
 
     max_backlog  => 5000,      # Define the maximum packages in buffer
 }
