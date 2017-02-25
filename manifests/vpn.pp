@@ -1,6 +1,5 @@
 class ffnord::vpn (
   $gw_vpn_interface  = 'tun-anonvpn', # Interface name for the anonymous vpn
-  $gw_control_ip     = '8.8.8.8',     # Control ip addr
   $gw_bandwidth      = 54,            # How much bandwith we should have up/down per mesh interface
 ) {
 
