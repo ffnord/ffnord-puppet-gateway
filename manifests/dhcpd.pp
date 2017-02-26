@@ -57,7 +57,7 @@ class ffnord::dhcpd::base {
     'isc-dhcp-client':
       ensure => 'absent',
   }
-  
+
   package {
     'isc-dhcp-server':
       ensure => 'installed',

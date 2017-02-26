@@ -205,18 +205,18 @@ ip46tables -A forward -i <%=@name%> -j <%=@chain%>-forward
 define ffnord::firewall::forward (
   $chain = 'mesh' # Possible values are "mesh","wan"
 ) {
- include ffnord::firewall
+  include ffnord::firewall
 
- file { "/etc/iptables.d/800-${chain}-forward-ACCEPT-${name}":
-   ensure => file,
-   owner => 'root',
-   group => 'root',
-   mode => '0644',
-   content => inline_template("# Process packages from device <%=@name%>
+  file { "/etc/iptables.d/800-${chain}-forward-ACCEPT-${name}":
+    ensure => file,
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    content => inline_template("# Process packages from device <%=@name%>
 ip46tables -A mesh-forward -o <%=@name%> -j ACCEPT
 "),
-   require => [File['/etc/iptables.d/']];
- }
+    require => [File['/etc/iptables.d/']];
+  }
 }
 
 define ffnord::firewall::set_value(
@@ -224,12 +224,12 @@ define ffnord::firewall::set_value(
   $value,
 ) {
 
- file { "/etc/iptables.d/000-file-value-${name}": 
-   ensure => file,
-   owner => 'root',
-   group => 'root',
-   mode => '0644',
-   content => inline_template("set_value ${path} ${value}\n"),
-   require => [File['/etc/iptables.d/']];
- }
+  file { "/etc/iptables.d/000-file-value-${name}": 
+    ensure => file,
+    owner => 'root',
+    group => 'root',
+    mode => '0644',
+    content => inline_template("set_value ${path} ${value}\n"),
+    require => [File['/etc/iptables.d/']];
+  }
 }
