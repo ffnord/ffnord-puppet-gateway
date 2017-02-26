@@ -9,8 +9,13 @@ if test -e /etc/ffnord ; then
   . /etc/ffnord
   MAINTENANCE=${MAINTENANCE:-0}
 else
-  echo "no file /etc/$MESH_CODE present. MAINTENANCE mode is supposed off" 
+  echo "no file /etc/ffnord present. MAINTENANCE mode is supposed off" 
   MAINTENANCE=0
+fi
+
+if [ "$MESH_CODE"=="" ] ; then 
+  echo "no MESH_CODE in /etc/ffnord present. ffki is used" 
+  MESH_CODE=ffki
 fi
 
 R="\033[31m" #red
