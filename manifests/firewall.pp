@@ -224,7 +224,7 @@ define ffnord::firewall::set_value(
   $value,
 ) {
 
-  file { "/etc/iptables.d/000-file-value-${name}": 
+  file { "/etc/iptables.d/000-file-value-${name}":
     ensure => file,
     owner => 'root',
     group => 'root',
