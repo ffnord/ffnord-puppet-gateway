@@ -95,4 +95,7 @@ for i in $MESH_CODE-vpn*; do
   FASTD_SOCKET=$SOCK fastd-query peers name $i|egrep "(established|vpn)"
 done
 
-# fastd-query-$MESH_CODE peers mac ba:76:1b:ba:62:cb
+echo "conntrack_max should be set to 1048576:"
+sysctl -a|grep conntrack_max --color=auto
+echo set with
+echo "/sbin/sysctl -w net.netfilter.nf_conntrack_max=1048576 && echo net.ipv4.netfilter.ip_conntrack_max = 1048576 >> /etc/sysctl.conf"
