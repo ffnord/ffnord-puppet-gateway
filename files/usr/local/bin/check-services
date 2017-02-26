@@ -5,8 +5,8 @@
 
 MESH_CODE=$(ls /sys/class/net/bat-* -d|sed 's/.*\/bat-//g')
 
-if test -e /etc/$MESH_CODE ; then 
-  . /etc/$MESH_CODE
+if test -e /etc/ffnord ; then 
+  . /etc/ffnord
   MAINTENANCE=${MAINTENANCE:-0}
 else
   echo "no file /etc/$MESH_CODE present. MAINTENANCE mode is supposed off" 
