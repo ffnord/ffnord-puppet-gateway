@@ -49,18 +49,8 @@ class ffnord::dhcpd::base {
   }
 
   package {
-    'isc-dhcp-common':
-      ensure => 'absent',
-  }
-
-  package {
-    'isc-dhcp-client':
-      ensure => 'absent',
-  }
-
-  package {
     'isc-dhcp-server':
-      ensure => 'installed',
+      ensure => 'installed';
   }
 
   file {
