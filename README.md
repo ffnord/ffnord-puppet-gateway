@@ -36,11 +36,11 @@ Install Puppet and some required modules with:
 
 ```
 apt-get install --no-install-recommends puppet git apt-transport-https
-puppet module install puppetlabs-stdlib
+puppet module install puppetlabs-stdlib --version 4.15.0
 puppet module install puppetlabs-apt --version 1.5.1
 puppet module install puppetlabs-vcsrepo --version 1.3.2
-puppet module install saz-sudo
-puppet module install torrancew-account
+puppet module install saz-sudo --version 4.1.0
+puppet module install torrancew-account --version 0.1.0
 ```
 
 Then add this module (which is not in the puppet forge, so it has to be
