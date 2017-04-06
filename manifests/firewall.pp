@@ -44,11 +44,11 @@ class ffnord::firewall (
   }
 
   service {
-    $iptablespersistentservice:
-       ensure => running,
-       hasrestart => true,
-       enable => true,
-       require => Package['iptables-persistent'];
+  $iptablespersistentservice:
+    ensure => running,
+    hasrestart => true,
+    enable => true,
+    require => Package['iptables-persistent'];
   }
 
   file {
