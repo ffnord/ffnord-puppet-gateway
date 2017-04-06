@@ -13,7 +13,7 @@ class ffnord::system::conntrack (
   $max_backlog = $ffnord::params::max_backlog,
 ) inherits ffnord::params {
   file {
-    "/etc/sysctl.d/conntrack.conf":
+    '/etc/sysctl.d/conntrack.conf':
       ensure => file,
       mode => '0644',
       owner => 'root',
@@ -22,29 +22,29 @@ class ffnord::system::conntrack (
   }
 
   exec {
-    'sysctl load conntrack.conf':
-     command => "/sbin/sysctl -p /etc/sysctl.d/conntrack.conf",
-     require => File['/etc/sysctl.d/conntrack.conf'];
+  'sysctl load conntrack.conf':
+    command => '/sbin/sysctl -p /etc/sysctl.d/conntrack.conf',
+    require => File['/etc/sysctl.d/conntrack.conf'];
   }
 
   file {
-    "/etc/sysctl.d/routing.conf":
+    '/etc/sysctl.d/routing.conf':
       ensure => file,
       mode => '0644',
       owner => 'root',
       group => 'root',
-      content => template("ffnord/etc/sysctl.d/routing.conf");
+      content => template('ffnord/etc/sysctl.d/routing.conf');
   }
 
   exec {
-    'sysctl load routing.conf':
-     command => "/sbin/sysctl -p /etc/sysctl.d/routing.conf",
-     require => File['/etc/sysctl.d/routing.conf'];
+  'sysctl load routing.conf':
+    command => '/sbin/sysctl -p /etc/sysctl.d/routing.conf',
+    require => File['/etc/sysctl.d/routing.conf'];
   }
 
   ffnord::firewall::set_value {
-    "conntrack_max":
-      path  => "/sys/module/nf_conntrack/parameters/hashsize",
+    'conntrack_max':
+      path  => '/sys/module/nf_conntrack/parameters/hashsize',
       value => $conntrack_max;
   }
 }

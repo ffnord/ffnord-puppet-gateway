@@ -11,22 +11,22 @@ class ffnord::resources::bird (
     file {
      '/etc/apt/preferences.d/bird':
         ensure => file,
-        mode => "0644",
+        mode => '0644',
         owner => root,
         group => root,
-        source => "puppet:///modules/ffnord/etc/apt/preferences.d/bird";
+        source => 'puppet:///modules/ffnord/etc/apt/preferences.d/bird';
     }
   }
 
-  ffnord::firewall::service { "bird":
+  ffnord::firewall::service { 'bird':
     ports  => ['179'],
     protos => ['tcp'],
     chains => ['mesh']
   }
 
   ffnord::resources::ffnord::field {
-    "INCLUDE_BIRD4": value => $include_bird4;
-    "INCLUDE_BIRD6": value => $include_bird6;
+    'INCLUDE_BIRD4': value => $include_bird4;
+    'INCLUDE_BIRD6': value => $include_bird6;
   }
 
 }

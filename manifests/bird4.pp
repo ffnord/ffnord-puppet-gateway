@@ -4,57 +4,52 @@ class ffnord::bird4 (
 ) inherits ffnord::params {
 
   require ffnord::resources::repos
- 
-  ffnord::monitor::nrpe::check_command {
-    "bird":
-      command => '/usr/lib/nagios/plugins/check_procs -w 1:1 -c 1:1 -C bird';
+  ffnord::monitor::nrpe::check_command { 'bird':
+    command => '/usr/lib/nagios/plugins/check_procs -w 1:1 -c 1:1 -C bird';
   }
 
   if($lsbdistcodename=="wheezy"){
-    package { 
-      'bird':
-        ensure => installed,
-        require => [
-          File['/etc/apt/preferences.d/bird'],
-          Apt::Source['debian-backports']
-        ];
+    package {'bird':
+      ensure => installed,
+      require => [
+        File['/etc/apt/preferences.d/bird'],
+        Apt::Source['debian-backports']
+      ];
     }
   } else {
-    package { 
-      'bird':
-        ensure => installed;
+    package {'bird':
+      ensure => installed;
     }
   }
-  file {
-    '/etc/bird/bird.conf.d/':
-      ensure => directory,
-      mode => "0755",
-      owner => root,
-      group => root,
-      require => File['/etc/bird/'];
-    '/etc/bird/bird.conf':
-      ensure => file,
-      mode => "0644",
-      content => template("ffnord/etc/bird/bird.conf.erb"),
-      require => [
-        Package['bird'],
-        File['/etc/bird/'],
-        File['/etc/bird/bird.conf.d/']
-      ],
-      before => Class['ffnord::resources::meta'];
-    '/etc/bird.conf':
-      ensure => link,
-      target => '/etc/bird/bird.conf',
-      require => File['/etc/bird/bird.conf'],
-      notify => Service['bird'];
-  } 
+  file { '/etc/bird/bird.conf.d/':
+    ensure => directory,
+    mode => '0755',
+    owner => root,
+    group => root,
+    require => File['/etc/bird/'];
+  '/etc/bird/bird.conf':
+    ensure => file,
+    mode => '0644',
+    content => template('ffnord/etc/bird/bird.conf.erb'),
+    require => [
+      Package['bird'],
+      File['/etc/bird/'],
+      File['/etc/bird/bird.conf.d/']
+    ],
+    before => Class['ffnord::resources::meta'];
+  '/etc/bird.conf':
+    ensure => link,
+    target => '/etc/bird/bird.conf',
+    require => File['/etc/bird/bird.conf'],
+    notify => Service['bird'];
+  }
 
   service {
     'bird':
       ensure => running,
       enable => true,
       hasstatus => false,
-      restart => "/usr/sbin/birdc configure",
+      restart => '/usr/sbin/birdc configure',
       require => Package['bird'],
       subscribe => File['/etc/bird/bird.conf'];
   }
@@ -86,8 +81,8 @@ define ffnord::bird4::mesh (
   }
 
   file { "/etc/bird/bird.conf.d/${mesh_code}.conf":
-    mode => "0644",
-    content => template("ffnord/etc/bird/bird.interface.conf.erb"),
+    mode => '0644',
+    content => template('ffnord/etc/bird/bird.interface.conf.erb'),
     require => [File['/etc/bird/bird.conf.d/'],Package['bird']],
     notify  => [
       File_line["bird-${mesh_code}-include"],
@@ -111,15 +106,15 @@ define ffnord::bird4::icvpn (
 
   $icvpn_name = $name
 
-  file_line { 
-    "icvpn-template":
+  file_line {
+    'icvpn-template':
       path => '/etc/bird/bird.conf',
       line => 'include "/etc/bird/bird.conf.d/icvpn-template.conf";',
       require => File['/etc/bird/bird.conf'],
       notify  => Service['bird'];
   }->
   file_line {
-    "icvpn-include":
+    'icvpn-include':
       path => '/etc/bird/bird.conf',
       line => 'include "/etc/bird/bird.conf.d/icvpn-peers.conf";',
       require => [
@@ -127,13 +122,13 @@ define ffnord::bird4::icvpn (
         Class['ffnord::resources::meta']
       ],
       notify  => Service['bird'];
-  } 
+  }
 
   # Process meta data from tinc directory
-  file { "/etc/bird/bird.conf.d/icvpn-template.conf":
-    mode => "0644",
-    content => template("ffnord/etc/bird/bird.icvpn-template.conf.erb"),
-    require => [ 
+  file { '/etc/bird/bird.conf.d/icvpn-template.conf':
+    mode => '0644',
+    content => template('ffnord/etc/bird/bird.icvpn-template.conf.erb'),
+    require => [
       File['/etc/bird/bird.conf.d/'],
       Package['bird'],
       Class['ffnord::tinc'],
@@ -143,5 +138,5 @@ define ffnord::bird4::icvpn (
       File_line['icvpn-include'],
       File_line['icvpn-template']
     ];
-  } 
+  }
 }
