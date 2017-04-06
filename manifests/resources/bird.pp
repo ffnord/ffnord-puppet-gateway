@@ -8,13 +8,12 @@ class ffnord::resources::bird (
       mode => '0755';
   }
   if($lsbdistcodename=="wheezy"){
-    file {
-     '/etc/apt/preferences.d/bird':
-        ensure => file,
-        mode => '0644',
-        owner => root,
-        group => root,
-        source => 'puppet:///modules/ffnord/etc/apt/preferences.d/bird';
+    file { '/etc/apt/preferences.d/bird':
+      ensure => file,
+      mode => '0644',
+      owner => root,
+      group => root,
+      source => 'puppet:///modules/ffnord/etc/apt/preferences.d/bird';
     }
   }
 

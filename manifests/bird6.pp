@@ -10,7 +10,7 @@ class ffnord::bird6 (
   }
 
   if($lsbdistcodename=="wheezy"){
-    package { 
+    package {
       'bird6':
         ensure => installed,
         require => [
@@ -19,7 +19,7 @@ class ffnord::bird6 (
         ];
     }
   } else {
-    package { 
+    package {
       'bird6':
         ensure => installed;
     }
