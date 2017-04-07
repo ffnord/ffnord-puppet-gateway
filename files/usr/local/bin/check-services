@@ -14,7 +14,8 @@ else
 fi
 
 if [ "$MESH_CODE"=="" ] ; then 
-  echo "no MESH_CODE in /etc/ffnord present. ffki is used" 
+  echo "WARNING: no MESH_CODE in /etc/ffnord present and no file /sys/class/net/bat-*"
+  echo "Mesh code 'ffki' is used" 
   MESH_CODE=ffki
 fi
 
