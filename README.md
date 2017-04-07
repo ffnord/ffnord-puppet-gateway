@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ffnord/ffnord-puppet-gateway.svg?branch=master)](https://travis-ci.org/ffnord/ffnord-puppet-gateway)
+
 # Freifunk Gateway Module
 
 * Daniel Ehlers <danielehlers@mindeye.net>
