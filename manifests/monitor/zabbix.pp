@@ -10,7 +10,7 @@ class ffnord::monitor::zabbix ( $zabbixserver
   apt::source {
     'zabbix':
       location   => 'http://repo.zabbix.com/zabbix/2.4/debian',
-      release    => 'wheezy',
+      release    => "${lsbdistcodename}",
       repos      => 'main';
   }
 

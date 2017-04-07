@@ -24,7 +24,7 @@ class ffnord::resources::repos (
   apt::source { 'debian-backports':
     location          => $debian_mirror,
     required_packages => 'debian-keyring debian-archive-keyring',
-    release           => 'wheezy-backports',
+    release           => "${lsbdistcodename}-backports",
     repos             => 'main contrib',
     include_src       => false,
   }

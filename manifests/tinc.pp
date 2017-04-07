@@ -7,13 +7,20 @@ class ffnord::tinc (
 
   $icvpn_peers = [],
 ) {
-  package {
-    'tinc':
-      ensure => installed,
-      require => [
-        File['/etc/apt/preferences.d/tinc'],
-        Apt::Source['debian-backports']
-      ];
+  if($lsbdistcodename=="wheezy"){
+    package {
+      'tinc':
+        ensure => installed,
+        require => [
+          File['/etc/apt/preferences.d/tinc'],
+          Apt::Source['debian-backports']
+        ];
+    }
+  } else {
+    package {
+      'tinc':
+        ensure => installed,
+    }
   }
 
   service {
@@ -57,12 +64,16 @@ class ffnord::tinc (
       target => '/etc/tinc/icvpn/scripts/post-merge',
       require => Vcsrepo['/etc/tinc/icvpn/'],
       mode => '0755';
+  }
+  if($lsbdistcodename=="wheezy") {
+    file {
     '/etc/apt/preferences.d/tinc':
       ensure => file,
       mode => '0644',
       owner => root,
       group => root,
       source => 'puppet:///modules/ffnord/etc/apt/preferences.d/tinc';
+    }
   }
 
   file_line {

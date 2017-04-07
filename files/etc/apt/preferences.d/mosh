@@ -1,3 +1,5 @@
+# auto-deployed by puppet *DO NOT TOUCH*
+# only needed for wheezy
 Package: mosh
 Pin: release a=wheezy-backports
 Pin-Priority: 500

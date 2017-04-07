@@ -18,7 +18,7 @@ class ffnord::system::conntrack (
       mode => '0644',
       owner => 'root',
       group => 'root',
-      content => inline_template("net.netfilter.nf_conntrack_max=<%=conntrack_max%>\n");
+      content => inline_template("net.netfilter.nf_conntrack_max=<%=@conntrack_max%>\n");
   }
 
   exec {

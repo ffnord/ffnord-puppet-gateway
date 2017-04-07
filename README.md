@@ -190,11 +190,11 @@ ffnord :: mesh {
     mesh_as,          # AS of your community
     mesh_mac,         # mac address mesh device: 52:54:00:bd:e6:d4
     vpn_mac,          # mac address vpn device, ideally != mesh_mac and unique
-    mesh_ipv6,        # ipv6 address of mesh device in cidr notation, e.g. 10.35.0.1/19
+    mesh_ipv4,        # ipv4 address of mesh device in cidr notation, e.g. 10.35.0.1/19
     mesh_mtu,         # mtu used, default only suitable for fastd via ipv4
     range_ipv4,       # ipv4 range allocated to community, this might be different to
-                      # the one used in the mesh in cidr notation, e.g. 10.35.0.1/19
-    mesh_ipv4,        # ipv4 address of mesh device in cidr notation, e.g. fd35:f308:a922::ff00/64
+                      # the one used in the mesh in cidr notation, e.g. 10.35.0.1/18
+    mesh_ipv6,        # ipv6 address of mesh device in cidr notation, e.g. fd35:f308:a922::ff00/64
     mesh_peerings,    # path to the local peerings description yaml file
     
     fastd_secret,     # fastd secret
@@ -300,6 +300,10 @@ automatically! You have to call `build-firewall` to apply them.
 
 ### Run Puppet
 
+On Debian jessie you have to load the iptables module manally before applying the puppet manifest:
+
+    modprobe ip_tables
+
 To apply the puppet manifest (e.g. saved as `/root/gateway.pp`) run:
 
 ```
@@ -317,6 +321,7 @@ To run puppet again, you have to ensure that old fastd-configurations are delete
 ```
 rm -Rf /etc/fastd/
 puppet apply --verbose /root/gateway.pp
+build-firewall
 ```
 
 ## Maintenance Mode
