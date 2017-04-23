@@ -308,6 +308,10 @@ On Debian jessie you have to load the ip_tables and ip_conntrack module manally 
     modprobe ip_tables
     modprobe ip_conntrack
 
+On Debian jessie add it to autoĺoad on reboot:
+
+    echo ip_conntrack >> /etc/modules
+
 To apply the puppet manifest (e.g. saved as `/root/gateway.pp`) run:
 
 ```
