@@ -106,8 +106,9 @@ ffnord::mesh {
     fastd_port   => 11280,
     fastd_peers_git => 'git://somehost/peers.git',
     
-    dhcp_ranges => [ '10.35.0.2 10.35.0.254'
-                   , '10.35.1.1 10.35.1.254'
+    dhcp_ranges => [ '10.35.0.2 10.35.0.254'    # the whole net is 10.71.0.0 - 10.71.63.255 
+                                                # so take one 32dr of this range but don't give out the ip of the gw itself
+                   , '10.35.1.1 10.35.1.254'    # more ranges can be added here
                    , '10.35.2.2 10.35.2.254'
                    , '10.35.3.2 10.35.3.254'
                    , '10.35.4.2 10.35.4.254'
@@ -150,7 +151,7 @@ ffnord::fastd {
 ffnord::icvpn::setup {
   'gotham_city0':
     icvpn_as => 65035,
-    icvpn_ipv4_address => "10.112.0.1",
+    icvpn_ipv4_address => "10.207.0.1",
     icvpn_ipv6_address => "fec0::a:cf:0:35",
     icvpn_exclude_peerings     => [gotham],
     tinc_keyfile       => "/root/tinc_rsa_key.priv"
@@ -302,9 +303,10 @@ automatically! You have to call `build-firewall` to apply them.
 
 ### Run Puppet
 
-On Debian jessie you have to load the iptables module manally before applying the puppet manifest:
+On Debian jessie you have to load the ip_tables and ip_conntrack module manally before applying the puppet manifest:
 
     modprobe ip_tables
+    modprobe ip_conntrack
 
 To apply the puppet manifest (e.g. saved as `/root/gateway.pp`) run:
 
