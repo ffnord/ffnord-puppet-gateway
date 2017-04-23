@@ -21,7 +21,7 @@ if [ "$MESH_CODE" == "" ] ; then
     MESH_CODE=ffki
   fi
 fi
-echo "m="$MESH_CODE
+echo "Mesh code: "$MESH_CODE
 
 R="\033[31m" #red
 G="\033[32m" #green
