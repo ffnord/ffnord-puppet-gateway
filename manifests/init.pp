@@ -17,6 +17,7 @@ define ffnord::mesh(
 
   $dhcp_ranges = [],  # dhcp pool
   $dns_servers = [],  # other dns servers in your network
+  $mesh_hop_penalty = 60, # hop_penalty for gateway hops
 ) {
 
   # TODO We should handle parameters in a param class pattern.
