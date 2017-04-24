@@ -38,7 +38,7 @@ class ffnord::firewall (
       ensure => installed;
   }
 
-  $iptablespersistentservice=$lsbdistcodename ? {
+  $iptablespersistentservice=$::lsbdistcodename ? {
     'wheezy' => 'iptables-persistent',
     default  => 'netfilter-persistent'
   }

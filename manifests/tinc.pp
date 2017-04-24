@@ -7,7 +7,7 @@ class ffnord::tinc (
 
   $icvpn_peers = [],
 ) {
-  if($lsbdistcodename=="wheezy"){
+  if($::lsbdistcodename=='wheezy'){
     package {
       'tinc':
         ensure => installed,
@@ -65,7 +65,7 @@ class ffnord::tinc (
       require => Vcsrepo['/etc/tinc/icvpn/'],
       mode => '0755';
   }
-  if($lsbdistcodename=="wheezy") {
+  if($::lsbdistcodename=='wheezy') {
     file {
     '/etc/apt/preferences.d/tinc':
       ensure => file,

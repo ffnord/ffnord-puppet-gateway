@@ -9,7 +9,7 @@ class ffnord::bird6 (
       command => '/usr/lib/nagios/plugins/check_procs -w 1:1 -c 1:1 -C bird6';
   }
 
-  if($lsbdistcodename=="wheezy"){
+  if($::lsbdistcodename=='wheezy'){
     package {
       'bird6':
         ensure => installed,
