@@ -7,14 +7,16 @@ resolv-retry infinite
 nobind
 persist-key
 persist-tun
-mute-replay-warnings
-ca pia/TrustedRoot.pem
-auth-user-pass pia/password
+cipher aes-128-cbc
+auth sha1
 tls-client
 remote-cert-tls server
-reneg-sec 0
-verb 3
+auth-user-pass pia/password
 comp-lzo
+verb 1
+reneg-sec 0
+crl-verify /etc/openvpn/pia/crl.rsa.2048.pem
+ca pia/ca.rsa.2048.crt
+disable-occ
 script-security 2
-route-noexec
 up anonvpn-up.sh
