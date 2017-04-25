@@ -173,7 +173,8 @@ class ffnord::vpn::provider::pia (
       require => [
         File['/etc/openvpn/pia/pia.conf'],
         File['/etc/openvpn/pia/password'],
-        File['/etc/openvpn/pia/TrustedRoot.pem'],
+	File['/etc/openvpn/pia/ca.rsa.2048.crt'],
+	File['/etc/openvpn/pia/crl.rsa.2048.pem'],
         File['/etc/openvpn/anonvpn-up.sh'],
         Package['openvpn'],
       ],
@@ -203,7 +204,14 @@ class ffnord::vpn::provider::pia (
       owner => 'root',
       group => 'root',
       mode => '0644',
-      source => 'puppet:///modules/ffnord/etc/openvpn/pia.root.pem',
+      source => 'puppet:///modules/ffnord/etc/openvpn/ca.rsa.2048.crt',
+      require => [File['/etc/openvpn/pia']];
+    '/etc/openvpn/pia/TrustedRoot.pem':
+      ensure => file,
+      owner => 'root',
+      group => 'root',
+      mode => '0644',
+      source => 'puppet:///modules/ffnord/etc/openvpn/crl.rsa.2048.pem',
       require => [File['/etc/openvpn/pia']];
   }
 }
