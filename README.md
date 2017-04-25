@@ -153,7 +153,7 @@ ffnord::icvpn::setup {
     icvpn_as => 65035,
     icvpn_ipv4_address => "10.207.0.1",
     icvpn_ipv6_address => "fec0::a:cf:0:35",
-    icvpn_exclude_peerings     => [gotham],
+    icvpn_exclude_peerings     => [gotham], # the own zone to prevent double configuration in icvpn-meta and own zone file
     tinc_keyfile       => "/root/tinc_rsa_key.priv"
 }
 
@@ -301,9 +301,8 @@ gc-gw4:
 The firewall rules created are collected in `/etc/iptables.d`, they are not applied
 automatically! You have to call `build-firewall` to apply them.
 
-### Run Puppet
-
-On Debian jessie you have to load the ip_tables and ip_conntrack module manally before applying the puppet manifest:
+### On Debian jessie
+you have to load the ip_tables and ip_conntrack module manally before applying the puppet manifest:
 
     modprobe ip_tables
     modprobe ip_conntrack
@@ -311,6 +310,8 @@ On Debian jessie you have to load the ip_tables and ip_conntrack module manally 
 On Debian jessie add it to autoĺoad on reboot:
 
     echo ip_conntrack >> /etc/modules
+
+### Run Puppet
 
 To apply the puppet manifest (e.g. saved as `/root/gateway.pp`) run:
 
@@ -330,6 +331,12 @@ To run puppet again, you have to ensure that old fastd-configurations are delete
 rm -Rf /etc/fastd/
 puppet apply --verbose /root/gateway.pp
 build-firewall
+```
+
+### First time: start services
+
+```
+/etc/init.d/fastd restart
 ```
 
 ## Maintenance Mode
