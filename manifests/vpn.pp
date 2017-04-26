@@ -199,14 +199,14 @@ class ffnord::vpn::provider::pia (
       mode => '0640',
       content => template('ffnord/etc/openvpn/password.erb'),
       require => [File['/etc/openvpn/pia']];
-    '/etc/openvpn/pia/TrustedRoot.pem':
+    '/etc/openvpn/pia/ca.rsa.2048.crt':
       ensure => file,
       owner => 'root',
       group => 'root',
       mode => '0644',
       source => 'puppet:///modules/ffnord/etc/openvpn/ca.rsa.2048.crt',
       require => [File['/etc/openvpn/pia']];
-    '/etc/openvpn/pia/TrustedRoot.pem':
+    '/etc/openvpn/pia/crl.rsa.2048.pem':
       ensure => file,
       owner => 'root',
       group => 'root',
