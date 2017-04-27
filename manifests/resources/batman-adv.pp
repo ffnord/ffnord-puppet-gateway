@@ -5,6 +5,9 @@ class ffnord::resources::batman-adv () {
   ->
   package {
     'batctl': ensure => installed;
-    'batman-adv-dkms': ensure => installed;
+    'batman-adv-dkms': ensure => $::lsbdistcodename ? {
+      'wheezy' => 'installed',
+      default => 'purged'
+    }
   }
 }
