@@ -8,7 +8,7 @@ class ffnord::bird4 (
     command => '/usr/lib/nagios/plugins/check_procs -w 1:1 -c 1:1 -C bird';
   }
 
-  if($lsbdistcodename=="wheezy"){
+  if($::lsbdistcodename=='wheezy'){
     package {'bird':
       ensure => installed,
       require => [

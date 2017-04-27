@@ -10,7 +10,7 @@ class ffnord::monitor::zabbix ( $zabbixserver
   apt::source {
     'zabbix':
       location   => 'http://repo.zabbix.com/zabbix/2.4/debian',
-      release    => "${lsbdistcodename}",
+      release    => $::lsbdistcodename,
       repos      => 'main';
   }
 
@@ -104,4 +104,3 @@ define ffnord::monitor::zabbix::check_script (
     })
   }
 }
-

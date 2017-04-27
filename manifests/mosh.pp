@@ -1,7 +1,7 @@
 class ffnord::mosh {
 
   require ffnord::resources::repos
-  if($lsbdistcodename=="wheezy"){
+  if($::lsbdistcodename=='wheezy'){
     package { 'mosh':
       ensure => installed,
       require => [
