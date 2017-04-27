@@ -1,0 +1,23 @@
+client
+dev-type tun
+dev tun-anonvpn
+proto udp
+remote <%= @openvpn_server %> <%= @openvpn_port %>
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+cipher aes-128-cbc
+auth sha1
+tls-client
+remote-cert-tls server
+auth-user-pass pia/password
+comp-lzo
+verb 1
+reneg-sec 0
+crl-verify /etc/openvpn/pia/crl.rsa.2048.pem
+ca pia/ca.rsa.2048.crt
+disable-occ
+script-security 2
+route-noexec
+up anonvpn-up.sh
