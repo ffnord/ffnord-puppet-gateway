@@ -48,7 +48,7 @@ class ffnord::system::conntrack (
       value => $conntrack_max;
   }
 
-  file { '/etc/sysctl.d/panic-reboot-conf':
+  file { '/etc/sysctl.d/panic-reboot.conf':
     ensure => present,
   }->
   file_line { 'Reboot on kernel panic':
