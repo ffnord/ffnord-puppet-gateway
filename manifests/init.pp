@@ -18,6 +18,13 @@ define ffnord::mesh(
   $dhcp_ranges = [],  # dhcp pool
   $dns_servers = [],  # other dns servers in your network
   $mesh_hop_penalty = 60, # hop_penalty for gateway hops
+
+  $fastd_igw_peers_git,   # fastd inter gateway peers
+  $fastd_igw_secret,      # fastd inter gateway secret
+  $fastd_igw_port,        # fastd inter gateway port
+
+  $igw_mtu,           # fastd inter gateway verification override
+  $igw_hop_penalty = 60, # hop_penalty for inter gateway traffic
 ) {
 
   # TODO We should handle parameters in a param class pattern.
@@ -75,6 +82,18 @@ define ffnord::mesh(
     fastd_port      => $fastd_port,
     fastd_peers_git => $fastd_peers_git,
     fastd_verify    => $fastd_verify;
+  } ->
+  ffnord::fastd { "fastd_igw_${mesh_code}":
+    mesh_code       => igw-$mesh_code,
+    mesh_interface  => igw-$mesh_code,
+    mesh_mac        => $mesh_mac,
+    mesh_hop_penalty=> $igw_hop_penalty,
+    vpn_mac         => $vpn_mac,
+    mesh_mtu        => $igw_mtu,
+    fastd_secret    => $fastd_igw_secret,
+    fastd_port      => $fastd_igw_port,
+    fastd_peers_git => $fastd_igw_peers_git,
+    fastd_verify    => $fastd_igw_verify;
   } ->
   ffnord::radvd { "br-${mesh_code}":
     mesh_ipv6_address    => $mesh_ipv6_address,
