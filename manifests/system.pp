@@ -47,4 +47,12 @@ class ffnord::system::conntrack (
       path  => '/sys/module/nf_conntrack/parameters/hashsize',
       value => $conntrack_max;
   }
+
+  file { '/etc/sysctl.d/panic-reboot.conf':
+    ensure => present,
+  }->
+  file_line { 'Reboot on kernel panic':
+    path => '/etc/sysctl.d/panic-reboot.conf',
+    line => 'kernel.panic = 10',
+  }
 }
