@@ -185,7 +185,7 @@ class { 'ffnord::nullmailer':
 
 # Useful packages
 package {
-  ['vim','tcpdump','dnsutils','realpath','screen','htop','tcpdump','mlocate','tig']:
+  ['vim','tcpdump','dnsutils','realpath','screen','htop','tcpdump','mlocate','tig','sshguard']:
     ensure => installed;
 }
 
