@@ -1,9 +1,12 @@
-# Common functions for pulling and updating data from git repositorys.
-# Cron jobs should call pull on script deriving from this, which should
-# call reload in the post-update hook when changes are incoming.
+# This script contains common functions that are included to be used in other scripts for 
+# pulling and updating data from git repositories.
+#
+# If this is used in cron jobs, it must be called with the option 'pull'. 
+# Scripts dereiving from this should be called with the option 'reload'
+# and can be used in a git post-update hook (when changes are incoming).
 # 
-# When calling by hand you could decide if you just reload and thus rebuild,
-# restart or whatever or pull in new data and then do the upper stuff.
+# When calling by hand you could decide if you just 'reload' and thus rebuild,
+# 'restart' or 'pull' in new data and then do the upper stuff.
 # 
 
 source /etc/ffnord
