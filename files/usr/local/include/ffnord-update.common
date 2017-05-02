@@ -8,6 +8,7 @@
 # When calling by hand you could decide if you just 'reload' and thus rebuild,
 # 'restart' or 'pull' in new data and then do the upper stuff.
 # 
+# Docs: https://github.com/ffnord/ffnord-puppet-gateway/blob/master/docs/scripts/ffnord-common.rst
 
 source /etc/ffnord
 source $1
