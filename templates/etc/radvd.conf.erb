@@ -4,6 +4,7 @@ interface <%= @interface %>
  AdvSendAdvert on;
  IgnoreIfMissing on;
  MaxRtrAdvInterval 200;
+ UnicastOnly on;
 
  prefix <%= @mesh_ipv6_prefix %>/<%= @mesh_ipv6_prefixlen %>
  {
