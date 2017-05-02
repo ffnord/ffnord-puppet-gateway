@@ -176,6 +176,13 @@ class { 'ffnord::alfred': master => true }
 
 class { 'ffnord::etckeeper': }
 
+class { 'ffnord::nullmailer':
+  adminaddr => 'noc@example.com',
+  remotes => 'mx.gotham.com',
+  defaultdomain => 'ffgo.de'.
+  
+}
+
 # Useful packages
 package {
   ['vim','tcpdump','dnsutils','realpath','screen','htop','tcpdump','mlocate','tig']:
