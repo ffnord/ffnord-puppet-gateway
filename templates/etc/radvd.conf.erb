@@ -5,13 +5,15 @@ interface <%= @interface %>
  IgnoreIfMissing on;
  MaxRtrAdvInterval 200;
  UnicastOnly on;
+ AdvDefaultLifetime 0;
 
  prefix <%= @mesh_ipv6_prefix %>/<%= @mesh_ipv6_prefixlen %>
  {
+   AdvPreferredLifetime 14400;
+   AdvValidLifetime 86400;
  };
 
  RDNSS <%= @mesh_ipv6_address %>
  {
  };
 };
-
