@@ -22,6 +22,7 @@ define ffnord::mesh(
   $fastd_igw_peers_git,   # fastd inter gateway peers
   $fastd_igw_secret,      # fastd inter gateway secret
   $fastd_igw_port,        # fastd inter gateway port
+  $fastd_igw_verify = '', # fastd backbone verification override
 
   $igw_mtu,           # fastd inter gateway verification override
   $igw_hop_penalty = 60, # hop_penalty for inter gateway traffic
