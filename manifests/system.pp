@@ -52,7 +52,7 @@ class ffnord::system::conntrack (
     ensure => present,
   }->
   file_line { 'Reboot on kernel panic':
-    path => '/etc/sysctl.d/panic-reboot-conf',
+    path => '/etc/sysctl.d/panic-reboot.conf',
     line => 'kernel.panic = 10',
   }
 }
