@@ -8,7 +8,7 @@ class ffnord::params (
   $include_bird6 = true, # support bird6
 
   # Settings for connection tracking, udp and tcp timeouts
-  $conntrack_max = 1048576,
+  $conntrack_max = 32768,
   $conntrack_tcp_timeout = 1200,
   $conntrack_udp_timeout = 65,
 
