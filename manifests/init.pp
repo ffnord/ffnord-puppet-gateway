@@ -74,6 +74,7 @@ define ffnord::mesh(
   } ->
   ffnord::fastd { "fastd_${mesh_code}":
     mesh_code       => $mesh_code,
+    batman_code     => $mesh_code,
     mesh_interface  => $mesh_code,
     mesh_mac        => $mesh_mac,
     mesh_hop_penalty=> $mesh_hop_penalty,
@@ -86,6 +87,7 @@ define ffnord::mesh(
   } ->
   ffnord::fastd { "fastd_igw_${mesh_code}":
     mesh_code       => "igw-${mesh_code}",
+    batman_code     => $mesh_code,
     mesh_interface  => "igw-${mesh_code}",
     mesh_mac        => $mesh_mac,
     mesh_hop_penalty=> $igw_hop_penalty,

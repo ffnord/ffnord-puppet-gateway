@@ -1,4 +1,5 @@
 define ffnord::fastd( $mesh_code,
+  $batman_code,
   $mesh_interface, # may not be more than 10 characters
   $mesh_mac,
   $mesh_hop_penalty = 60, # hop penalty for batman advanced
