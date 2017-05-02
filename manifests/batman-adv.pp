@@ -1,4 +1,9 @@
-define ffnord::batman-adv( $mesh_code, $mesh_hop_penalty, $batman_it = 5000 ) {
+define ffnord::batman-adv(
+  $mesh_code,
+  $mesh_hop_penalty,
+  $batman_it = 5000,
+  $batman_version = $::class::params::batman_version
+) {
   include ffnord::resources::batman-adv
   include ffnord::firewall
 
@@ -6,7 +11,10 @@ define ffnord::batman-adv( $mesh_code, $mesh_hop_penalty, $batman_it = 5000 ) {
     "/etc/network/interfaces.d/${mesh_code}-batman":
     ensure => file,
     content => template('ffnord/etc/network/mesh-batman.erb'),
-    require => [Package['batctl'],Package['batman-adv-dkms']];
+    require => $batman_version ? {
+      14 => [Package['batctl'],Package['batman-adv-dkms']],
+      default => [Package['batctl']]
+    }
   }
 
   file_line {

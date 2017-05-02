@@ -26,5 +26,8 @@ class ffnord::params (
 
   # Default values for ffnord config
   $maintenance = 0, # Shall the maintenance mode be active after installation
+
+  # B.A.T.M.A.N. adv version
+  $batman_version = 14,
 ) {
 }
