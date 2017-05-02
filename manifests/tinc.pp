@@ -4,8 +4,6 @@ class ffnord::tinc (
 
   $icvpn_ipv4_address,
   $icvpn_ipv6_address,
-
-  $icvpn_peers = [],
 ) {
   if($::lsbdistcodename=='wheezy'){
     package {
