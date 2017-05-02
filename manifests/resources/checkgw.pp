@@ -11,7 +11,7 @@ class ffnord::resources::checkgw (
   }
 
   ffnord::resources::ffnord::field {
-    'GW_CONTROL_IP': value => "( ${gw_control_ip} )";
+    'GW_CONTROL_IP': value => "( ${gw_control_ips} )";
   }
 
   cron {
