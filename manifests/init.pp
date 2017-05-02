@@ -84,8 +84,8 @@ define ffnord::mesh(
     fastd_verify    => $fastd_verify;
   } ->
   ffnord::fastd { "fastd_igw_${mesh_code}":
-    mesh_code       => igw-$mesh_code,
-    mesh_interface  => igw-$mesh_code,
+    mesh_code       => "igw-${mesh_code}",
+    mesh_interface  => "igw-${mesh_code}",
     mesh_mac        => $mesh_mac,
     mesh_hop_penalty=> $igw_hop_penalty,
     vpn_mac         => $vpn_mac,
