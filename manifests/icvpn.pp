@@ -28,8 +28,6 @@ define ffnord::icvpn::setup (
 
     icvpn_ipv4_address => $icvpn_ipv4_address,
     icvpn_ipv6_address => $icvpn_ipv6_address,
-
-    icvpn_peers  => $icvpn_peerings;
   }
 
   if $ffnord::params::include_bird4 == false and $ffnord::params::include_bird6 == false {
