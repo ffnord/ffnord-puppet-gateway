@@ -2,7 +2,7 @@
 auto br-<%= @mesh_code %>
 iface br-<%= @mesh_code %> inet6 static
   bridge-ports none
-  bridge_hw <%= mesh_mac %>
+  bridge_hw <%= @mesh_mac %>
   pre-up    /sbin/ip -6 rule add pref 31000 iif $IFACE table 42
   pre-up    /sbin/ip -6 rule add pref 31001 iif $IFACE unreachable
   post-down /sbin/ip -6 rule del pref 31000 iif $IFACE table 42
