@@ -119,10 +119,10 @@ ffnord::mesh {
                    , '10.35.20.1'
                    ],
 
-    fastd_igw_secret => "/root/fastd_igw_secret.key",
-    fastd_port       => 11281,
-    fastd_peers_git  => 'git://somehost/peersigw.git',
-    igw_mtu          => '1280',
+    fastd_igw_secret     => "/root/fastd_igw_secret.key",
+    fastd_igw_port       => 11281,
+    fastd_igw_peers_git  => 'git://somehost/peersigw.git',
+    igw_mtu              => '1280',
 }
 
 ffnord::named::zone {
