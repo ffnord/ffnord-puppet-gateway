@@ -74,7 +74,7 @@ example manifest and its dependencies.
 
       max_backlog  => 5000,      # Define the maximum packages in buffer
 
-      $batman_version => 15,     # B.A.T.M.A.N. adv version
+      batman_version => 15,     # B.A.T.M.A.N. adv version
   }
 
   # You can repeat this mesh block for every community you support
@@ -135,7 +135,7 @@ example manifest and its dependencies.
       fastd_secret    => "/root/fastd_secret.conf",
       fastd_port      => 10000,
       fastd_peers_git => '/vagrant/fastd/gc/',
-      fastd_verify=> 'true',                    # set this to true to acept all fastd keys without verification
+      fastd_verify=> 'true',                    # set this to 'true' to accept all fastd keys without verification
   }
 
   ffnord::icvpn::setup {
