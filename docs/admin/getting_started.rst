@@ -73,6 +73,8 @@ example manifest and its dependencies.
       gw_control_ips => "192.0.2.1 192.0.2.2 192.0.2.3", # Define target to ping against for function check
 
       max_backlog  => 5000,      # Define the maximum packages in buffer
+
+      $batman_version => 15,     # B.A.T.M.A.N. adv version
   }
 
   # You can repeat this mesh block for every community you support
@@ -132,7 +134,8 @@ example manifest and its dependencies.
       mesh_mtu        => 1426,
       fastd_secret    => "/root/fastd_secret.conf",
       fastd_port      => 10000,
-      fastd_peers_git => '/vagrant/fastd/gc/'
+      fastd_peers_git => '/vagrant/fastd/gc/',
+      fastd_verify=> 'true',                    # set this to true to acept all fastd keys without verification
   }
 
   ffnord::icvpn::setup {
