@@ -119,6 +119,7 @@ ffnord::mesh {
                    , '10.35.20.1'
                    ],
 
+    fastd_igw_enable     => true,
     fastd_igw_secret     => "/root/fastd_igw_secret.key",
     fastd_igw_port       => 11281,
     fastd_igw_peers_git  => 'git://somehost/peersigw.git',
