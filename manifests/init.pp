@@ -20,12 +20,12 @@ define ffnord::mesh(
   $mesh_hop_penalty = 60, # hop_penalty for gateway hops
 
   $fastd_igw_enable = false, # enable fastd inter gateway instance
-  $fastd_igw_peers_git,      # fastd inter gateway peers
-  $fastd_igw_secret,         # fastd inter gateway secret
-  $fastd_igw_port,           # fastd inter gateway port
+  $fastd_igw_peers_git = '', # fastd inter gateway peers
+  $fastd_igw_secret = '',    # fastd inter gateway secret
+  $fastd_igw_port = 11281,   # fastd inter gateway port
   $fastd_igw_verify = '',    # fastd backbone verification override
 
-  $igw_mtu,           # fastd inter gateway verification override
+  $igw_mtu = 1448,       # fastd inter gateway mtu
   $igw_hop_penalty = 60, # hop_penalty for inter gateway traffic
 ) {
 
