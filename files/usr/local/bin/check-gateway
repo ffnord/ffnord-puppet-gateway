@@ -45,10 +45,19 @@ if [[ $MAINTENANCE -eq 0 ]]; then
         /sbin/ip rule add from all fwmark 0x1 unreachable preference 32001
     fi
 
-    # check for interface
+    # try restart openvpn if interface is missing
     /sbin/ip link show dev "${GW_INTERFACE}" > /dev/null 2>&1 
     if [[ $? -gt 0 ]] 
     then
+      logger -t check-gatway -p daemon.info -s "Interface $GW_INTERFACE does not exist, try restart"
+      /usr/sbin/service openvpn restart
+    fi
+
+    # check again for interface
+    /sbin/ip link show dev "${GW_INTERFACE}" > /dev/null 2>&1 
+    if [[ $? -gt 0 ]] 
+    then
+       # count missing states and restart after $INTERFACE_MISSING minutes
        INTERFACE_MISSING=$(cat "$INTERFACE_MISSING_STATE" 2>/dev/null || echo 0)
        echo $(( INTERFACE_MISSING + 1)) > "$INTERFACE_MISSING_STATE"
        logger -t check-gateway -p daemon.info "Interface $GW_INTERFACE does not exist, for $INTERFACE_MISSING minutes."
