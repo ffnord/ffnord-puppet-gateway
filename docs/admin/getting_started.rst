@@ -94,7 +94,8 @@ example manifest and its dependencies.
       fastd_secret => "/root/fastd_secret.key",
       fastd_port   => 11280,
       fastd_peers_git => 'git://somehost/peers.git',
-      
+      fastd_verify=> 'true',                      # set this to 'true' to accept all fastd keys without verification
+
       dhcp_ranges => [ '10.35.0.2 10.35.0.254'    # the whole net is 10.71.0.0 - 10.71.63.255 
                                                   # so take one 32dr of this range but don't give out the ip of the gw itself
                      , '10.35.1.1 10.35.1.254'    # more ranges can be added here
