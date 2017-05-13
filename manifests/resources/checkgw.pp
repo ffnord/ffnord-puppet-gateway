@@ -11,6 +11,7 @@ class ffnord::resources::checkgw (
   }
 
   ffnord::resources::ffnord::field {
+    # todo: this doesn't work for alfred, that uses /bin/sh
     'GW_CONTROL_IP': value => "( ${gw_control_ips} )";
   }
 
