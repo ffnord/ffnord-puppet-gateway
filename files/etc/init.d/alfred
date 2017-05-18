@@ -11,7 +11,7 @@
 ### END INIT INFO
 
 . /lib/lsb/init-functions
-. /etc/ffnord
+eval $(grep ALFRED_OPTS /etc/ffnord)
 
 test $DEBIAN_SCRIPT_DEBUG && set -v -x
 
