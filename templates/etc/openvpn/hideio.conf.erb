@@ -5,6 +5,8 @@ dev tun-anonvpn
 proto udp
 remote <%= @openvpn_server %> <%= @openvpn_port %>
 cipher AES-128-CBC
+ping 10
+ping-restart 30
 resolv-retry infinite
 nobind
 persist-key
