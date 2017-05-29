@@ -187,6 +187,8 @@ example manifest and its dependencies.
   class { 'ffnord::alfred': master => true }
 
   class { 'ffnord::etckeeper': }
+  
+  class { 'ffnord::mosh': }
 
   class { 'ffnord::nullmailer':
     adminaddr => 'noc@example.com',
