@@ -27,8 +27,10 @@ Releases of ffnord-puppet-gateway are managed using Git.
 Checkout the module into the ``/etc/puppet/modules`` directory:
 
 ::
-cd /etc/puppet/modules
-git clone https://github.com/ffnord/ffnord-puppet-gateway ffnord
+  
+  cd /etc/puppet/modules
+  git clone https://github.com/ffnord/ffnord-puppet-gateway ffnord
+
 ::
 
 
@@ -60,8 +62,11 @@ anonymous vpn uplink.
 Please make sure that the content of your fastd key-file looks like this:
 
 ::
+
   secret "**************************";
+
 ::
+
 The stars are replaced by your private fastd key
 
 A First Manifest
@@ -201,53 +206,64 @@ example manifest and its dependencies.
 Firewall
 --------
 
-The firewall rules created are collected in `/etc/iptables.d`, they are not applied
-automatically! You have to call `build-firewall` to apply them.
+The firewall rules created are collected in ``/etc/iptables.d``, they are not applied
+automatically! You have to call ``build-firewall`` to apply them.
 
 On Debian jessie
 `````````````
 you have to load the ip_tables and ip_conntrack module manally before applying the puppet manifest:
 
 ::
+
     modprobe ip_tables
     modprobe ip_conntrack
+
 ::
 
 On Debian jessie add it to autoĺoad on reboot:
 
 ::
+
     echo ip_conntrack >> /etc/modules
+
 ::
 
 Run Puppet
 ``````````
 
-To apply the puppet manifest (e.g. saved as `/root/gateway.pp`) run:
+To apply the puppet manifest (e.g. saved as ``/root/gateway.pp``) run:
 
 ::
-puppet apply --verbose /root/gateway.pp
-build-firewall
+
+  puppet apply --verbose /root/gateway.pp
+  build-firewall
+
 ::
 
 The verbose flag is optional and shows all changes. To be even more catious you can
-also add the `--noop` flag to only show changes but not apply them.  
-**This should be run best inside a `screen` session!**
+also add the ``--noop`` flag to only show changes but not apply them.  
+**This should be run best inside a** ``screen`` **session!**
 
 Re-run Puppet
 `````````````
 
 To run puppet again, you have to ensure that old fastd-configurations are deleted before you start:
+
 ::
-rm -Rf /etc/fastd/
-puppet apply --verbose /root/gateway.pp
-build-firewall
+
+  rm -Rf /etc/fastd/
+  puppet apply --verbose /root/gateway.pp
+  build-firewall
+
 ::
 
 First time: start services
 `````````````
 
 ::
-/etc/init.d/fastd restart
+
+  /etc/init.d/fastd restart
+
 ::
 
 Maintenance Mode
@@ -257,7 +273,9 @@ To allow administrative operations on a gateway without harming user connections
 you should bring the gateway into maintenance mode:
 
 ::
-maintenance on
+
+  maintenance on
+
 ::
 
 This will deactivate the gateway feature of batman in the next run of check-gateway (cronjob every minute).
@@ -267,26 +285,32 @@ the gateway.
 To deactivate maintenance mode and reactivate the batman-adv gateway feature:
 
 ::
-maintenance off
+
+  maintenance off
+
 ::
 
 check with 
 
 ::
-maintenance status
+
+  maintenance status
+
 ::
 
 FASTD Query
 -----------
 
 For debugging purposes we utilize the status socket of fastd using a little
-helper script called `fastd-query`, which itself is a wrapper around `socat`
-and `jq`. An alias `fastd-query-${mesh_code}` is created for every
+helper script called ``fastd-query``, which itself is a wrapper around ``socat``
+and ``jq``. An alias ``fastd-query-${mesh_code}`` is created for every
 mesh network. For example you can retrieve the status for some node, where
 the node name is equivalent to the peers filename:
 
 ::
-# fastd-query-ffgc peers name gc-gw0 
+
+  # fastd-query-ffgc peers name gc-gw0 
+
 ::
 
 
@@ -296,24 +320,26 @@ Further details
 
 
 Named Zone Type
------------
+---------------
 
 This type enables you to receive a zone file from a git repository, include
 it into the named configuration and setup a cronjob for pulling changes in.
 By default the cronjob will pull every 30min. 
 
 The provided configuration should not rely on a relative path but use
-the absolute path prefixed with '/etc/bind/zones/${name}/'.
+the absolute path prefixed with ``/etc/bind/zones/${name}/``.
 
 ::
-ffnord::named::zone {
-  '<name>':
-    zone_git; # zone file repo
-}
+
+  ffnord::named::zone {
+    '<name>':
+      zone_git; # zone file repo
+  }
+
 ::
 
 DHCPd static type
------------
+-----------------
 
 This type enables you to receive a file with static dhcp assignments from a git repository, include
 it into the dhcp configuration and setup a cron job for pulling changes in.
@@ -325,28 +351,32 @@ The name should be the same as the community the static assignments belong to.
 There has to be a file named static.conf in the repo.
 
 ::
-ffnord::dhcpd::static {
-  '<name>':
-    static_git; # dhcp static file repo
-}
+
+  ffnord::dhcpd::static {
+    '<name>':
+      static_git; # dhcp static file repo
+  }
+
 ::
 
 ICVPN Type
------------
+----------
 
 ::
-ffnord :: icvpn::setup {
-  icvpn_as,            # AS of the community peering
-  icvpn_ipv4_address,  # transfer network IPv4 address
-  icvpn_ipv6_address,  # transfer network IPv6 address
-  icvpn_peerings = [], # Lists of icvpn names
 
-  tinc_keyfile,        # Private Key for tinc
-}
+  ffnord :: icvpn::setup {
+    icvpn_as,            # AS of the community peering
+    icvpn_ipv4_address,  # transfer network IPv4 address
+    icvpn_ipv6_address,  # transfer network IPv6 address
+    icvpn_peerings = [], # Lists of icvpn names
+
+    tinc_keyfile,        # Private Key for tinc
+  }
+
 ::
 
 IPv4 Uplink via GRE Tunnel
------------
+--------------------------
 
 This is a module for an IPv4 Uplink via GRE tunnel and BGP.
 This module and the VPN module are mutually exclusive.
@@ -355,37 +385,41 @@ for each tunnel you want to use. See http://wiki.freifunk.net/Freifunk_Hamburg/I
 for a more detailed description.
 
 ::
-class {
-  'ffnord::uplink::ip':
-    nat_network,        # network of IPv4 addresses usable for NAT
-    tunnel_network,     # network of tunnel IPs to exclude from NAT
-}
-ffnord::uplink::tunnel {
-   '<name>':
-     local_public_ip,  # local public IPv4 of this gateway
-     remote_public_ip, # remote public IPv4 of the tunnel endpoint
-     local_ipv4,       # tunnel IPv4 on our side
-     remote_ip,        # tunnel IPv4 on the remote side
-     remote_as,        # ASN of the BGP server announcing a default route for you
-}
+
+  class {
+    'ffnord::uplink::ip':
+      nat_network,        # network of IPv4 addresses usable for NAT
+      tunnel_network,     # network of tunnel IPs to exclude from NAT
+  }
+  ffnord::uplink::tunnel {
+     '<name>':
+       local_public_ip,  # local public IPv4 of this gateway
+       remote_public_ip, # remote public IPv4 of the tunnel endpoint
+       local_ipv4,       # tunnel IPv4 on our side
+       remote_ip,        # tunnel IPv4 on the remote side
+       remote_as,        # ASN of the BGP server announcing a default route for you
+  }
+
 ::
 
 Peering description
------------
+-------------------
 
 Be aware that currently the own system mesh address will not be filtered.
 
 ::
-gc-gw1:
-  ipv4: "10.35.5.1"
-  ipv6: "fd35:f308:a922::ff01"
-gc-gw2:
-  ipv4: "10.35.10.1"
-  ipv6: "fd35:f308:a922::ff02"
-gc-gw3:
-  ipv4: "10.35.15.1"
-  ipv6: "fd35:f308:a922::ff03"
-gc-gw4:
-  ipv4: "10.35.20.1"
-  ipv6: "fd35:f308:a922::ff04"
+
+  gc-gw1:
+    ipv4: "10.35.5.1"
+    ipv6: "fd35:f308:a922::ff01"
+  gc-gw2:
+    ipv4: "10.35.10.1"
+    ipv6: "fd35:f308:a922::ff02"
+  gc-gw3:
+    ipv4: "10.35.15.1"
+    ipv6: "fd35:f308:a922::ff03"
+  gc-gw4:
+    ipv4: "10.35.20.1"
+    ipv6: "fd35:f308:a922::ff04"
+
 ::
