@@ -4,15 +4,18 @@
 
 * Daniel Ehlers <danielehlers@mindeye.net>
 
-This module tries to automate the configuration of a FFNord Freifunk Gateway.
-The idea is to implement the step-by-step guide on http://wiki.freifunk.net/Freifunk_Hamburg/Gateway with multi community support and almost all other FFNord tools.
+This module automates the configuration of a FFNord Freifunk Gateway, used for example in Kiel and Freifunk Nord.
+The idea is to implement the step-by-step guide on http://wiki.freifunk.net/Freifunk_Hamburg/Gateway with multi-community support and almost all other FFNord tools.
 
-Basically this is a complete rewrite of the puppet scripts provided by the
-Freifunk Hamburg Community.
-
-The 'ffnord::mesh' block will setup a bridge, fastd, batman, ntp, dhcpd, dns (bind9),
+The `ffnord::mesh` block will setup a bridge, fastd, batman, ntp, dhcpd, dns (bind9),
 radvd, bird6 and firewall rules vor IPv4 and IPv6.
 There are types for setting up monitoring, icvpn, anonymous vpn and alfred announcements.
+
+## Getting started
+
+A detailed instruction and an example puppet manifest can be found at:  
+https://github.com/ffnord/ffnord-puppet-gateway/blob/master/docs/admin/getting_started.rst
+
 
 ## Open Problems
 
@@ -28,9 +31,7 @@ There are types for setting up monitoring, icvpn, anonymous vpn and alfred annou
 * Bird IPv4 Route exchange
 * Apply firewall rules automatially, when all rules are defined.
 
-### Getting started
+## History
 
-A detailed instruction and an example puppet manifest can be found at:  
-https://github.com/ffnord/ffnord-puppet-gateway/blob/master/docs/admin/getting_started.rst
-
-Now create your puppet manifest code and save it e.g. as `/root/gateway.pp`
+Basically this is a complete rewrite of the puppet scripts provided by the
+Freifunk Hamburg Community.
