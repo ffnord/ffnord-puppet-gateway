@@ -101,34 +101,35 @@ example manifest and its dependencies.
   # You can repeat this mesh block for every community you support
   ffnord::mesh { 
     'mesh_ffgc':
-      mesh_name    => "Freifunk Gotham City",
-      mesh_code    => "ffgc",
-      mesh_as      => 65035,
-      mesh_mac     => "de:ad:be:ef:de:ad",
-      vpn_mac      => "de:ad:be:ff:de:ad",
-      mesh_ipv6    => "fd35:f308:a922::ff00/64",
-      mesh_ipv4    => "10.35.0.1/19",
-      mesh_mtu     => "1280",
-      range_ipv4   => "10.35.0.0/16",
-      mesh_peerings => "/root/mesh_peerings.yaml",
-      
-      fastd_secret => "/root/fastd_secret.key",
-      fastd_port   => 11280,
-      fastd_peers_git => 'git://somehost/peers.git',
-      fastd_verify=> 'true',                      # set this to 'true' to accept all fastd keys without verification
+      mesh_name    => "Freifunk Gotham City",        # Name of your community, e.g. 'Freifunk Gotham City'
+      mesh_code    => "ffgc",                        # Code of your community, e.g. 'ffgc'
+      mesh_as      => 65035,                         # AS of your community
+      mesh_mac     => "de:ad:be:ef:de:ad",           # mac address mesh device: e.g. '52:54:00:bd:e6:d4'
+      vpn_mac      => "de:ad:be:ff:de:ad",           # mac address vpn device, ideally != mesh_mac and unique
+      range_ipv4   => "10.35.0.0/16",                # ipv4 range allocated to community in cidr notation, e.g. '10.35.0.1/16'
+      mesh_ipv4    => "10.35.0.1/19",                # ipv4 address in cidr notation, e.g. '10.35.0.1/19'
+      mesh_ipv6    => "fd35:f308:a922::ff00/64",     # ipv6 address in cidr notation, e.g.
+      mesh_peerings => "/root/mesh_peerings.yaml",   # path to the local peerings description yaml file
+      mesh_mtu     => "1280",                        # mtu used, default only suitable for fastd via ipv4
+       
+      fastd_peers_git => 'git://somehost/peers.git', # fastd peers
+      fastd_secret => "/root/fastd_secret.key",      # fastd secret
+      fastd_port   => 11280,                         # fastd port
+      fastd_verify=> 'true',                         # fastd verification override string for connection attempts, e.g. 'true' = accept all, '' = default (no override)
 
-      dhcp_ranges => [ '10.35.0.2 10.35.0.254'    # the whole net is 10.71.0.0 - 10.71.63.255 
-                                                  # so take one 32dr of this range but don't give out the ip of the gw itself
-                     , '10.35.1.1 10.35.1.254'    # more ranges can be added here
+      dhcp_ranges => [ '10.35.0.2 10.35.0.254'       # dhcp pool, the whole net is 10.71.0.0 - 10.71.63.255 
+                                                     # so take one 32dr of this range but don't give out the ip of the gw itself
+                     , '10.35.1.1 10.35.1.254'       # more ranges can be added here
                      , '10.35.2.2 10.35.2.254'
                      , '10.35.3.2 10.35.3.254'
                      , '10.35.4.2 10.35.4.254'
                      ],
-      dns_servers => [ '10.35.5.1'
+      dns_servers => [ '10.35.5.1'                   # other dns servers in your network
                      , '10.35.10.1'
                      , '10.35.15.1'
                      , '10.35.20.1'
                      ],
+      mesh_hop_penalty => 60,                        # hop_penalty for gateway hops
   }
 
   ffnord::named::zone {

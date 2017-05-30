@@ -4,11 +4,11 @@ define ffnord::mesh(
   $mesh_as,           # AS of your community
   $mesh_mac,          # mac address mesh device: e.g. '52:54:00:bd:e6:d4'
   $vpn_mac,           # mac address vpn device, ideally != mesh_mac and unique
-  $mesh_mtu = 1280,   # mtu used, default only suitable for fastd via ipv4
   $range_ipv4,        # ipv4 range allocated to community in cidr notation, e.g. '10.35.0.1/16'
   $mesh_ipv4,         # ipv4 address in cidr notation, e.g. '10.35.0.1/19'
   $mesh_ipv6,         # ipv6 address in cidr notation, e.g. 'fd35:f308:a922::ff00/64'
   $mesh_peerings,     # path to the local peerings description yaml file
+  $mesh_mtu = 1280,   # mtu used, default only suitable for fastd via ipv4
 
   $fastd_peers_git,   # fastd peers
   $fastd_secret,      # fastd secret
