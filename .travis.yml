@@ -11,7 +11,7 @@ before_install:
   - gem install puppet-lint
   - sudo apt-get install --no-install-recommends puppet git
   - sudo puppet module install puppetlabs-stdlib --version 4.15.0
-  - sudo puppet module install puppetlabs-apt --version 1.5.1
+  - sudo puppet module install puppetlabs-apt --version 1.5.2
   - sudo puppet module install puppetlabs-vcsrepo --version 1.3.2
   - sudo puppet module install saz-sudo --version 4.1.0
   - sudo puppet module install torrancew-account --version 0.1.0
