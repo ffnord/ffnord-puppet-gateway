@@ -9,6 +9,7 @@ iface br-<%= @mesh_code %> inet6 static
   post-down /sbin/ip -6 rule del pref 31000 iif $IFACE table 42
   post-down /sbin/ip -6 rule del pref 31001 iif $IFACE unreachable
   post-up    /sbin/ip -6 route replace <%= @mesh_ipv6_prefix %>/<%= @mesh_ipv6_prefixlen %> dev $IFACE table 42
+  post-up    /sbin/ip -6 addr add fe80::fced:beff:feef:ff00/64 dev $IFACE || true
   address <%= @mesh_ipv6_address %>
   # TODO bits configurable
   netmask <%= @mesh_ipv6_prefixlen %>
