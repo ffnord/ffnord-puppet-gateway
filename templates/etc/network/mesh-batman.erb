@@ -1,5 +1,8 @@
+auto bat-<%= @mesh_code %>
 allow-hotplug bat-<%= @mesh_code %>
 iface bat-<%= @mesh_code %> inet6 manual
+  pre-up    /sbin/modprobe batman-adv
+  pre-up    /sbin/ip link add name $IFACE type batadv || true
   pre-up    /sbin/ip link set dev $IFACE master br-<%= @mesh_code %>
   pre-up    /usr/sbin/batctl -m $IFACE it <%= @batman_it %>
   pre-up    /sbin/ip link add name dummy-<%= @mesh_code %> type dummy || true

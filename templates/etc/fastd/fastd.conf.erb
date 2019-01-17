@@ -16,11 +16,9 @@ include peers from "peers";
 on verify "<%= @fastd_verify %>";
 <% end %>
 on up "
- modprobe batman-adv
  ip link set address <%= @vpn_mac %> dev $INTERFACE
- /usr/sbin/batctl -m bat-<%= @mesh_code %> if add $INTERFACE
- ip link set address <%= @mesh_mac %> dev bat-<%= @mesh_code %>
  ifup bat-<%= @mesh_code %>
+ /usr/sbin/batctl -m bat-<%= @mesh_code %> if add $INTERFACE
  ip link set up dev $INTERFACE
  service alfred start bat-<%= @mesh_code %> # maybe this only at first instance?
 ";
