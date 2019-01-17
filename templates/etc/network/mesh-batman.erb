@@ -4,11 +4,11 @@ iface bat-<%= @mesh_code %> inet6 manual
   pre-up    /sbin/modprobe batman-adv
   pre-up    /sbin/ip link add name $IFACE type batadv || true
   pre-up    /sbin/ip link set dev $IFACE master br-<%= @mesh_code %>
-  pre-up    /usr/sbin/batctl -m $IFACE it <%= @batman_it %>
+  pre-up    batctl -m $IFACE it <%= @batman_it %>
   pre-up    /sbin/ip link add name dummy-<%= @mesh_code %> type dummy || true
   pre-up    /sbin/ip link set address <%= @mesh_mac %> dev dummy-<%= @mesh_code %>
   pre-up    /sbin/ip link set dev dummy-<%= @mesh_code %> up
-  pre-up    /usr/sbin/batctl -m $IFACE if add dummy-<%= @mesh_code %> || true
+  pre-up    batctl -m $IFACE if add dummy-<%= @mesh_code %> || true
   pre-up    /sbin/ip link set $IFACE address <%= @mesh_mac %>
   up        /sbin/ip link set dev $IFACE up
   up        echo <%= @mesh_hop_penalty %> > /sys/class/net/${IFACE}/mesh/hop_penalty 
