@@ -20,5 +20,4 @@ on up "
  ifup bat-<%= @mesh_code %>
  /usr/sbin/batctl -m bat-<%= @mesh_code %> if add $INTERFACE
  ip link set up dev $INTERFACE
- service alfred start bat-<%= @mesh_code %> # maybe this only at first instance?
 ";
